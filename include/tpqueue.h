@@ -66,6 +66,7 @@ class TPQueue {
       head = temp;
       return data;
   }
+};
 
 struct SYM {
   char ch;
