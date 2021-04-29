@@ -31,7 +31,7 @@ class TPQueue {
   void push(const T& data) {
     if (tail && head) {
       ITEM* current = tail;
-      
+
       while (current && data.prior > (current->data).prior) {
         current = current->prev;
       }
@@ -51,7 +51,7 @@ class TPQueue {
         head = current;
       }
     } else {
-      head = create(data,nullptr);
+      head = create(data, nullptr);
       tail = head;
     }
   }
