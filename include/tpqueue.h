@@ -6,15 +6,13 @@
 template<typename T>
 class TPQueue {
  private:
-  ITEM* head;
-  ITEM* tail;
-
   struct ITEM {
     T data;
     ITEM* next;
     ITEM* prev;
   };
-
+  ITEM* head;
+  ITEM* tail;
   TPQueue::ITEM* create(const T& data, ITEM*prev) {
     ITEM* item = new ITEM;
     item->data = data;
@@ -59,7 +57,7 @@ class TPQueue {
   }
 
   T pop() {
-    if (head) {
+      assert(head);
       ITEM* temp = head->next;
       T data = head->data;
       if (temp)
@@ -67,20 +65,7 @@ class TPQueue {
       delete head;
       head = temp;
       return data;
-    } else {
-      return (T)0;
-    }
   }
-
-  void print() const {
-    ITEM* temp = head;
-    while (temp) {
-      std::cout << temp->data << " ";
-      temp = temp->next;
-    }
-    std::cout << std::endl;
-  }
-};
 
 struct SYM {
   char ch;
