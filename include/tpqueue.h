@@ -5,7 +5,64 @@
 
 template<typename T>
 class TPQueue {
-  // Сюда помещается описание структуры "Очередь с приоритетами"
+  struct ITEM {
+    T data ;
+    ITEM * next ;
+  };
+  public :
+  TPQueue () : head ( nullptr ) , tail ( nullptr ) {}
+  ~ TPQueue () ; {
+    while (head)
+      pop();
+  }
+  void push(const T &data) {
+    if (tail && head) {
+      ITEM *temp = head;
+      
+      if (data.prior > temp->data.prior) {
+        temp = create(data);
+        temp->next = head;
+        head = temp;
+      } else {
+        while (temp->next) {
+          if (temp->next->data.prior < data.prior) {
+            ITEM *item = create(data);
+            item->next = temp->next;
+            temp->next = item;
+            break;
+          } else {
+            temp = temp->next;
+          }
+        }
+      }
+      if (!temp->next) {
+        temp = create(data);
+        tail->next = temp;
+        tail = temp;
+      }
+    } else {
+      head = create(data);
+      tail = head;
+    }
+  }
+  private :
+  ITEM* create(const T& data) {
+    ITEM *item = new ITEM;
+    item->data = data;
+    item->next = nullptr;
+    return item;
+  }
+  ITEM * head ;
+  ITEM * tail ;
+};
+T pop() {
+  if( head ) {
+    ITEM * temp = head−>next ;
+    T data = head−>data ;
+    delete head ;
+    head = temp ;
+    return data ;
+  }
 };
 
 struct SYM {
