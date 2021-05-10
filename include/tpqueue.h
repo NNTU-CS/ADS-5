@@ -9,8 +9,9 @@ class TPQueue {
     T data;
     ITEM * next;
   };
- public:
-  TPQueue() : head (nullptr), tail (nullptr) {}
+ 
+  public:
+  TPQueue() : head(nullptr), tail(nullptr) {}
   ~TPQueue() {
     while (head)
       pop();
@@ -42,20 +43,20 @@ class TPQueue {
       head = create(data);
       tail = head;
     }
-  }
- private :
-  ITEM* create(T data) {
+ private:
+  ITEM *create(T data) {
     ITEM *item = new ITEM;
     item->data = data;
     item->next = nullptr;
     return item;
   }
-  ITEM * head;
-  ITEM * tail;
+  ITEM *head;
+  ITEM *tail;
+  }
 }
 T pop() {
   if (head) {
-    ITEM *temp = head−>next;
+    ITEM *temp = head->next;
     T data = head->data;
     delete head;
     head = temp;
