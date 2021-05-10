@@ -9,34 +9,31 @@ class TPQueue {
     T res;
     ITEM *next;
   };
-
-  private:
-   ITEM *head;
-   ITEM *tail;
-   ITEM *create(T res) {
-     ITEM *i = new ITEM;
-     i->res = res;
-     i->next = nullptr;
-     return i;
-   }
-
-  public:
-   TPQueue() :head(nullptr), tail(nullptr) {}
-   ~TPQueue() {
-     while (head)
-       pop();
-   }
-
+ private:
+  ITEM *head;
+  ITEM *tail;
+  ITEM *create(T res) {
+    ITEM *i = new ITEM;
+    i->res = res;
+    i->next = nullptr;
+    return i;
+  }
+ public:
+  TPQueue() :head(nullptr), tail(nullptr) {}
+  ~TPQueue() {
+    while (head)
+      pop();
+  }
   void push(const T &res) {
-    if (head && tail) {
+    if (tail && head) {
       ITEM *temp = head;
-      if (res.prior > temp->res.prior) {
+      if (temp->res.prior < res.prior) {
         temp = create(res);
         temp->next = head;
         head = temp;
       } else {
         while (temp->next) {
-          if (res.prior > temp->next->res.prior) {
+          if (temp->next->res.prior < res.prior) {
             ITEM *i = create(res);
             i->next = temp->next;
             temp->next = i;
@@ -63,7 +60,6 @@ class TPQueue {
     return res;
   }
 };
-
 struct SYM {
   char ch;
   int  prior;
