@@ -6,19 +6,18 @@
 template<typename T>
 class TPQueue {
   struct ITEM {
-    T data ;
-    ITEM * next ;
+    T data;
+    ITEM * next;
   };
-  public :
-  TPQueue () : head ( nullptr ) , tail ( nullptr ) {}
-  ~ TPQueue () ; {
+ public:
+  TPQueue() : head (nullptr), tail (nullptr) {}
+  ~TPQueue() {
     while (head)
       pop();
   }
   void push(const T &data) {
     if (tail && head) {
       ITEM *temp = head;
-      
       if (data.prior > temp->data.prior) {
         temp = create(data);
         temp->next = head;
@@ -36,38 +35,37 @@ class TPQueue {
         }
       }
       if (!temp->next) {
-        temp = create(data);
-        tail->next = temp;
-        tail = temp;
+        tail->next = create(data);
+        tail = tail->next;
       }
     } else {
       head = create(data);
       tail = head;
     }
   }
-  private :
-  ITEM* create(const T& data) {
+ private :
+  ITEM* create(T data) {
     ITEM *item = new ITEM;
     item->data = data;
     item->next = nullptr;
     return item;
   }
-  ITEM * head ;
-  ITEM * tail ;
-};
+  ITEM * head;
+  ITEM * tail;
+}
 T pop() {
-  if( head ) {
-    ITEM * temp = head−>next ;
-    T data = head−>data ;
-    delete head ;
-    head = temp ;
-    return data ;
+  if (head) {
+    ITEM *temp = head−>next;
+    T data = head->data;
+    delete head;
+    head = temp;
+    return data;
   }
 };
 
 struct SYM {
   char ch;
-  int  prior;
+  int prior;
 };
 
 #endif // INCLUDE_TPQUEUE_H_
