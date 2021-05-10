@@ -5,12 +5,22 @@
 
 template<typename T>
 class TPQueue {
+  private:
+  ITEM *create(T data) {
+    ITEM *item = new ITEM;
+    item->data = data;
+    item->next = nullptr;
+    return item;
+  }
+  ITEM *head;
+  ITEM *tail;
   struct ITEM {
     T data;
     ITEM * next;
   };
- 
-  public:
+  }
+
+ public:
   TPQueue() : head(nullptr), tail(nullptr) {}
   ~TPQueue() {
     while (head)
@@ -43,17 +53,6 @@ class TPQueue {
       head = create(data);
       tail = head;
     }
- private:
-  ITEM *create(T data) {
-    ITEM *item = new ITEM;
-    item->data = data;
-    item->next = nullptr;
-    return item;
-  }
-  ITEM *head;
-  ITEM *tail;
-  }
-}
 T pop() {
   if (head) {
     ITEM *temp = head->next;
