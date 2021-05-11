@@ -27,13 +27,11 @@ class TPQueue {
                         temp->next = current->next;
                         current->next = temp;
                         break;
-                    }
-                    else {
+                    } else {
                         current = current->next;
                     }
                 }
-            }
-            else {
+            } else {
                 current = create(data);
                 current->next = head;
                 head = current;
@@ -43,8 +41,7 @@ class TPQueue {
                 tail->next = create(data);
                 tail = tail->next;
             }
-        }
-        else {
+        } else {
             head = create(data);
             tail = head;
         }
@@ -59,6 +56,7 @@ class TPQueue {
 
         return data;
     }
+    
  private:
     TPQueue::ITEM* create(const T& data) {
         ITEM* item = new ITEM;
