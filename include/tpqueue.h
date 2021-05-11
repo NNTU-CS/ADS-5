@@ -8,7 +8,7 @@ class TPQueue {
   struct ITEM {
     T data;
     ITEM *next;
-  };
+  }
   
  private:
   ITEM *create(T data) {
