@@ -5,11 +5,11 @@
 
 template<typename T>
 class TPQueue {
- struct ITEM {
-    T data;
-    ITEM* next;
-    ITEM* prev;
- };
+struct ITEM {
+ T data;
+ ITEM* next;
+ ITEM* prev;
+};
  private:
     TPQueue::ITEM* create(const T&);
     ITEM* head;
@@ -19,7 +19,6 @@ class TPQueue {
     ~TPQueue();
     void push(const T&);
     T pop();
-    void print() const;
 };
 template <typename T>
 typename TPQueue <T>::ITEM* TPQueue <T>::create(const T& data) {
@@ -78,15 +77,7 @@ T TPQueue <T>::pop() {
   head = temp;
   return data;
 }
-template <typename T>
-void TPQueue <T>::print() const {
-  ITEM* temp = head;
-  while (temp) {
-    std::cout << temp->data << " ";
-    temp = temp->next;
-  }
-  std::cout << std::endl;
-}
+
 struct SYM {
   char ch;
   int  prior;
