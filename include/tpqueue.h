@@ -72,7 +72,6 @@ void TPQueue<T>::push(const T &data) {
         head = create(data);
         tail = head;
     }
-
 }
 
 template<typename T>
