@@ -8,7 +8,7 @@ class TPQueue {
   struct ITEM {
     T data;
     ITEM *next;
-  }
+  };
   
  private:
   ITEM *create(T data) {
@@ -20,7 +20,7 @@ class TPQueue {
  ITEM *head;
  ITEM *tail;
 
-public:
+ public:
   TPQueue() : head(nullptr), tail(nullptr) {}
   ~TPQueue() {
     while (head)
@@ -62,10 +62,11 @@ public:
       head = temp;
       return data;
     }
-  };
-  struct SYM {
-    char ch;
-    int prior;
-  };
+  }
+};
+struct SYM {
+  char ch;
+  int prior;
+};
 
 #endif // INCLUDE_TPQUEUE_H_
