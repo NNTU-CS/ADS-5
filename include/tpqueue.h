@@ -6,9 +6,9 @@
 template<typename T>
 class TPQueue {
 struct ITEM {
- T data;
- ITEM* next;
- ITEM* prev;
+T data;
+ITEM* next;
+ITEM* prev;
 };
  private:
     TPQueue::ITEM* create(const T&);
