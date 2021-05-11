@@ -9,7 +9,7 @@ class TPQueue {
     T data;
     ITEM *next;
   };
- 
+
  private:
   ITEM *create(T data) {
     ITEM *i = new ITEM;
