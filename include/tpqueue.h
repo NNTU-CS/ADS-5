@@ -9,7 +9,7 @@ class TPQueue {
     T data;
     ITEM *next;
   };
-  
+ 
  private:
   ITEM *create(T data) {
     ITEM *i = new ITEM;
@@ -17,8 +17,8 @@ class TPQueue {
     i->next = nullptr;
     return i;
   }
- ITEM *head;
- ITEM *tail;
+  ITEM *head;
+  ITEM *tail;
 
  public:
   TPQueue() : head(nullptr), tail(nullptr) {}
