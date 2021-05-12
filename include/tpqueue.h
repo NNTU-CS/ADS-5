@@ -3,14 +3,96 @@
 #define INCLUDE_TPQUEUE_H_
 #include <cassert>
 
-template<typename T>
-class TPQueue {
-  // Сюда помещается описание структуры "Очередь с приоритетами"
+struct SYM {
+    char ch;
+    int prior;
 };
 
-struct SYM {
-  char ch;
-  int  prior;
+template <typename T>
+class LListQueue_v2 {
+    struct ITEM {
+        T data;
+        ITEM* next;
+    };
+ public:
+    LListQueue_v2() : head(nullptr), tail(nullptr) {}
+    ~LListQueue_v2();
+    void push(const T&);
+    T pop();
+    void print()const;
+
+ private:
+    LListQueue_v2::ITEM* create(const T&);
+    ITEM* head;
+    ITEM* tail;
 };
+
+template<typename T>
+LListQueue_v2<T>::~LListQueue_v2() {
+    while (head) {
+        pop();
+    }
+}
+
+template<typename T>
+LListQueue_v2<T>::ITEM* LListQueue_v2<T>::create(const T& Shinoa) {
+    ITEM* Madoka = new ITEM;
+    Madoka->data = Shinoa;
+    Madoka->next = nullptr;
+    return Madoka;
+}
+
+template <typename T>
+void LListQueue_v2<T>::push(const T& Asuna) {
+    if (head) {
+        if (head->data.prior < Asuna.prior) {
+            auto* temp = head;
+            head = create(Asuna);
+            head->next = temp;
+            return;
+        }
+        ITEM* Illya = this->head;
+        while (Illya->next != nullptr) {
+            if (Illya->next->data.prior < Asuna.prior) {
+                auto *temp = Illya->next;
+                Illya->next = create(Asuna);
+                Illya->next->next = temp;
+                return;
+            }
+            Illya = Illya->next;
+        }
+        Illya->next = create(Asuna);
+        tail = Illya->next;
+    }
+    else {
+        head = create(Asuna);
+        tail = head;
+    }
+}
+
+template<typename T>
+T LListQueue_v2<T>::pop() {
+    if (head) {
+        ITEM* Konata = head->next;
+        T Shirou = head->data;
+        delete head;
+        head = Konata;
+        return Shirou;
+    }
+    else {
+        return (T)0;
+    }
+}
+
+template <typename T >
+void LListQueue_v2<T>::print() const
+{
+    ITEM* Acha = head;
+    while (Acha) {
+        std::cout << Acha->data.ch << " " << Acha->data.prior << std::endl;
+        Acha = Acha->next;
+    }
+    std::cout << std::endl;
+}
 
 #endif // INCLUDE_TPQUEUE_H_
