@@ -10,16 +10,18 @@ class TPQueue {
         T data;
         ITEM *next;
     };
-public:
+ public:
     TPQueue() : head(nullptr), tail(nullptr) {}
     ~TPQueue();
 
     void push(const T &);
-    T pop();
     void print() const;
-  
-private:
+    
+    T pop();
+
+ private:
     TPQueue::ITEM *create(const T &);
+
     ITEM *head;
     ITEM *tail;
 };
@@ -49,9 +51,9 @@ void TPQueue<T>::push(const T &data) {
         } else {
             while (temp->next) {
                 if (data.prior > temp->next->data.prior) {
-                    ITEM *t = create(data);
-                    t->next = temp->next;
-                    temp->next = t;
+                    ITEM *present = create(data);
+                    present->next = temp->next;
+                    temp->next = present;
                     break;
                 } else {
                     temp = temp->next;
@@ -83,10 +85,10 @@ template<typename T>
 void TPQueue<T>::print() const {
     ITEM *temp = head;
     while (temp) {
-        cout << temp->data << "␣";
+        std::cout << temp->data << "␣";
         temp = temp->next;
     }
-    cout << endl;
+    std::cout << std::endl;
 }
 
 struct SYM {
