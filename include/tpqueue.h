@@ -2,6 +2,7 @@
 #ifndef INCLUDE_TPQUEUE_H_
 #define INCLUDE_TPQUEUE_H_
 #include <cassert>
+#include <iostream>
 
 template<typename T>
 class TPQueue {
@@ -64,22 +65,28 @@ void TPQueue<T>::push(const T &data) {
   }
 }
 
-template <typename T>
+template<typename T>
 T TPQueue<T>::pop() {
-  if (head) {
-    ITEM *temp = head->next;
-    T data = head->data;
-    delete head;
-    head = temp;
-    return data;
-  } else {
-    return (T) 0;
-  }
+    if (head) {
+        ITEM *temp = head->next;
+        T data = head->data;
+        delete head;
+        head = temp;
+        return data;
+    }
 }
-
+template<typename T>
+void TPQueue<T>::print() const {
+    ITEM *temp = head;
+    while (temp) {
+        std::cout << temp->data << "␣";
+        temp = temp->next;
+    }
+    std::cout << std::endl;
+}
 struct SYM {
-  char ch;
-  int  prior;
+    char ch;
+    int prior;
 };
 
 #endif // INCLUDE_TPQUEUE_H_
