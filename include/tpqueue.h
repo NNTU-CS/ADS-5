@@ -15,7 +15,6 @@ class TPQueue {
   ~TPQueue();
   void push(const T &);
   T pop();
-  void print() const;
  private:
   TPQueue::ITEM *create(const T &);
   ITEM *head;
@@ -77,16 +76,6 @@ T TPQueue<T>::pop() {
   } else {
     return (T) 0;
   }
-}
-
-template <typename T>
-void TPQueue<T>::print() const {
-  ITEM *temp = head;
-  while (temp) {
-    std::cout << temp->data << "␣";
-    temp = temp->next;
-  }
-  std::cout << std::endl;
 }
 
 struct SYM {
