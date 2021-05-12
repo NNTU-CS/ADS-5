@@ -12,7 +12,7 @@ class TPQueue {
   };
  public:
   TPQueue() : head(nullptr) , tail(nullptr) {}
-  ~ TPQueue ();
+  ~TPQueue();
   void push(const T &);
   T pop();
   void print() const;
@@ -24,7 +24,6 @@ class TPQueue {
 
 template <typename T>
 typename TPQueue<T>::ITEM *TPQueue <T>::create(const T& data) {
-
   ITEM *item = new ITEM;
   item->data = data;
   item->next = nullptr;
@@ -61,7 +60,7 @@ void TPQueue<T>::push(const T & data) {
       tail->next = create(data);
       tail = tail->next;
     } else {
-      head = create (data);
+      head = create(data);
       tail = head;
     }
   }
