@@ -11,10 +11,10 @@ class TPQueue {
     ITEM *next;
   };
  public:
-  TPQueue () : head(nullptr) , tail(nullptr) {}
+  TPQueue() : head(nullptr) , tail(nullptr) {}
   ~ TPQueue ();
   void push(const T &);
-  T pop () ;
+  T pop();
   void print() const;
  private:
   TPQueue::ITEM *create(const T &);
@@ -24,10 +24,10 @@ class TPQueue {
 
 template <typename T>
 typename TPQueue<T>::ITEM *TPQueue <T>::create(const T& data) {
-  
+
   ITEM *item = new ITEM;
-  item−>data = data;
-  item−>next = nullptr;
+  item->data = data;
+  item->next = nullptr;
   return item;
 }
 
@@ -61,16 +61,16 @@ void TPQueue<T>::push(const T & data) {
       tail->next = create(data);
       tail = tail->next;
     } else {
-      head = create ( data ) ;
-      tail = head ;
+      head = create (data);
+      tail = head;
     }
   }
 
 template <typename T>
 T TPQueue <T>::pop() {
   if (head) {
-    ITEM *temp = head−>next;
-    T data = head−>data ;
+    ITEM *temp = head->next;
+    T data = head->data;
     delete head;
     head = temp;
     return data;
@@ -83,8 +83,8 @@ template <typename T>
 void TPQueue<T>::print() const {
   ITEM *temp = head;
   while (temp) {
-    std::cout << temp−>data << "␣";
-    temp = temp−>next;
+    std::cout << temp->data << "␣";
+    temp = temp->next;
   }
   std::cout << std::endl;
 }
