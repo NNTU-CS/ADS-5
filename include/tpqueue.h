@@ -9,33 +9,33 @@ struct SYM {
 };
 
 template <typename T>
-class LListQueue {
+class TPQueue {
     struct ITEM {
         T data;
         ITEM* next;
     };
  public:
-    LListQueue() : head(nullptr), tail(nullptr) {}
-    ~LListQueue();
+    TPQueue() : head(nullptr), tail(nullptr) {}
+    ~TPQueue();
     void push(const T&);
     T pop();
     void print()const;
 
  private:
-    LListQueue::ITEM* create(const T&);
+    TPQueue::ITEM* create(const T&);
     ITEM* head;
     ITEM* tail;
 };
 
 template<typename T>
-LListQueue<T>::~LListQueue() {
+TPQueue<T>::~TPQueue() {
     while (head) {
         pop();
     }
 }
 
 template<typename T>
-LListQueue<T>::ITEM* LListQueue<T>::create(const T& Shinoa) {
+TPQueue<T>::ITEM* TPQueue<T>::create(const T& Shinoa) {
     ITEM* Madoka = new ITEM;
     Madoka->data = Shinoa;
     Madoka->next = nullptr;
@@ -43,7 +43,7 @@ LListQueue<T>::ITEM* LListQueue<T>::create(const T& Shinoa) {
 }
 
 template <typename T>
-void LListQueue<T>::push(const T& Asuna) {
+void TPQueue<T>::push(const T& Asuna) {
     if (head) {
         if (head->data.prior < Asuna.prior) {
             auto* temp = head;
@@ -71,7 +71,7 @@ void LListQueue<T>::push(const T& Asuna) {
 }
 
 template<typename T>
-T LListQueue<T>::pop() {
+T TPQueue<T>::pop() {
     if (head) {
         ITEM* Konata = head->next;
         T Shirou = head->data;
@@ -85,7 +85,7 @@ T LListQueue<T>::pop() {
 }
 
 template <typename T >
-void LListQueue<T>::print() const
+void TPQueue<T>::print() const
 {
     ITEM* Acha = head;
     while (Acha) {
