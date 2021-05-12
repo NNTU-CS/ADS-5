@@ -15,6 +15,7 @@ class TPQueue {
   ~TPQueue();
   void push(const T &);
   T pop();
+  void print() const;
  private:
   TPQueue::ITEM *create(const T &);
   ITEM *head;
