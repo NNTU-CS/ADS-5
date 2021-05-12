@@ -2,6 +2,7 @@
 #ifndef INCLUDE_TPQUEUE_H_
 #define INCLUDE_TPQUEUE_H_
 #include <cassert>
+#include <iostream>
 
 template<typename T>
 class TPQueue {
@@ -82,10 +83,10 @@ template<typename T>
 void TPQueue<T>::print() const {
     ITEM *temp = head;
     while (temp) {
-        std::cout << temp->data << "␣";
+        cout << temp->data << "␣";
         temp = temp->next;
     }
-    std::cout << std::endl;
+    cout << endl;
 }
 
 struct SYM {
