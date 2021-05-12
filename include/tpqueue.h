@@ -89,7 +89,7 @@ void TPQueue<T>::print() const
 {
     ITEM* Acha = head;
     while (Acha) {
-        std::cout << Acha->data.ch << " " << Acha->data.prior << std::endl;
+        std::cout << Acha->data.ch << std::endl;
         Acha = Acha->next;
     }
     std::cout << std::endl;
