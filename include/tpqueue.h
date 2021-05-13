@@ -36,7 +36,7 @@ TPQueue<T>::~TPQueue() {
 }
 
 template<typename T>
-TPQueue<T>::ITEM* TPQueue<T>::create(const T& Shinoa) {
+typename TPQueue<T>::ITEM* TPQueue<T>::create(const T& Shinoa) {
     ITEM* Madoka = new ITEM;
     Madoka->data = Shinoa;
     Madoka->next = nullptr;
