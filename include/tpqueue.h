@@ -16,7 +16,7 @@ class TPQueue {
         ITEM* next;
     };
  public:
-    TPQueue() : head(nullptr), tail(nullptr) {}
+    TPQueue() : head(nullptr), tail(nullptr) {};
     ~TPQueue();
     void push(const T&);
     T pop();
@@ -83,7 +83,7 @@ T TPQueue<T>::pop() {
     }
 }
 
-template <typename T >
+template <typename T>
 void TPQueue<T>::print() const {
     ITEM* Acha = head;
     while (Acha) {
