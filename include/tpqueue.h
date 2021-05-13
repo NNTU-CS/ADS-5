@@ -1,35 +1,31 @@
-// Copyright 2021 NNTU-CS
 #ifndef INCLUDE_TPQUEUE_H_
 #define INCLUDE_TPQUEUE_H_
 #include <cassert>
-#include <iostream>
 
 template<typename T>
 class TPQueue {
     struct ITEM {
-        T data;
+        T ch;
         ITEM *next;
     };
- public:
+public:
     TPQueue() : head(nullptr), tail(nullptr) {}
     ~TPQueue();
 
     void push(const T &);
-    void print() const;
-    
     T pop();
-
- private:
+    void print() const;
+  
+private:
     TPQueue::ITEM *create(const T &);
-
     ITEM *head;
     ITEM *tail;
 };
 
 template<typename T>
-typename TPQueue<T>::ITEM *TPQueue<T>::create(const T &data) {
+typename TPQueue<T>::ITEM *TPQueue<T>::create(const T &ch) {
     ITEM *item = new ITEM;
-    item->data = data;
+    item->ch = ch;
     item->next = nullptr;
     return item;
 }
@@ -41,19 +37,19 @@ TPQueue<T>::~TPQueue() {
 }
 
 template<typename T>
-void TPQueue<T>::push(const T &data) {
+void TPQueue<T>::push(const T &ch) {
     if (tail && head) {
         ITEM *temp = head;
-        if (data.prior > temp->data.prior) {
-            temp = create(data);
+        if (ch.prior > temp->ch.prior) {
+            temp = create(ch);
             temp->next = head;
             head = temp;
         } else {
             while (temp->next) {
-                if (data.prior > temp->next->data.prior) {
-                    ITEM *present = create(data);
-                    present->next = temp->next;
-                    temp->next = present;
+                if (ch.prior > temp->next->ch.prior) {
+                    ITEM *t = create(ch);
+                    t->next = temp->next;
+                    temp->next = t;
                     break;
                 } else {
                     temp = temp->next;
@@ -61,11 +57,11 @@ void TPQueue<T>::push(const T &data) {
             }
         }
         if (!temp->next) {
-            tail->next = create(data);
+            tail->next = create(ch);
             tail = tail->next;
         }
     } else {
-        head = create(data);
+        head = create(ch);
         tail = head;
     }
 }
@@ -74,10 +70,10 @@ template<typename T>
 T TPQueue<T>::pop() {
     if (head) {
         ITEM *temp = head->next;
-        T data = head->data;
+        T ch = head->ch;
         delete head;
         head = temp;
-        return data;
+        return ch;
     }
 }
 
@@ -85,15 +81,15 @@ template<typename T>
 void TPQueue<T>::print() const {
     ITEM *temp = head;
     while (temp) {
-        std::cout << temp->data << "␣";
+        std::cout << temp->ch << "␣";
         temp = temp->next;
     }
     std::cout << std::endl;
 }
 
 struct SYM {
-    char ch;
-    int  prior;
+  char data;
+  int  prior;
 };
 
 #endif // INCLUDE_TPQUEUE_H_
