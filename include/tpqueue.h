@@ -73,13 +73,9 @@ void TPQueue<T>::push(const T& Asuna) {
 template<typename T>
 T TPQueue<T>::pop() {
     if (head) {
-        ITEM* temp = head -> next;
-        T data = head -> data;
-        delete head;
-        head = temp;
-        return data;
-    } else {
-        return (T)0;
+        T Shirou = head->data;
+        head = head->next;
+        return Shirou;
     }
 }
 
