@@ -1,7 +1,8 @@
+// Copyright 2021 NNTU-CS
 #include <iostream>
 #include <cassert>
-#ifndef INCLUDE_LLISTQUEUE_
-#define INCLUDE_LLISTQUEUE_
+#ifndef INCLUDE_TPQUEUE_H_
+#define INCLUDE_TPQUEUE_H_
 
 struct SYM {
     char ch;
@@ -92,4 +93,4 @@ void TPQueue<T>::print() const {
     std::cout << std::endl;
 }
 
-#endif // INCLUDE_LLISTQUEUE_
+#endif // INCLUDE_TPQUEUE_H_
