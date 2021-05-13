@@ -1,7 +1,7 @@
-// Copyright 2021 NNTU-CS
-#ifndef INCLUDE_TPQUEUE_H_
-#define INCLUDE_TPQUEUE_H_
+#include <iostream>
 #include <cassert>
+#ifndef INCLUDE_LLISTQUEUE_
+#define INCLUDE_LLISTQUEUE_
 
 struct SYM {
     char ch;
@@ -63,8 +63,7 @@ void TPQueue<T>::push(const T& Asuna) {
         }
         Illya->next = create(Asuna);
         tail = Illya->next;
-    }
-    else {
+    } else {
         head = create(Asuna);
         tail = head;
     }
@@ -78,15 +77,13 @@ T TPQueue<T>::pop() {
         delete head;
         head = Konata;
         return Shirou;
-    }
-    else {
+    } else {
         return (T)0;
     }
 }
 
 template <typename T >
-void TPQueue<T>::print() const
-{
+void TPQueue<T>::print() const {
     ITEM* Acha = head;
     while (Acha) {
         std::cout << Acha->data.ch << std::endl;
@@ -95,4 +92,4 @@ void TPQueue<T>::print() const
     std::cout << std::endl;
 }
 
-#endif // INCLUDE_TPQUEUE_H_
+#endif // INCLUDE_LLISTQUEUE_
