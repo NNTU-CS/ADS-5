@@ -16,7 +16,7 @@ class TPQueue {
         ITEM* next;
     };
  public:
-    TPQueue() : head(nullptr), tail(nullptr) {};
+    TPQueue() : head(nullptr), tail(nullptr) {}
     ~TPQueue();
     void push(const T&);
     T pop();
@@ -73,9 +73,13 @@ void TPQueue<T>::push(const T& Asuna) {
 template<typename T>
 T TPQueue<T>::pop() {
     if (head) {
-        T Shirou = head->data;
-        head = head->next;
-        return Shirou;
+        ITEM* temp = head -> next;
+        T data = head -> data;
+        delete head;
+        head = temp;
+        return data;
+    } else {
+        return (T)0;
     }
 }
 
