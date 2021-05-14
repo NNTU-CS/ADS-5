@@ -1,7 +1,6 @@
 // Copyright 2021 NNTU-CS
 #ifndef INCLUDE_TPQUEUE_H_
 #define INCLUDE_TPQUEUE_H_
-
 #include <cassert>
 #include <iostream>
 
@@ -13,10 +12,13 @@ class TPQueue {
     };
  public:
     TPQueue() : head(nullptr), tail(nullptr) {}
+
     ~TPQueue();
 
     void push(const T &);
+
     T pop();
+
     void print() const;
 
  private:
@@ -51,9 +53,9 @@ void TPQueue<T>::push(const T &data) {
         } else {
             while (temp->next) {
                 if (data.prior > temp->next->data.prior) {
-                    ITEM *t = create(data);
-                    t->next = temp->next;
-                    temp->next = t;
+                    ITEM *present = create(data);
+                    present->next = temp->next;
+                    temp->next = present;
                     break;
                 } else {
                     temp = temp->next;
@@ -91,11 +93,9 @@ void TPQueue<T>::print() const {
     std::cout << std::endl;
 }
 
+
 struct SYM {
   char ch;
   int  prior;
-    char ch;
-    int prior;
 };
-
 #endif // INCLUDE_TPQUEUE_H_
