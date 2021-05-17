@@ -7,28 +7,29 @@ template<typename T>
 class TPQueue {
   struct ITEM {
     T data;
-    ITEM *next;
+    ITEM * next;
   };
 
 
-  private:
-  ITEM *head;
-  ITEM *tail;
+ private:
+  ITEM * head;
+  ITEM * tail;
   ITEM *create(T data) {
-    ITEM *t = new ITEM;
-    t->data = data;
-    t->next = nullptr;
-    return t;
+  ITEM *t = new ITEM;
+  t->data = data;
+  t->next = nullptr;
+  return t;
   }
 
 
-  public:
+ public:
   TPQueue() :head(nullptr), tail(nullptr) {}
   ~TPQueue() {
-    while (head)
-      pop();
+  while (head)
+    pop();
   }
-  void push(const T &data) {
+
+  void push(const T&data) {
     if (tail && head) {
       ITEM *temp = head;
       if (temp->data.prior < data.prior) {
@@ -64,7 +65,6 @@ class TPQueue {
     return data;
   }
 };
-
 struct SYM {
   char ch;
   int  prior;
