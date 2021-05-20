@@ -10,9 +10,9 @@ class TPQueue {
     ITEM * next;
   };
 
-  private :
+  private:
 
-      ITEM * create (const T &data) {
+      ITEM * create(const T &data) {
         ITEM * item = new ITEM;
         item->data = data;
         item->next = nullptr;
@@ -22,15 +22,15 @@ class TPQueue {
     ITEM * head;
     ITEM * tail;
 
-  public :
-    LListQueue(): head(nullptr), tail (nullptr) {}
+  public:
+    LListQueue(): head(nullptr), tail(nullptr) {}
 
-    ~LListQueue(){
+    ~LListQueue() {
       while (head)
         pop();
     }
 
-    void push (const T& data) {
+    void push(const T& data) {
       if (!(tail && head)) {
         head = create(data);
         tail = head;
@@ -51,13 +51,12 @@ class TPQueue {
         } else {
           auto *temp = head;
           while (temp != tail) {
-            if (data.prior > temp->next.prior) {
+            if (data.prior > temp->next->prior) {
               ITEM *item = create(data);
               item->next = temp->next;
               temp->next = item;
               break;
-            }
-            else
+            } else
               temp = temp->next;
           }
           if (temp = tail) {
@@ -68,7 +67,7 @@ class TPQueue {
       }
     }
 
-    T pop () {
+    T pop() {
       if (head) {
         T data = head->data;
         if (head == tail) {
@@ -83,7 +82,7 @@ class TPQueue {
         }
       }
     }
-  };
+};
 
 struct SYM {
   char ch;
