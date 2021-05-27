@@ -11,6 +11,7 @@ class TPQueue {
   };
 
    private:
+  
      ITEM * create(const T &data) {
      ITEM * item = new ITEM;
      item->data = data;
@@ -22,6 +23,7 @@ class TPQueue {
      ITEM * tail;
 
    public:
+  
      TPQueue(): head(nullptr), tail(nullptr) {}
 
      ~TPQueue() {
@@ -80,7 +82,7 @@ class TPQueue {
          }
        }
      }
- };
+};
 
 struct SYM {
   char ch;
