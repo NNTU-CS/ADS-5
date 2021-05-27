@@ -10,8 +10,7 @@ class TPQueue {
     ITEM * next;
   };
 
-  private:
-
+  private: 
       ITEM * create(const T &data) {
         ITEM * item = new ITEM;
         item->data = data;
@@ -22,10 +21,10 @@ class TPQueue {
     ITEM * head;
     ITEM * tail;
 
-  public:
-    LListQueue(): head(nullptr), tail(nullptr) {}
+  public: 
+    TPQueue(): head(nullptr), tail(nullptr) {}
 
-    ~LListQueue() {
+    ~TPQueue() {
       while (head)
         pop();
     }
@@ -51,13 +50,12 @@ class TPQueue {
         } else {
           auto *temp = head;
           while (temp != tail) {
-            if (data.prior > temp->next->prior) {
+            if (data.prior > temp->next->data.prior) {
               ITEM *item = create(data);
               item->next = temp->next;
               temp->next = item;
               break;
-            } else
-              temp = temp->next;
+            } else {temp = temp->next};
           }
           if (temp = tail) {
             tail = create(data);
