@@ -9,7 +9,7 @@ class TPQueue {
     T data;
     ITEM * next;
   };
- 
+
  private:
      ITEM * create(const T &data) {
      ITEM * item = new ITEM;
