@@ -9,9 +9,8 @@ class TPQueue {
     T data;
     ITEM * next;
   };
-
-   private:
-  
+ 
+ private:
      ITEM * create(const T &data) {
      ITEM * item = new ITEM;
      item->data = data;
@@ -22,8 +21,7 @@ class TPQueue {
      ITEM * head;
      ITEM * tail;
 
-   public:
-  
+ public:
      TPQueue(): head(nullptr), tail(nullptr) {}
 
      ~TPQueue() {
