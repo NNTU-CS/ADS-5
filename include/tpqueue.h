@@ -1,6 +1,7 @@
 // Copyright 2021 NNTU-CS
 #ifndef INCLUDE_TPQUEUE_H_
-#define INCLUDE_TPQUEUE_H_#include <cassert>
+#define INCLUDE_TPQUEUE_H_
+#include <cassert>
 
 template < typename T >
   class TPQueue {
@@ -16,8 +17,8 @@ template < typename T >
       item -> next = nullptr;
       return item;
     }
-
-    public:
+    
+   public:
       TPQueue(): head(nullptr) {}~TPQueue() {
         while (head)
           pop();
