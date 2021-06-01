@@ -8,6 +8,7 @@ class TPQueue {
     ITEM* next;
     ITEM* last;
   };
+  
  private:
   ITEM* head;
   ITEM* tail;
@@ -18,8 +19,9 @@ class TPQueue {
     item->last = last;
     return item;
   }
-public:
-  TPQueue() : head(nullptr), tail(nullptr){}
+  
+ public:
+  TPQueue() : head(nullptr), tail(nullptr) {}
 
   ~TPQueue() {
     while (head) {
