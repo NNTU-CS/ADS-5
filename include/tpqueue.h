@@ -18,12 +18,11 @@ class TPQueue {
     item->last = last;
     return item;
   }
- public:
-
-  TPQueue() : head(nullptr), tail(nullptr){};
+public:
+  TPQueue() : head(nullptr), tail(nullptr){}
 
   ~TPQueue() {
-    while (head){
+    while (head) {
       pop();
     }
   }
