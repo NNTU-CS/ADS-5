@@ -1,3 +1,4 @@
+// Copyright 2021 NNTU-CS
 #ifndef INCLUDE_TPQUEUE_H_
 #define INCLUDE_TPQUEUE_H_
 #include <cassert>
@@ -8,7 +9,7 @@ class TPQueue {
     ITEM* next;
     ITEM* last;
   };
-  
+
  private:
   ITEM* head;
   ITEM* tail;
@@ -19,7 +20,7 @@ class TPQueue {
     item->last = last;
     return item;
   }
-  
+
  public:
   TPQueue() : head(nullptr), tail(nullptr) {}
 
