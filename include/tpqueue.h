@@ -20,7 +20,7 @@ class TPQueue {
   }
  public:
 
-  TPQueue() : head(nullptr), tail(nullptr);
+  TPQueue() : head(nullptr), tail(nullptr){};
 
   ~TPQueue() {
     while (head){
