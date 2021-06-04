@@ -6,7 +6,7 @@
 template < typename T >
   class TPQueue {
      private:
-      struct ITEM {
+       struct ITEM {
         T data;
         ITEM * next;
       };
@@ -17,7 +17,7 @@ template < typename T >
       item -> next = nullptr;
       return item;
     }
-   
+
    public:
       TPQueue(): head(nullptr) {}~TPQueue() {
         while (head)
