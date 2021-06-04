@@ -5,11 +5,10 @@
 
 template < typename T >
   class TPQueue {
-     private:
+      private:
        struct ITEM {
         T data;
-        ITEM * next;
-      };
+        ITEM * next; };
     ITEM * head;
     ITEM * create(const T & data) {
       ITEM * item = new ITEM;
