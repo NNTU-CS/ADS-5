@@ -6,21 +6,20 @@
 template<typename T>
 class TPQueue {
   struct ITEM {
-  struct ITEM {
     T data;
-    ITEM *next;
- };
+    ITEM * next;
   };
 
  private:
-  ITEM *head;
-  ITEM *tail;
+  ITEM * head;
+  ITEM * tail;
   ITEM *create(T data) {
     ITEM *t = new ITEM;
     t->data = data;
     t->next = nullptr;
     return t;
   }
+
  public:
   TPQueue() :head(nullptr), tail(nullptr) {}
   ~TPQueue() {
