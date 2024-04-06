@@ -1,43 +1,89 @@
-#include <iostream>
+// Copyright 2021 NNTU-CS
 #include <string>
+#include <map>
 #include "tstack.h"
+bool isOperator(char c) {
+    return (c == '+' || c == '-' || c == '*' || c == '/');
+}
+int isPriority(char operation) {
+    if (operation == '*' || operation == '/') {
+        return 2;
+    } else if (operation == '+' || operation == '-') {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+std::string infx2pstfx(const std::string inf) {
+    std::string postf = "";
+    TStack<char, 100> stack1;
+    for (int i = 0; i < inf.size(); i++) {
+        char c = inf[i];
+        if (isdigit(c)) {
+            int operand = 0;
+            while (i < inf.size() && isdigit(inf[i])) {
+                operand = operand * 10 + (inf[i] - '0');
+                i++;
+            }
+            i--;
+            postf += std::to_string(operand) + " ";
+        } else if (isalpha(c)) {
+            postf += c;
+            postf += " ";
+        } else if (c == '(') {
+            stack1.push(c);
+        } else if (c == ')') {
+            while (!stack1.isEmpty() && stack1.watch() != '(') {
+                postf += stack1.pop();
+                postf += ' ';
+            }
+            if (!stack1.isEmpty() && stack1.watch() == '(') {
+                stack1.pop();
+            }
+        } else if (isOperator(c)) {
+            while (!stack1.isEmpty() &&
+                   isPriority(stack1.watch()) >= isPriority(c)) {
+                postf += stack1.pop();
+                postf += ' ';
+            }
+            stack1.push(c);
+        }
+    }
 
-std::string infx2pstfx(std::string inf) {
-TStack<char, 100> stack1;
-  std::string spst;
-    std::string spst;
-  for (int i = 0; i < inf.length(); i++) {
-      if (inf[i] >= '0' && inf[i] <= '9') {
-          spst += inf[i];
-          spst += ' ';
-      } else if (inf[i] == '(') {
-          stack1.push('(');
-      } else if (inf[i] == ')') {
-          while (!stack1.isempty() && stack1.get() != '(') {
-              spst += stack1.get();
-              spst += ' ';
-              stack1.pop();
-          }
-          if (!stack1.isempty()) {
-              stack1.pop();
-          }
-      } else {
-          while (!stack1.isempty() && stack1.get() != '(' &&
-          (inf[i] =='+' || stack1.get() =='*' || stack1.get() == '/')) {
-              spst += stack1.get();
-              spst += ' ';
-              stack1.pop();
-          }
-          stack1.push(inf[i]);
-      }
-  }
-  while (!stack1.isempty()) {
-      spst += stack1.get();
-      spst += ' ';
-      stack1.pop();
-  }
-  if (!spst.empty()) {
-      spst.erase(spst.size() - 1);
-  }
-  return spst;
+    while (!stack1.isEmpty()) {
+        postf += stack1.pop();
+        postf += ' ';
+    }
+    if (!postf.empty() && postf[postf.size() - 1] == ' ') {
+        postf.pop_back();
+    }
+
+    return postf;
+}
+int eval(const std::string pref) {
+    TStack<int, 100> stack2;
+    for (int i = 0; i < pref.size(); i++) {
+        if (isdigit(pref[i])) {
+            int operand = 0;
+            while (i < pref.size() && isdigit(pref[i])) {
+                operand = operand * 10 + (pref[i] - '0');
+                i++;
+            }
+            i--;
+            stack2.push(operand);
+        } else if (isOperator(pref[i])) {
+            int operand2 = stack2.pop();
+            int operand1 = stack2.pop();
+            if (pref[i] == '+') {
+                stack2.push(operand1 + operand2);
+            } else if (pref[i] == '-') {
+                stack2.push(operand1 - operand2);
+            } else if (pref[i] == '*') {
+                stack2.push(operand1 * operand2);
+            } else if (pref[i] == '/') {
+                stack2.push(operand1 / operand2);
+            }
+        }
+    }
+    return stack2.pop();
 }
