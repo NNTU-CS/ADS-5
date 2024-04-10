@@ -55,16 +55,16 @@ std::string infx2pstfx(std::string inf) {
     rez1 += rez[i];
   return rez1;
 }
-int schet(const int& p, const int& v, const int& x) {
+int schet(const int& l, const int& m, const int& x) {
   switch (x) {
     case '+':
-      return p + v;
+      return l + m;
     case '-':
-      return p - v;
+      return l - m;
     case '/':
-      return p / v;
+      return l / m;
     case '*':
-      return p * v;
+      return l * m;
     default:
       return 0;
   }
