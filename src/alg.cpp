@@ -3,7 +3,6 @@
 #include <map>
 #include "tstack.h"
 
-
 TStack<char, 100> stack1;
 TStack<int, 100> stack2;
 
@@ -67,7 +66,6 @@ int eval(std::string pref) {
       stack2.pop();
       int a = stack2.show();
       stack2.pop();
-
       if (c == '+') {
         stack2.add((a + b));
       } else if (c == '-') {
