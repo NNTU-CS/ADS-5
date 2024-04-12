@@ -3,14 +3,14 @@
 #include <map>
 #include "tstack.h"
 
-int prioritet(char operator) {
-  if (operator == '(')
+int prioritet(char oper) {
+  if (oper == '(')
     return 0;
-  else if (operator == ')')
+  else if (oper == ')')
     return 1;
-  else if (operator == '+' || operator == '-')
+  else if (oper == '+' || oper == '-')
     return 2;
-  else if (operator == '*' || operator == '/')
+  else if (oper == '*' || oper == '/')
     return 3;
 }
 std::string infx2pstfx(std::string inf) {
@@ -33,7 +33,7 @@ std::string infx2pstfx(std::string inf) {
       stack1.push(simvol);
     }
   }
-  while (!stack1.empty()){
+  while (!stack1.empty()) {
     pstfx += st.top();
     pstfx += ' ';
     stack1.pop();
@@ -45,15 +45,14 @@ int eval(std::string post) {
   for (char simvol2 : post) {
     if (isdigit(simvol2)) {
       stack2.push(simvol2 - '0');
-    }
-    else if (simvol2 == ' ') {
+    } else if (simvol2 == ' ') {
       continue;
     } else {
       int operand2 = stack2.top();
       stack2.pop();
       int operand1 = stack2.top();
       stack2.pop();
-      switch(simvol2) {
+      switch (simvol2) {
         case '+':
           stack2.push(operand1 + operand2);
           break;
@@ -69,5 +68,5 @@ int eval(std::string post) {
       }
     }
   }
-  return stack2.top(); 
+  return stack2.top();
 }
