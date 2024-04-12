@@ -68,5 +68,5 @@ int eval(std::string post) {
       }
     }
   }
-  return stack2.show();
+  return stack2.top();
 }
