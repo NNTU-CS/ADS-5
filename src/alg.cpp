@@ -34,7 +34,7 @@ std::string infx2pstfx(std::string inf) {
     }
   }
   while (!stack1.empty()) {
-    pstfx += st.top();
+    pstfx += stack1.top();
     pstfx += ' ';
     stack1.pop();
   }
