@@ -8,7 +8,6 @@ class TStack {
   private:
     T arr[100];
     int top;
-
   public:
     TStack() : top(-1) {}
     void add(T value) {
@@ -17,7 +16,9 @@ class TStack {
       else
         throw std::string("Full");
     }
-    T show() const { return arr[top]; }
+    T show() const { 
+      return arr[top]; 
+    }
     T pop() {
       if (isEmpty()) {
         throw std::string("Empty");
