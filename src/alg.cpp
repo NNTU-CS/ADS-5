@@ -6,16 +6,11 @@
 TStack<char, 100> stack1;
 TStack<int, 100> stack2;
 
-int Priory(char operand) {
-  if (operand == '+' || operand == '-') {
-    return 1;
-  }
-  if (operand == '*' || operand == '/') {
-    return 2;
-  }
+int Priority(char operand) {
+  if (operand == '+' || operand == '-') return 1;
+  if (operand == '*' || operand == '/') return 2;
   return 0;
 }
-
 std::string infx2pstfx(std::string inf) {
   std::string postfix;
   TStack<char, 100> stack;
@@ -25,7 +20,7 @@ std::string infx2pstfx(std::string inf) {
     } else if (c == '(') {
       stack.add(c);
     } else if (c == '+' || c == '-' || c == '*' || c == '/') {
-      while (!stack.isEmpty() && Priory(stack.show()) >= Priory(c)) {
+      while (!stack.isEmpty() && Priority(stack.show()) >= Priority(c)) {
         postfix = postfix + stack.show() + ' ';
         stack.pop();
       }
@@ -66,6 +61,7 @@ int eval(std::string pref) {
       stack2.pop();
       int a = stack2.show();
       stack2.pop();
+
       if (c == '+') {
         stack2.add((a + b));
       } else if (c == '-') {
