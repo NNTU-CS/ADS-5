@@ -30,6 +30,8 @@ std::string infx2pstfx(std::string inf) {
       res = res + sym + ' ';
     } else if (sym == '(' || prioritet(stack1.peek()) < prioritet(sym) || stack1.isEmpty()) {
       stack1.push(sym);
+    } else if (stack1.isEmpty()) {
+      stack1.push(sym);
     } else if (prioritet((sym) <= prioritet(stack1.peek()))) {
       while(prioritet(stack1.peek() <= prioritet(sym))) {
         res = res + ' ' + stack1.peek();
