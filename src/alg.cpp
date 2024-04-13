@@ -3,8 +3,8 @@
 #include <map>
 #include "tstack.h"
 
-TStack <char, 100> stack1;
-TStack <int, 100> stack2;
+TStack<char, 100> stack1;
+TStack<int, 100> stack2;
 
 int Priory(char operand) {
   if (operand == '+' || operand == '-') {
