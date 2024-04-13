@@ -3,15 +3,17 @@
 #define INCLUDE_TSTACK_H_
 #include <string>
 
-template<typename T, int size>
+template<typename T>
 class TStack {
+
   private:
-    T data[size];
+    T data[100];
     int top;
+
   public:
     TStack(): top() {}
     void push(const T & item) {
-      if (top <= size - 1)
+      if (top <= 99)
         data[top + 1] = item;
       else
         throw std::string("Full");
@@ -21,7 +23,7 @@ class TStack {
         return data[--top];
       else
         throw std::string("Empty");
-    };
+    }
     T show() {
       return data[top];
     }

@@ -11,7 +11,7 @@ int getPriority(char operand) {
 }
 
 std::string infx2pstfx(std::string inf) {
-  TStack<char, 100> stack;
+  TStack<char> stack;
   std::string postfix;
 
   for (char c : inf) {
@@ -46,7 +46,7 @@ std::string infx2pstfx(std::string inf) {
 }
 
 int eval(std::string pref) {
-  TStack<int, 100> stack;
+  TStack<int> stack;
   std::string buffer = "";
 
   for (char c : pref) {
