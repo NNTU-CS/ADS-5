@@ -3,18 +3,6 @@
 #include <map>
 #include "tstack.h"
 
-int prioritet(char sym) { 
-  switch (sym) {
-    case '(': return 0;
-    case ')': return 1;
-    case '+': return 2;
-    case '-': return 2;
-    case '*': return 3;
-    case '/': return 3;
-    default: return -1;
-  }
-}
-
 int getPriority(char sym) {
   if (sym == '(') {
     return 0;
@@ -47,52 +35,46 @@ bool isOperator(char sym) {
   return sym == '+' || sym == '-' || sym == '*' || sym == '/';
 }
 
-bool isNum(char sym){
-  return '0' <= sym & sym <= '9';
-}
-
 
 std::string infx2pstfx(std::string inf) {
   // добавьте код
   return std::string("");
   TStack<char, 100> stack;
-  std::string res;
+  std::string post;
   int priority = 0;
-  for (auto sym : inf) {
-    int count = 1;
-    if (isNum((sym))) {
-      res += sym;
-      if ((count != inf.length() - 1) || (!stack.isEmpty())) {
-        res += " ";
+  for (int i = 0; inf[i]; i++) {
+    if (inf[i] >= '0' && inf[i] <= '9') {
+      post += inf[i];
+      if ((i != inf.length() - 1) || (!stack.isEmpty())) {
+        post += " ";
       }
-    } else if (sym == '(') {
-      stack.push(sym);
+    } else if (inf[i] == '(') {
+      stack.push(inf[i]);
     } else if (stack.isEmpty()) {
-      stack.push(sym);
-    } else if (sym == ')') {
+      stack.push(inf[i]);
+    } else if (inf[i] == ')') {
       while (stack.stTop() != '(') {
-        res += stack.pop();
-        res += ' ';
+        post += stack.pop();
+        post += ' ';
       }
       stack.pop();
-    } else if (getPriority(sym) <= getPriority(stack.stTop())) {
-      while (getPriority(sym) <= getPriority(stack.stTop())) {
-        res += stack.pop();
+    } else if (getPriority(inf[i]) <= getPriority(stack.stTop())) {
+      while (getPriority(inf[i]) <= getPriority(stack.stTop())) {
+        post += stack.pop();
       }
-      res += ' ';
-      stack.push(sym);
+      post += ' ';
+      stack.push(inf[i]);
     } else {
-      stack.push(sym);
+      stack.push(inf[i]);
     }
-    count ++;
   }
   while (!stack.isEmpty()) {
-    res += stack.pop();
+    post += stack.pop();
     if (!stack.isEmpty()) {
-      res += ' ';
+      post += ' ';
     }
   }
-  return res;
+  return post;
 }
 
 int eval(std::string pref) {
@@ -101,18 +83,19 @@ int eval(std::string pref) {
   int num1 = 0, num2 = 0;
   TStack<int, 100> stack;
   std::string line;
-  for (auto sym : pref) {
-    if (sym >= '0' && sym <= '9') {
-      line += sym;
-    } else if (sym == ' ' && line.length() > 0) {
+  for (int i = 0; pref[i]; i++) {
+    if (pref[i] >= '0' && pref[i] <= '9') {
+      line += pref[i];
+    } else if (pref[i] == ' ' && line.length() > 0) {
       stack.push(std::stoi(line));
       line = "";
-    } else if (isOperator(sym)) {
+    } else if (isOperator(pref[i])) {
       num2 = stack.pop();
       num1 = stack.pop();
-      stack.push(operation(num1, num2, sym));
+      stack.push(operation(num1, num2, pref[i]));
     }
   }
   return stack.pop();
 }
+
 
