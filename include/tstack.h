@@ -6,12 +6,12 @@
 template<typename T, int size>
 class TStack{
 private:
-    T * data;
+    T * data = new T[size];
     int top = 0;
 
 public:
-    TStack() : top(-1) {
-        data = new T[size];
+    TStack() {
+        top = 0;
     }
     ~TStack() {
         delete[] data;
