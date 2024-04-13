@@ -8,25 +8,30 @@ class TStack {
  private:
     T arr[100];
     int top;
+
  public:
     TStack(): top(-1) {}
-    void push(T val) {
-      if (!isOverflow())
-        arr[++top] = val;
+    void push(T value) {
+      if (!isFull())
+        arr[++top] = value;
       else
-        throw std::string("overflow");
+        throw std::string("Full");
+    }
+    T get() const {
+      return arr[top];
     }
     T pop() {
       if (isEmpty())
-        throw std::string("empty");
+        throw std::string("Empty");
       else
         return arr[top--];
-    }
-    bool isOverflow() const {
-      return top == size - 1;
     }
     bool isEmpty() const {
       return top == -1;
     }
+    bool isFull() const {
+      return top == size - 1;
+    }
 };
+
 #endif  // INCLUDE_TSTACK_H_
