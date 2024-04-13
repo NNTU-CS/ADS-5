@@ -1,0 +1,8 @@
+{
+	"files.associations": {
+		"*.scss": "scss",
+		"*.module.scss": "scss",
+		"*.cpp": "cpp",
+		"map": "cpp"
+	}
+}
