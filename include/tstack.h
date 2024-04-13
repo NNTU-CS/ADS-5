@@ -17,16 +17,12 @@ public:
         } 
     }
 
-    T pop() {
-        if (top >= 0) {
-            return stack[top--];
-        } 
+    T pop() { 
+        return stack[top--];
     }
 
     T peek() const {
-        if (top >= 0) {
-            return stack[top];
-        }
+        return stack[top];
     }
 
     bool isEmpty() const {
