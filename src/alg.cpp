@@ -1,5 +1,6 @@
 // Copyright 2021 NNTU-CS
 #include <string>
+#include <map>
 #include "tstack.h"
 
 int getPriority(char sym) {
@@ -34,10 +35,7 @@ bool isOperator(char sym) {
   return sym == '+' || sym == '-' || sym == '*' || sym == '/';
 }
 
-
 std::string infx2pstfx(std::string inf) {
-  // добавьте код
-  return std::string("");
   TStack<char, 100> stack;
   std::string post;
   int priority = 0;
@@ -77,8 +75,6 @@ std::string infx2pstfx(std::string inf) {
 }
 
 int eval(std::string pref) {
-  // добавьте код
-  return 0;
   int num1 = 0, num2 = 0;
   TStack<int, 100> stack;
   std::string line;
@@ -96,5 +92,3 @@ int eval(std::string pref) {
   }
   return stack.pop();
 }
-
-
