@@ -15,8 +15,9 @@ bool isNum(char sym){
   case '7': return true;
   case '8': return true;
   case '9': return true;
-  defualt: return false;
+  return false;
   }
+  return false;
 }
 
 TStack<char, 100> stack1;
