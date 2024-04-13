@@ -5,30 +5,37 @@
 
 template<typename T, int size>
 class TStack {
- private:
-  const int SIZE = size;
-  T arr[100];
-  int top;
-
- public:
-  SStack() : top(-1) { }
-  T get() const {
-    return arr[top];
-  }
-  bool isEmpty() const {
-    return top == -1;
-  }
-  bool isFull() const {
-    return top == size-1;
-  }
-  void pop() {
-    if (top >= 0)
-      top--;
-  }
-  void push(T item) {
-    if (top < size-1)
-      arr[++top] = item;
-  }
+  private:
+    T* ptr;
+    int x;
+  public:
+    TStack() : x(0) {
+      ptr = new T[size];
+    }
+    void pushup(const T& c) {
+      if (size - 1 >= x) {
+        ptr[x++] = c;
+        } else {
+            throw std::string("Fall !");
+        }
+    }
+    T popback() {
+      if (x > 0) {
+        return ptr[--x];
+        } else {
+            throw std::string("Empty");
+        }
+    }
+    bool IfZero() const {
+      return x == 0;
+    }
+    T ElemUp() const {
+      if (x > 0) {
+        return ptr[x - 1];
+      } else {
+          throw std::string("Fall!");
+        }
+    }
 };
 
 #endif  // INCLUDE_TSTACK_H_
