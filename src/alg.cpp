@@ -14,19 +14,7 @@ std::map <char, int> prioritet
 };
 
 bool isNum(char sym){
-  switch (sym) {
-  case '0': return true;
-  case '1': return true;
-  case '2': return true;
-  case '3': return true;
-  case '4': return true;
-  case '5': return true;
-  case '6': return true;
-  case '7': return true;
-  case '8': return true;
-  case '9': return true;
-  default: return false;
-  }
+  return '0' <= sym & sym <= '9';
 }
 
 TStack<char, 100> stack1;
@@ -41,21 +29,21 @@ std::string infx2pstfx(std::string inf) {
       stack1.push(sym);
       if (prioritet[stack1.peek()] >= prioritet[sym]) { 
         while (!(stack1.isEmpty())){
-          res += stack1.peek();
+          res = res + ' ' + stack1.peek();
           stack1.pop();
         }
         stack1.push(sym);
       }
     } else if (sym == ')') { 
       while (stack1.peek() != '(') { 
-        res += stack1.peek();
+        res = res + ' ' + stack1.peek();
         stack1.pop();
       }
       stack1.pop();
     }
   }
   while (!(stack1.isEmpty())) {
-    res += stack1.peek();
+    res = res + ' ' + stack1.peek();
     stack1.pop();
     }
   return res;
