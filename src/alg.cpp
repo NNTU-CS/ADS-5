@@ -6,184 +6,122 @@
 TStack<char, 100> stack1;
 TStack<int, 100> stack2;
 
-std::string infx2pstfx(std::string inf) {
-SStack<char, 100> stack1;
-std::string newstring = "";
-  for (int i = 0; i < inf.length() + 1; i++) {
-    char operat1 = inf[i];
-    int prior1 = 0;
-    switch (operat1) {
-    case '(':
-      prior1 = 0;
-      break;
-    case ')':
-      prior1 = 1;
-      break;
+int prioty(char elem) {
+  int pr = 0;
+  switch (elem) {
     case '+':
-      prior1 = 2;
-      break;
+        return 2;
     case '-':
-      prior1 = 2;
-      break;
+        return 2;
+    case '(':
+        return 0;
     case '*':
-      prior1 = 3;
-      break;
+        return 3;
     case '/':
-      prior1 = 3;
-      break;
+        return 3;
+    case ')':
+        return 1;
+    default:
+        break;
     }
-    int prior2 = 0;
-    if (!stack1.isEmpty()) {
-      char operat2 = stack1.get();
-      switch (operat2) {
-      case '(':
-        prior2 = 0;
-        break;
-      case ')':
-        prior2 = 1;
-        break;
-      case '+':
-        prior2 = 2;
-        break;
-      case '-':
-        prior2 = 2;
-        break;
-      case '*':
-        prior2 = 3;
-        break;
-      case '/':
-        prior2 = 3;
-        break;
-      }
-    }
-    if (inf[i] >= '0' && inf[i] <= '9') {
-      newstring += inf[i];
-      newstring += ' ';
-    } else if ((inf[i] >= '(' && inf[i] <= '/') && inf[i] != ')') {
-      if (inf[i] == '(') {
-        stack1.push('(');
-      } else if (prior1 > prior2) {
-        stack1.push(inf[i]);
-      } else if (stack1.isEmpty()) {
-        stack1.push(inf[i]);
-      } else {
-        while (prior1 <= prior2) {
-          char operat2 = stack1.get();
-          prior2 = 0;
-          switch (operat2) {
-          case '(':
-            prior2 = 0;
-            break;
-          case ')':
-            prior2 = 1;
-            break;
-          case '+':
-            prior2 = 2;
-            break;
-          case '-':
-            prior2 = 2;
-            break;
-          case '*':
-            prior2 = 3;
-            break;
-          case '/':
-            prior2 = 3;
-            break;
-          }
-          if (stack1.get() != '(') {
-            newstring += stack1.get();
-            newstring += ' ';
-            stack1.pop();
-          }
-          if (!stack1.isEmpty()) {
-            char operat1 = stack1.get();
-            prior1 = 0;
-            switch (operat1) {
-            case '(':
-              prior1 = 0;
-              break;
-            case ')':
-              prior1 = 1;
-              break;
-            case '+':
-              prior1 = 2;
-              break;
-            case '-':
-              prior1 = 2;
-              break;
-            case '*':
-              prior1 = 3;
-              break;
-            case '/':
-              prior1 = 3;
-              break;
-            }
-            if (operat1 == '(')
-              break;
-          } else {
-            break;
-          }
-        }
-        stack1.push(inf[i]);
-      }
-    } else if (inf[i] == ')') {
-      while (stack1.get() != '(') {
-        if (stack1.isEmpty()) {
-          break;
-        }
-        newstring += stack1.get();
-        newstring += ' ';
-        stack1.pop();
-      }
-      stack1.pop();
-    }
-    if (inf[i] == '\0') {
-      while (!stack1.isEmpty()) {
-        newstring += stack1.get();
-        newstring += ' ';
-        stack1.pop();
-      }
-    }
+  return pr;
+}
+
+int schet(int x, int y, char elem) {
+  switch (elem) {
+    case '+':
+        return x + y;
+    case '-':
+        return x - y;
+    case '*':
+        return x * y;
+    case '/':
+        return x / y;
+    default:
+        return 0;
   }
-  newstring.pop_back();
-  return newstring;
+}
+
+std::string infx2pstfx(std::string inf) {
+  TStack<char, 100> stack;
+  std::string line = "";
+  int flag = 0;
+  try {
+      for (char& n : inf) {
+          if ((n >= '0') && (n <= '9')) {
+              if (flag == 1) {
+                  line = line + " " + n;
+                  flag = 0;
+              } else {
+                  line = line + n;
+              }
+          } else {
+              if (n == '(') {
+                  stack.pushup(n);
+              } else {
+                  flag = 1;
+                  if (stack.IfZero()) {
+                      stack.pushup(n);
+                  } else {
+                      if (n == ')') {
+                          while (stack.ElemUp() != '(') {
+                              line = line + " " + stack.popback();
+                          }
+                          stack.popback();
+                      } else {
+                          if (prioty(n) > prioty(stack.ElemUp())) {
+                              stack.pushup(n);
+                          } else {
+                              while ((!stack.IfZero()) &&
+                                  (prioty(n) <= prioty(stack.ElemUp()))) {
+                                  line = line + " " + stack.popback();
+                              }
+                              stack.pushup(n);
+                          }
+                      }
+                  }
+              }
+          }
+      }
+      while (!stack.IfZero()) {
+        line = line + " " + stack.popback();
+      }
+      return line;
+  }
+  catch (std::string maliniya) {
+    return "Fall!";
+  }
 }
 
 int eval(std::string pref) {
-SStack<int, 100> stack2;
-std::string timeline = "";
-  for (int i = 0; i < pref.length() + 1; i++) {
-    if (pref[i] >= '0' && pref[i] <= '9') {
-      timeline += pref[i];
-    } else if (pref[i] == ' ' && timeline != "") {
-      int num = std::stoi(timeline);
-      stack2.push(num);
-      timeline = "";
-    } else if (pref[i] >= '(' && pref[i] <= '/') {
-      char s = pref[i];
-      int num1 = stack2.get();
-      stack2.pop();
-      int num2 = stack2.get();
-      stack2.pop();
-      int res = 0;
-      switch (s) {
-      case '+':
-        res = num1 + num2;
-        break;
-      case '-' :
-        res = num2 - num1;
-        break;
-      case '*':
-        res = num2 * num1;
-        break;
-      case '/':
-        res = num2 / num1;
-        break;
+  std::string line = "";
+  TStack<int, 100> stack1;
+  int flag = 0;
+  try {
+      for (char& b : pref) {
+          if (flag == 0) {
+              if (('0' <= b) && (b <= '9')) {
+                  line += b;
+              } else {
+                  if (line == "") {
+                      int y = stack1.popback();
+                      int x = stack1.popback();
+                      int res = schet(x, y, b);
+                      stack1.pushup(res);
+                      flag = 1;
+                  } else {
+                      stack1.pushup(stoi(line));
+                      line = "";
+                  }
+              }
+          } else {
+              flag = 0;
+          }
       }
-      stack2.push(res);
+      return stack1.popback();
     }
-    if (pref[i] == '\0')
-      break;
+  catch (std::string maliniya) {
+    return -1;
   }
-  return stack2.get();
+  return 0;
 }
