@@ -10,22 +10,22 @@ class TStack {
     int top;
  public:
     TStack(): top(-1) {}
-    void pushh(T val) {
+    void push(T val) {
       if (!isOverflow())
         arr[++top] = val;
       else
-        throw std::string("Stack overflow");
+        throw std::string("overflow");
     }
     T pop() {
-      if (isEmptyy())
-        throw std::string("Stack is empty");
+      if (isEmpty())
+        throw std::string("empty");
       else
         return arr[top--];
     }
     bool isOverflow() const {
       return top == size - 1;
     }
-    bool isEmptyy() const {
+    bool isEmpty() const {
       return top == -1;
     }
 };
