@@ -16,7 +16,7 @@ class TStack {
       else
         throw std::string("Stack overflow");
     }
-    T popp() {
+    T pop() {
       if (isEmptyy())
         throw std::string("Stack is empty");
       else
