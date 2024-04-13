@@ -2,88 +2,76 @@
 #include <string>
 #include <map>
 #include "tstack.h"
-bool isOperator(char c) {
-    return (c == '+' || c == '-' || c == '*' || c == '/');
+TStack<char, 100> stack1;
+TStack<int, 100> stack2;
+int prioritet(char operand) {
+    if (operand == '-') return 1;
+    if (operand == '+') return 1;
+    if (operand == '*') return 2;
+    if (operand == '/') return 2;
+    return 0;
 }
-int isPriority(char operation) {
-    if (operation == '*' || operation == '/') {
-        return 2;
-    } else if (operation == '+' || operation == '-') {
-        return 1;
-    } else {
-        return 0;
-    }
-}
-std::string infx2pstfx(const std::string inf) {
-    std::string postf = "";
-    TStack<char, 100> stack1;
-    for (int i = 0; i < inf.size(); i++) {
-        char c = inf[i];
+std::string infx2pstfx(std::string inf) {
+    std::string postfix;
+    TStack<char, 100> stack;
+    for (char c : inf) {
         if (isdigit(c)) {
-            int operand = 0;
-            while (i < inf.size() && isdigit(inf[i])) {
-                operand = operand * 10 + (inf[i] - '0');
-                i++;
-            }
-            i--;
-            postf += std::to_string(operand) + " ";
-        } else if (isalpha(c)) {
-            postf += c;
-            postf += " ";
+            postfix += c;
+            postfix += ' ';
         } else if (c == '(') {
-            stack1.push(c);
+            stack.push(c);
+        } else if (c == '+' || c == '-' || c == '*' || c == '/') {
+            while (!stack.isEmpty() && prioritet(stack.see()) >= prioritet(c)) {
+                postfix = postfix + stack.see() + ' ';
+                stack.pop();
+            }
+            stack.push(c);
         } else if (c == ')') {
-            while (!stack1.isEmpty() && stack1.watch() != '(') {
-                postf += stack1.pop();
-                postf += ' ';
+            while (!stack.isEmpty() && stack.see() != '(') {
+                postfix = postfix + stack.see() + ' ';
+                postfix = postfix + stack.see() + ' ';
+                stack.pop();
             }
-            if (!stack1.isEmpty() && stack1.watch() == '(') {
-                stack1.pop();
-            }
-        } else if (isOperator(c)) {
-            while (!stack1.isEmpty() &&
-                   isPriority(stack1.watch()) >= isPriority(c)) {
-                postf += stack1.pop();
-                postf += ' ';
-            }
-            stack1.push(c);
+            stack.pop();
         }
     }
-
-    while (!stack1.isEmpty()) {
-        postf += stack1.pop();
-        postf += ' ';
+    while (!stack.isEmpty()) {
+        postfix = postfix + stack.see() + ' ';
+        stack.pop();
     }
-    if (!postf.empty() && postf[postf.size() - 1] == ' ') {
-        postf.pop_back();
+    if (!postfix.empty()) {
+        postfix.pop_back();
     }
-
-    return postf;
+    return postfix;
 }
-int eval(const std::string pref) {
-    TStack<int, 100> stack2;
-    for (int i = 0; i < pref.size(); i++) {
-        if (isdigit(pref[i])) {
-            int operand = 0;
-            while (i < pref.size() && isdigit(pref[i])) {
-                operand = operand * 10 + (pref[i] - '0');
-                i++;
+int eval(std::string pref) {
+    std::string strNumber = "";
+    for (char c : pref) {
+        if (c != ' ' && c != '+' && c != '-' && c != '*' && c != '/') {
+            strNumber += c;
+        }
+        if (c == ' ') {
+            if (!strNumber.empty()) {
+                int num = std::stoi(strNumber);
+                stack2.push(num);
+                strNumber = "";
             }
-            i--;
-            stack2.push(operand);
-        } else if (isOperator(pref[i])) {
-            int operand2 = stack2.pop();
-            int operand1 = stack2.pop();
-            if (pref[i] == '+') {
-                stack2.push(operand1 + operand2);
-            } else if (pref[i] == '-') {
-                stack2.push(operand1 - operand2);
-            } else if (pref[i] == '*') {
-                stack2.push(operand1 * operand2);
-            } else if (pref[i] == '/') {
-                stack2.push(operand1 / operand2);
+        }
+        if (c == '+' || c == '-' || c == '*' || c == '/') {
+            int b = stack2.see();
+            stack2.pop();
+            int a = stack2.see();
+            stack2.pop();
+            if (c == '+') {
+                stack2.push((a + b));
+            } else if (c == '-') {
+                stack2.push((a - b));
+            } else if (c == '*') {
+                stack2.push((a * b));
+            } else if (c == '/') {
+                stack2.push((a / b));
             }
         }
     }
-    return stack2.pop();
+    return stack2.see();
 }
