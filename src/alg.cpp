@@ -15,76 +15,104 @@ int prioritet(char sym) {
   }
 }
 
+int getPriority(char sym) {
+  if (sym == '(') {
+    return 0;
+  } else if (sym == ')') {
+    return 1;
+  } else if (sym == '+' || sym == '-') {
+    return 2;
+  } else if (sym == '*' || sym == '/') {
+    return 3;
+  } else {
+    return -1;
+  }
+}
+
+int operation(int a, int b, char sym) {
+  switch (sym) {
+    case '+':
+      return a + b;
+    case '-':
+      return a - b;
+    case '*':
+      return a * b;
+    case '/':
+      return a / b;
+  }
+  return 0;
+}
+
+bool isOperator(char sym) {
+  return sym == '+' || sym == '-' || sym == '*' || sym == '/';
+}
+
 bool isNum(char sym){
   return '0' <= sym & sym <= '9';
 }
 
-TStack<char, 100> stack1;
-TStack<int, 100> stack2;
 
 std::string infx2pstfx(std::string inf) {
+  // добавьте код
+  return std::string("");
+  TStack<char, 100> stack;
   std::string res;
-  int count = 0;
-  for (auto& sym : inf) {
-    if (isNum(sym)) {
-      count++;
-      if (count == 1){
-        res = res + sym + ' ';
+  int priority = 0;
+  for (auto sym : inf) {
+    int count = 1;
+    if (isNum((sym))) {
+      res += sym;
+      if ((count != inf.length() - 1) || (!stack.isEmpty())) {
+        res += " ";
       }
     } else if (sym == '(') {
-      stack1.push(sym);
-    } else if(prioritet(sym) > prioritet(stack1.peek())) {
-      stack1.push(sym);
-    } else if(stack1.isEmpty()) {
-      stack1.push(sym);
-    } else if(sym == ')') {
-      while (stack1.peek() != '(') {
-        res = res + ' ' + stack1.peek();
-        stack1.pop();
+      stack.push(sym);
+    } else if (stack.isEmpty()) {
+      stack.push(sym);
+    } else if (sym == ')') {
+      while (stack.stTop() != '(') {
+        res += stack.pop();
+        res += ' ';
       }
-      stack1.pop();
+      stack.pop();
+    } else if (getPriority(sym) <= getPriority(stack.stTop())) {
+      while (getPriority(sym) <= getPriority(stack.stTop())) {
+        res += stack.pop();
+      }
+      res += ' ';
+      stack.push(sym);
     } else {
-      while (!stack1.isEmpty() && (prioritet(sym) <= prioritet(stack1.peek()))) {
-        res = res + ' ' + stack1.peek();
-      } 
+      stack.push(sym);
     }
-    }
-    while (!(stack1.isEmpty())) {
-      res = res + ' ' + stack1.peek();
-      stack1.pop();
-    }
-  return res;
+    count ++;
   }
+  while (!stack.isEmpty()) {
+    res += stack.pop();
+    if (!stack.isEmpty()) {
+      res += ' ';
+    }
+  }
+  return res;
+}
 
 int eval(std::string pref) {
-  int num1 = 0;
-  int num2 = 0;
-  for (auto sym : pref) {
-    if (isNum(sym)) {
-      stack2.push(sym - '0');
-    }
-    else if (!isNum(sym)) {
-      int num1 = stack2.peek();
-      stack2.pop();
-      int num2 = stack2.peek();
-      stack2.pop();
-     }
-     switch (sym) {
-      case '+': 
-        stack2.push(num1 + num2);
-        break;
-        case '-': 
-        stack2.push(num1 - num2);
-        break;
-        case '*': 
-        stack2.push(num1 * num2);
-        break;
-        case '/': 
-        stack2.push(num1 / num2);
-        break;
-      default: continue;
-      }
-      return stack2.peek();
-  }
+  // добавьте код
   return 0;
+  int num1 = 0, num2 = 0;
+  TStack<int, 100> stack;
+  std::string line;
+  for (auto sym : pref) {
+    if (sym >= '0' && sym <= '9') {
+      line += sym;
+    } else if (sym == ' ' && line.length() > 0) {
+      stack.push(std::stoi(line));
+      line = "";
+    } else if (isOperator(sym)) {
+      num2 = stack.pop();
+      num1 = stack.pop();
+      stack.push(operation(num1, num2, sym));
+    }
+  }
+  return stack.pop();
 }
+
