@@ -2,76 +2,98 @@
 #include <string>
 #include <map>
 #include "tstack.h"
-TStack<char, 100> stack1;
-TStack<int, 100> stack2;
-int prioritet(char operand) {
-    if (operand == '-') return 1;
-    if (operand == '+') return 1;
-    if (operand == '*') return 2;
-    if (operand == '/') return 2;
-    return 0;
+
+int prior(char x) {
+  switch (x) {
+    case '(':
+      return 0;
+    case ')':
+      return 1;
+    case '+': case '-':
+      return 2;
+    case '*': case '/':
+      return 3;
+    default:
+      return -1;
+    }
 }
 std::string infx2pstfx(std::string inf) {
-    std::string postfix;
-    TStack<char, 100> stack;
-    for (char c : inf) {
-        if (isdigit(c)) {
-            postfix += c;
-            postfix += ' ';
-        } else if (c == '(') {
-            stack.push(c);
-        } else if (c == '+' || c == '-' || c == '*' || c == '/') {
-            while (!stack.isEmpty() && prioritet(stack.see()) >= prioritet(c)) {
-                postfix = postfix + stack.see() + ' ';
-                stack.pop();
-            }
-            stack.push(c);
-        } else if (c == ')') {
-            while (!stack.isEmpty() && stack.see() != '(') {
-                postfix = postfix + stack.see() + ' ';
-                postfix = postfix + stack.see() + ' ';
-                stack.pop();
-            }
-            stack.pop();
+  std::string rezult, rezult1;
+  TStack<char, 100>stack1;
+  for (auto& x : inf) {
+    int p = prior(x);
+    if (p == -1) {
+      rezult = rezult + x + ' ';
+    } else {
+      char elem = stack1.get();
+      if (p == 0 || prior(elem) < p || stack1.isEmpty()) {
+        stack1.push(x);
+      } else {
+        if (x == ')') {
+          while (prior(elem) >= p) {
+            rezult = rezult + elem + ' ';
+            stack1.pop();
+            elem = stack1.get();
+          }
+          stack1.pop();
+        } else {
+          while (prior(elem) >= p) {
+            rezult = rezult + elem + ' ';
+            stack1.pop();
+            elem = stack1.get();
+          }
+          stack1.push(x);
         }
+      }
     }
-    while (!stack.isEmpty()) {
-        postfix = postfix + stack.see() + ' ';
-        stack.pop();
-    }
-    if (!postfix.empty()) {
-        postfix.pop_back();
-    }
-    return postfix;
+  }
+  while (!stack1.isEmpty()) {
+    rezult = rezult + stack1.get() + ' ';
+    stack1.pop();
+  }
+  for (int i = 0; i < rezult.size() - 1; i++)
+    rezult1 += rezult[i];
+  return rezult1;
 }
+
+int schet(const int& p, const int& v, const int& x) {
+  switch (x) {
+    case '+':
+      return p + v;
+    case '-':
+      return p - v;
+    case '/':
+      return p / v;
+    case '*':
+      return p * v;
+    default:
+      return 0;
+  }
+}
+
 int eval(std::string pref) {
-    std::string strNumber = "";
-    for (char c : pref) {
-        if (c != ' ' && c != '+' && c != '-' && c != '*' && c != '/') {
-            strNumber += c;
-        }
-        if (c == ' ') {
-            if (!strNumber.empty()) {
-                int num = std::stoi(strNumber);
-                stack2.push(num);
-                strNumber = "";
-            }
-        }
-        if (c == '+' || c == '-' || c == '*' || c == '/') {
-            int b = stack2.see();
-            stack2.pop();
-            int a = stack2.see();
-            stack2.pop();
-            if (c == '+') {
-                stack2.push((a + b));
-            } else if (c == '-') {
-                stack2.push((a - b));
-            } else if (c == '*') {
-                stack2.push((a * b));
-            } else if (c == '/') {
-                stack2.push((a / b));
-            }
-        }
+  TStack<int, 100> stack1;
+  std::string rezult = "";
+  for (int i = 0; i < pref.size(); i++) {
+    char elem = pref[i];
+    if (prior(elem) == -1) {
+      if (pref[i] == ' ') {
+        continue;
+      } else if (isdigit(pref[i+1])) {
+        rezult += pref[i];
+        continue;
+      } else {
+        rezult += pref[i];
+        stack1.push(atoi(rezult.c_str()));
+        rezult = "";
+      }
+    } else {
+      int v = stack1.get();
+      stack1.pop();
+      int p = stack1.get();
+      stack1.pop();
+      stack1.push(schet(p, v, elem));
     }
-    return stack2.see();
+  }
+  return stack1.get();
 }
