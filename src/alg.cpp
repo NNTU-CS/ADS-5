@@ -25,7 +25,7 @@ TStack<int, 100> stack2;
 std::string infx2pstfx(std::string inf) {
   std::string res;
   int count = 0;
-  for (auto sym : inf) {
+  for (auto& sym : inf) {
     if (isNum(sym)) {
       count++;
       if (count == 1){
