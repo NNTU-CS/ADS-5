@@ -24,24 +24,29 @@ TStack<int, 100> stack2;
 
 std::string infx2pstfx(std::string inf) {
   std::string res;
-
+  int count = 0;
   for (auto sym : inf) {
     if (isNum(sym)) {
-      res = res + sym + ' ';
-    } else if (sym == '(' || prioritet(stack1.peek()) < prioritet(sym) || stack1.isEmpty()) {
+      count++;
+      if (count == 1){
+        res = res + sym + ' ';
+      }
+    } else if (sym == '(') {
       stack1.push(sym);
-    } else if (stack1.isEmpty()) {
+    } else if(prioritet(sym) > prioritet(stack1.peek())) {
       stack1.push(sym);
-    } else if (prioritet((sym) <= prioritet(stack1.peek()))) {
-      while(prioritet(stack1.peek() <= prioritet(sym))) {
-        res = res + ' ' + stack1.peek();
-        stack1.pop();
-      } 
-    } else if (sym == ')') {
+    } else if(stack1.isEmpty()) {
+      stack1.push(sym);
+    } else if(sym == ')') {
       while (stack1.peek() != '(') {
         res = res + ' ' + stack1.peek();
         stack1.pop();
       }
+      stack1.pop();
+    } else {
+      while (!stack1.isEmpty() && (prioritet(sym) <= prioritet(stack1.peek()))) {
+        res = res + ' ' + stack1.peek();
+      } 
     }
     }
     while (!(stack1.isEmpty())) {
@@ -52,6 +57,34 @@ std::string infx2pstfx(std::string inf) {
   }
 
 int eval(std::string pref) {
-  // добавьте код
+  int num1 = 0;
+  int num2 = 0;
+  for (auto sym : pref) {
+    if (isNum(sym)) {
+      stack2.push(sym - '0');
+    }
+    else if (!isNum(sym)) {
+      int num1 = stack2.peek();
+      stack2.pop();
+      int num2 = stack2.peek();
+      stack2.pop();
+     }
+     switch (sym) {
+      case '+': 
+        stack2.push(num1 + num2);
+        break;
+        case '-': 
+        stack2.push(num1 - num2);
+        break;
+        case '*': 
+        stack2.push(num1 * num2);
+        break;
+        case '/': 
+        stack2.push(num1 / num2);
+        break;
+      default: continue;
+      }
+      return stack2.peek();
+  }
   return 0;
 }
