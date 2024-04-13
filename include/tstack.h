@@ -5,12 +5,11 @@
 
 template<typename T>
 class TStack {
-
-  private:
+ private:
     T data[100];
     int top;
 
-  public:
+ public:
     TStack(): top() {}
     void push(const T & item) {
       if (top <= 99)
