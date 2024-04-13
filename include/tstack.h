@@ -14,27 +14,18 @@ public:
     void push(const T& value) {
         if (top < size - 1) {
             stack[++top] = value;
-        } else {
-            // stack is full
-            throw std::out_of_range("Stack is full");
-        }
+        } 
     }
 
     T pop() {
         if (top >= 0) {
             return stack[top--];
-        } else {
-            // stack is empty
-            throw std::out_of_range("Stack is empty");
-        }
+        } 
     }
 
     T peek() const {
         if (top >= 0) {
             return stack[top];
-        } else {
-            // stack is empty
-            throw std::out_of_range("Stack is empty");
         }
     }
 
