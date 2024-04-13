@@ -1,8 +1,6 @@
 // Copyright 2021 NNTU-CS
 #include <string>
 #include <map>
-#include <utility>
-#include <xlocale>
 #include "tstack.h"
 
 bool isNum(char sym){
