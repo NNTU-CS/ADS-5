@@ -13,6 +13,7 @@ int prioritet(char oper) {
   else if (oper == '*' || oper == '/')
     return 3;
 }
+
 std::string infx2pstfx(std::string inf) {
   std::string pstfx = "";
   TStack<char, 100> stack1;
@@ -40,7 +41,8 @@ std::string infx2pstfx(std::string inf) {
   }
   return pstfx;
 }
-int eval(std::string post) {
+
+int eval(std::string pref) {
   TStack<int, 100> stack2;
   for (char simvol2 : post) {
     if (isdigit(simvol2)) {
