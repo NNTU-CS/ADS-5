@@ -1,179 +1,125 @@
 // Copyright 2021 NNTU-CS
-#include <iostream>
-#include <string>
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
+#include <string>
 
 template<typename T, int size>
 class TStack {
   // добавьте код стека
  private:
-    T* ptr;
-    int x;
+    T data[100];
+    int top;
 
  public:
-    TStack() : x(0) {
-        ptr = new T[size];
+    TStack() : top(-1) {}
+    void push(T val) {
+        if (!isFull())
+            data[++top] = val;
+        else
+            throw std::string("Full");
     }
-    void pushup(const T& c) {
-        if (size - 1 >= x) {
-            ptr[x++] = c;
-        } else {
-            throw std::string("Fall !");
-        }
+    T get() const {
+        return data[top];
     }
-    T popback() {
-        if (x > 0) {
-            return ptr[--x];
-        } else {
+    T pop() {
+        if (isEmpty()) {
             throw std::string("Empty");
-        }
-    }
-    bool IfZero() const {
-        return x == 0;
-    }
-    T ElemUp() const {
-        if (x > 0) {
-            return ptr[x - 1];
         } else {
-            throw std::string("Fall!");
+            return data[top--];
         }
+    }
+    bool isEmpty() const {
+        return top == -1;
+    }
+    bool isFull() const {
+        return top == size - 1;
     }
 };
 
 #endif  // INCLUDE_TSTACK_H_
-  122 changes: 118 additions & 4 deletions122  
-src/alg.cpp
-Viewed
-@@ -2,13 +2,127 @@
-#include <string>
 #include <map>
 #include "tstack.h"
-int prioty(char);
-int schet(int, int, char);
-std::string infx2pstfx(std::string);
-int eval(std::string);
+
+int Priority(char oper) {
+    if (oper == '+' || oper == '-') return 1;
+    if (oper == '*' || oper == '/') return 2;
+    return 0;
+}
+
+bool isOperator(char ch) {
+    return (ch == '+' || ch == '-' || ch == '*' || ch == '/');
+}
 
 std::string infx2pstfx(std::string inf) {
   // добавьте код
   return std::string("");
+    std::string postfix;
     TStack<char, 100> stack;
-    std::string line = "";
-    int flag = 0;
-    try {
-        for (char& n : inf) {
-            if ((n >= '0') && (n <= '9')) {
-                if (flag == 1) {
-                    line = line + " " + n;
-                    flag = 0;
-                } else {
-                    line = line + n;
-                }
-            } else {
-                if (n == '(') {
-                    stack.pushup(n);
-                } else {
-                    flag = 1;
-                    if (stack.IfZero()) {
-                        stack.pushup(n);
-                    } else {
-                        if (n == ')') {
-                            while (stack.ElemUp() != '(') {
-                                line = line + " " + stack.popback();
-                            }
-                            stack.popback();
-                        } else {
-                            if (prioty(n) > prioty(stack.ElemUp())) {
-                                stack.pushup(n);
-                            } else {
-                                while ((!stack.IfZero()) &&
-                                    (prioty(n) <= prioty(stack.ElemUp()))) {
-                                    line = line + " " + stack.popback();
-                                }
-                                stack.pushup(n);
-                            }
-                        }
-                    }
-                }
+    for (char c : inf) {
+        if (isdigit(c)) {
+            postfix = postfix + c + ' ';
+        } else if (c == '(') {
+            stack.push(c);
+        } else if (isOperator(c)) {
+            while (!stack.isEmpty() && Priority(stack.get()) >= Priority(c)) {
+                postfix = postfix + stack.get() + ' ';
+                stack.pop();
             }
+            stack.push(c);
+        } else if (c == ')') {
+            while (!stack.isEmpty() && stack.get() != '(') {
+                postfix = postfix + stack.get() + ' ';
+                stack.pop();
+            }
+            stack.pop();
         }
-        while (!stack.IfZero()) {
-            line = line + " " + stack.popback();
-        }
-        return line;
     }
-    catch (std::string maliniya) {
-        return "Fall!";
+    while (!stack.isEmpty()) {
+        postfix = postfix + stack.get() + ' ';
+        stack.pop();
     }
+    if (!postfix.empty()) {
+        postfix.pop_back();
+    }
+    return postfix;
 }
 
 int eval(std::string pref) {
   // добавьте код
   return 0;
-    std::string line = "";
-    TStack<int, 100> stack1;
-    int flag = 0;
-    try {
-        for (char& b : pref) {
-            if (flag == 0) {
-                if (('0' <= b) && (b <= '9')) {
-                    line += b;
-                } else {
-                    if (line == "") {
-                        int y = stack1.popback();
-                        int x = stack1.popback();
-                        int res = schet(x, y, b);
-                        stack1.pushup(res);
-                        flag = 1;
-                    } else {
-                        stack1.pushup(stoi(line));
-                        line = "";
-                    }
-                }
-            } else {
-                flag = 0;
+int eval(std::string post) {
+    TStack<int, 100> stack;
+    std::string Number;
+    for (char c : post) {
+        if (isdigit(c)) {
+            Number += c;
+        } else if (Number != "") {
+            stack.push(std::atoi(Number.c_str()));
+            Number = "";
+        }
+        if (isOperator(c)) {
+            int val2 = stack.get();
+            stack.pop();
+            int val1 = stack.get();
+            stack.pop();
+            switch (c) {
+            case '+':
+                stack.push(val1 + val2);
+                break;
+            case '-':
+                stack.push(val1 - val2);
+                break;
+            case '*':
+                stack.push(val1 * val2);
+                break;
+            case '/':
+                stack.push(val1 / val2);
+                break;
             }
         }
-        return stack1.popback();
     }
-    catch (std::string maliniya) {
-        return -1;
+    if (Number != "") {
+        stack.push(std::atoi(Number.c_str()));
     }
-    return 0;
-}
-
-int prioty(char znak) {
-    int pryoto = 0;
-    switch (znak) {
-    case '+':
-        return 2;
-    case '-':
-        return 2;
-    case '(':
-        return 0;
-    case '*':
-        return 3;
-    case '/':
-        return 3;
-    case ')':
-        return 1;
-    default:
-        break;
-    }
-    return pryoto;
-}
-
-int schet(int x, int y, char znak) {
-    switch (znak) {
-    case '+':
-        return x + y;
-    case '-':
-        return x - y;
-    case '*':
-        return x * y;
-    case '/':
-        return x / y;
-    default:
-        return 0;
-    }
+    return stack.get();
 }
