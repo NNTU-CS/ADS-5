@@ -4,6 +4,7 @@
 
 #include <string>
 
+int Prioritet(char a);
 std::string infx2pstfx(std::string);
 int eval(std::string);
 
