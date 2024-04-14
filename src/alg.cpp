@@ -1,98 +1,73 @@
 // Copyright 2021 NNTU-CS
-#include <map>
 #include "tstack.h"
 
-bool isOperator(char op) {
-    return (op == '+' || op == '-' || op == '(' ||
-        op == ')' || op == '/' || op == '*');
-}
-bool isDigit(char n) {
-    return (n >= '0' && n <= '9');
-}
-
-int whatPrioritet(char op) {
-    if (op == '-' || op == '+')
-        return 1;
-    if (op == '/' || op == '*')
-        return 2;
-    return 0;
-}
 std::string infx2pstfx(std::string inf) {
   // добавьте код
   return std::string("");
-    std::string post;
-    int c = 0;
-    TStack <char, 100> stack1;
-    for (char s : inf) {
-        if (isDigit(s)) {
-            c++;
-            if (c == 1) {
-                post += s;
-                continue;
-            }
-            post = post + ' ' + s;
-        } else if (isOperator(s)) {
-            if (s == '(') {
-                stack1.push(s);
-            } else if (stack1.checkEmpty()) {
-                stack1.push(s);
-            } else if (whatPrioritet(s) > whatPrioritet(stack1.get())) {
-                stack1.push(s);
-            } else if (s == ')') {
-                while (stack1.get() != '(') {
-                    post = post + ' ' + stack1.get();
-                    stack1.pop();
-                }
+    TStack<char, 100> stack1;
+    std::string pst;
+    for (int i = 0; i < inf.length(); i++) {
+        if (inf[i] >= '0' && inf[i] <= '9') {
+            pst += inf[i];
+            pst += ' ';
+        } else if (inf[i] == '(') {
+            stack1.push('(');
+        } else if (inf[i] == ')') {
+            while (!stack1.isempty() && stack1.get() != '(') {
+                pst += stack1.get();
+                pst += ' ';
                 stack1.pop();
-            } else {
-                int x = whatPrioritet(s);
-                int y = whatPrioritet(stack1.get());
-                while (!stack1.checkEmpty() && x <= y) {
-                    post = post + ' ' + stack1.get();
-                    stack1.pop();
-                }
-                stack1.push(s);
             }
+            if (!stack1.isempty()) {
+                stack1.pop();
+            }
+        } else {
+            while (!stack1.isempty() && stack1.get() != '(' &&
+            (inf[i] =='+' || stack1.get() =='*' || stack1.get() == '/')) {
+                pst += stack1.get();
+                pst += ' ';
+                stack1.pop();
+            }
+            stack1.push(inf[i]);
         }
     }
-    while (!stack1.checkEmpty()) {
-        post = post + ' ' + stack1.get();
+    while (!stack1.isempty()) {
+        pst += stack1.get();
+        pst += ' ';
         stack1.pop();
     }
-    return post;
+    if (!pst.empty()) {
+        pst.erase(pst.size() - 1);
+    }
+    return pst;
 }
 
 int eval(std::string pref) {
   // добавьте код
   return 0;
-    TStack <int, 100> stack2;
-    for (char s : pref) {
-        if (isDigit(s)) {
-            stack2.push(s - '0');
-        } else if (isOperator(s)) {
-            int x = stack2.get();
-            stack2.pop();
-            int y = stack2.get();
-            stack2.pop();
-            switch (s) {
-            case '+':
-                stack2.push(x + y);
-                break;
-            case '-':
-                stack2.push(y - x);
-                break;
-            case '*':
-                stack2.push(x * y);
-                break;
-            case '/':
-                stack2.push(y / x);
-                break;
-            default:
-                continue;
+    TStack<int, 100> stack2;
+    for (int i = 0; i < pref.length(); i++) {
+        char ch = pref[i];
+        if (isdigit(ch)) {
+            stack2.push(ch - '0');
+        } else if (ch == '+' || ch == '-' || ch == '/' || ch == '*') {
+            int operand2 = stack2.pop();
+            int operand1 = stack2.pop();
+            switch (ch) {
+                case '+':
+                    stack2.push(operand1 + operand2);
+                    break;
+                case '-':
+                    stack2.push(operand1 - operand2);
+                    break;
+                case '*':
+                    stack2.push(operand1 * operand2);
+                    break;
+                case '/':
+                    stack2.push(operand1 / operand2);
+                    break;
             }
-        } else {
-            continue;
         }
     }
-    return stack2.get();
+    return stack2.pop();
 }
