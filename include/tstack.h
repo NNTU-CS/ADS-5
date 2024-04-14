@@ -7,24 +7,45 @@ template<typename T, int size>
 class TStack {
   // добавьте код стека
  private:
-    T* stackArray;
+    T *stackArray;
     int topIndex;
+
  public:
-    TStack() : topIndex(-1) {
+    TStack() {
         stackArray = new T[size];
+        topIndex = -1;
     }
-    void pop() {
-        if (topIndex >= 0)
-            topIndex--;
+
+    ~TStack() {
+        delete[] stackArray;
     }
+
     void push(T item) {
-        if (topIndex < size - 1)
-            stackArray[++topIndex] = item;
+        if (topIndex != size - 1) {
+            topIndex++;
+            stackArray[topIndex] = item;
+        }
     }
+
+    T pop() {
+        if (topIndex != -1) {
+            T element = stackArray[topIndex];
+            topIndex--;
+            return element;
+        } else {
+            return T();
+        }
+    }
+
     T get() const {
-        return stackArray[topIndex];
+        if (topIndex == -1) {
+            return T();
+        } else {
+            return stackArray[topIndex];
+        }
     }
-    bool checkEmpty() const {
+
+    bool isempty() const {
         return topIndex == -1;
     }
 
