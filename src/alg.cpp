@@ -1,125 +1,98 @@
 // Copyright 2021 NNTU-CS
-#ifndef INCLUDE_TSTACK_H_
-#define INCLUDE_TSTACK_H_
-#include <string>
-
-template<typename T, int size>
-class TStack {
-  // добавьте код стека
- private:
-    T data[100];
-    int top;
-
- public:
-    TStack() : top(-1) {}
-    void push(T val) {
-        if (!isFull())
-            data[++top] = val;
-        else
-            throw std::string("Full");
-    }
-    T get() const {
-        return data[top];
-    }
-    T pop() {
-        if (isEmpty()) {
-            throw std::string("Empty");
-        } else {
-            return data[top--];
-        }
-    }
-    bool isEmpty() const {
-        return top == -1;
-    }
-    bool isFull() const {
-        return top == size - 1;
-    }
-};
-
-#endif  // INCLUDE_TSTACK_H_
 #include <map>
 #include "tstack.h"
 
-int Priority(char oper) {
-    if (oper == '+' || oper == '-') return 1;
-    if (oper == '*' || oper == '/') return 2;
+bool isOperator(char op) {
+    return (op == '+' || op == '-' || op == '(' ||
+        op == ')' || op == '/' || op == '*');
+}
+bool isDigit(char n) {
+    return (n >= '0' && n <= '9');
+}
+
+int whatPrioritet(char op) {
+    if (op == '-' || op == '+')
+        return 1;
+    if (op == '/' || op == '*')
+        return 2;
     return 0;
 }
-
-bool isOperator(char ch) {
-    return (ch == '+' || ch == '-' || ch == '*' || ch == '/');
-}
-
 std::string infx2pstfx(std::string inf) {
   // добавьте код
   return std::string("");
-    std::string postfix;
-    TStack<char, 100> stack;
-    for (char c : inf) {
-        if (isdigit(c)) {
-            postfix = postfix + c + ' ';
-        } else if (c == '(') {
-            stack.push(c);
-        } else if (isOperator(c)) {
-            while (!stack.isEmpty() && Priority(stack.get()) >= Priority(c)) {
-                postfix = postfix + stack.get() + ' ';
-                stack.pop();
+    std::string post;
+    int c = 0;
+    TStack <char, 100> stack1;
+    for (char s : inf) {
+        if (isDigit(s)) {
+            c++;
+            if (c == 1) {
+                post += s;
+                continue;
             }
-            stack.push(c);
-        } else if (c == ')') {
-            while (!stack.isEmpty() && stack.get() != '(') {
-                postfix = postfix + stack.get() + ' ';
-                stack.pop();
+            post = post + ' ' + s;
+        } else if (isOperator(s)) {
+            if (s == '(') {
+                stack1.push(s);
+            } else if (stack1.checkEmpty()) {
+                stack1.push(s);
+            } else if (whatPrioritet(s) > whatPrioritet(stack1.get())) {
+                stack1.push(s);
+            } else if (s == ')') {
+                while (stack1.get() != '(') {
+                    post = post + ' ' + stack1.get();
+                    stack1.pop();
+                }
+                stack1.pop();
+            } else {
+                int x = whatPrioritet(s);
+                int y = whatPrioritet(stack1.get());
+                while (!stack1.checkEmpty() && x <= y) {
+                    post = post + ' ' + stack1.get();
+                    stack1.pop();
+                }
+                stack1.push(s);
             }
-            stack.pop();
         }
     }
-    while (!stack.isEmpty()) {
-        postfix = postfix + stack.get() + ' ';
-        stack.pop();
+    while (!stack1.checkEmpty()) {
+        post = post + ' ' + stack1.get();
+        stack1.pop();
     }
-    if (!postfix.empty()) {
-        postfix.pop_back();
-    }
-    return postfix;
+    return post;
 }
 
 int eval(std::string pref) {
   // добавьте код
   return 0;
-int eval(std::string post) {
-    TStack<int, 100> stack;
-    std::string Number;
-    for (char c : post) {
-        if (isdigit(c)) {
-            Number += c;
-        } else if (Number != "") {
-            stack.push(std::atoi(Number.c_str()));
-            Number = "";
-        }
-        if (isOperator(c)) {
-            int val2 = stack.get();
-            stack.pop();
-            int val1 = stack.get();
-            stack.pop();
-            switch (c) {
+    TStack <int, 100> stack2;
+    for (char s : pref) {
+        if (isDigit(s)) {
+            stack2.push(s - '0');
+        } else if (isOperator(s)) {
+            int x = stack2.get();
+            stack2.pop();
+            int y = stack2.get();
+            stack2.pop();
+            switch (s) {
             case '+':
-                stack.push(val1 + val2);
+                stack2.push(x + y);
                 break;
             case '-':
-                stack.push(val1 - val2);
+                stack2.push(y - x);
                 break;
             case '*':
-                stack.push(val1 * val2);
+                stack2.push(x * y);
                 break;
             case '/':
-                stack.push(val1 / val2);
+                stack2.push(y / x);
                 break;
+            default:
+                continue;
             }
+        } else {
+            continue;
         }
     }
-    if (Number != "") {
-        stack.push(std::atoi(Number.c_str()));
-    }
-    return stack.get();
+    return stack2.get();
 }
