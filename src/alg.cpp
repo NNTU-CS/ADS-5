@@ -6,6 +6,7 @@
 
 template<typename T, int size>
 class TStack {
+  // добавьте код стека
  private:
     T* ptr;
     int x;
@@ -41,16 +42,22 @@ class TStack {
 };
 
 #endif  // INCLUDE_TSTACK_H_
+  122 changes: 118 additions & 4 deletions122  
+src/alg.cpp
+Viewed
+@@ -2,13 +2,127 @@
 #include <string>
 #include <map>
 #include "tstack.h"
 int prioty(char);
 int schet(int, int, char);
+std::string infx2pstfx(std::string);
+int eval(std::string);
 
 std::string infx2pstfx(std::string inf) {
   // добавьте код
   return std::string("");
-  TStack<char, 100> stack;
+    TStack<char, 100> stack;
     std::string line = "";
     int flag = 0;
     try {
@@ -103,7 +110,7 @@ std::string infx2pstfx(std::string inf) {
 int eval(std::string pref) {
   // добавьте код
   return 0;
-  std::string line = "";
+    std::string line = "";
     TStack<int, 100> stack1;
     int flag = 0;
     try {
@@ -170,4 +177,3 @@ int schet(int x, int y, char znak) {
         return 0;
     }
 }
-
