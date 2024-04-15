@@ -12,7 +12,7 @@ public:
     TStack() : top(-1) {
         stackArray = new T[size];
     }
-    void pop() {
+    void poo() {
         if (top >= 0)
             top--;
     }
