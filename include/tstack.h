@@ -16,9 +16,9 @@ public:
         if (top >= 0)
             top--;
     }
-    void push(T item) {
+    void push(T temp) {
         if (top < size - 1)
-            stackArray[++top] = item;
+            stackArray[++top] = temp;
     }
     T get() const {
         return stackArray[top];
