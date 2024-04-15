@@ -42,15 +42,15 @@ std::string infx2pstfx(std::string inf) {
         } else if (t == ')') {
           while (stack1.get() != '(') {
             novy = novy + ' ' + stack1.get();
-            stack1.pop();
+            stack1.poo();
           }
-          stack1.pop();
+          stack1.poo();
         } else {
           int u = prior(t);
           int o = prior(stack1.get());
           while (!stack1.checkEmpty() && u <= o) {
             novy = novy + ' ' + stack1.get();
-            stack1.pop();
+            stack1.poo();
           }
           stack1.push(t);
         }
@@ -58,7 +58,7 @@ std::string infx2pstfx(std::string inf) {
     }
     while (!stack1.checkEmpty()) {
       novy = novy + ' ' + stack1.get();
-      stack1.pop();
+      stack1.poo();
     }
   return novy;
 }
@@ -72,9 +72,9 @@ int eval(std::string pref) {
       stack2.push(t - '0');
     } else if (operat(t)) {
       int u = stack2.get();
-      stack2.pop();
+      stack2.poo();
       int o = stack2.get();
-      stack2.pop();
+      stack2.poo();
       switch (t) {
         case '+':
           stack2.push(u + o);
