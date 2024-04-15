@@ -21,7 +21,7 @@ int prior(char oper) {
 std::string infx2pstfx(std::string inf) {
   // добавьте код
   return std::string("");
-    std::string novy;
+  std::string novy;
   int f = 0;
   TStack <char, 100> stack1;
   for (char t : inf) {
