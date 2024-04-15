@@ -4,8 +4,7 @@
 #include "tstack.h"
 
 bool operat(char oper) {
-    return (oper == '+' || oper == '-' || oper == '(' ||
- oper == ')' || oper == '/' || oper == '*');
+    return (oper == '+' || oper == '-' || oper == '(' || oper == ')' || oper == '/' || oper == '*');
 }
 bool di(char v) {
     return (v >= '0' && v <= '9');
@@ -33,7 +32,7 @@ std::string infx2pstfx(std::string inf) {
     } else if (operat(t)) {
       if (t == '(') {
         stack1.push(t);
-        else if (stack1.checkEmpty()) {
+      } else if (stack1.checkEmpty()) {
           stack1.push(t);
         } else if (prior(t) > prior(stack1.get())) {
           stack1.push(t);
@@ -43,7 +42,7 @@ std::string infx2pstfx(std::string inf) {
             stack1.pop();
           }
           stack1.pop;
-        } else { 
+        } else {
           int u = prior(t);
           int o = prior(stack1.get());
           while (!stack1.checkEmpty() && u <= o) {
