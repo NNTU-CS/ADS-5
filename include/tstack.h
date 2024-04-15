@@ -5,6 +5,27 @@
 template<typename T, int size>
 class TStack {
   // добавьте код стека
+private:
+    T* stackArray;
+    int top;
+public:
+    TStack() : top(-1) {
+        stackArray = new T[size];
+    }
+    void poo() {
+        if (top >= 0)
+            top--;
+    }
+    void push(T temp) {
+        if (top < size - 1)
+            stackArray[++top] = temp;
+    }
+    T get() const {
+        return stackArray[top];
+    }
+    bool checkEmpty() const {
+        return top == -1;
+    }
 };
 
 #endif  // INCLUDE_TSTACK_H_
