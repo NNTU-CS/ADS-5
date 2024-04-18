@@ -2,45 +2,42 @@
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 
+#include <string>
+
 template<typename T, int size>
 class TStack {
     // добавьте код стека
 private:
-    T* stackArray;
-    int topIndex;
+    static const int KSize = size;
+    T data[KSize];
+    int top;
 
 public:
-    TStack() {
-        stackArray = new T[size];
-        topIndex = -1;
+    TStack() : top(0) {}
+
+    void push(const T &item) {
+        if (top <= size - 1)
+            data[top++] = item;
+        else
+            throw std::string("Full!");
     }
-    ~TStack() {
-        delete[] stackArray;
-    }
-    void push(T item) {
-        if (topIndex != size - 1) {
-            topIndex++;
-            stackArray[topIndex] = item;
-        }
-    }
+
     T pop() {
-        if (topIndex != -1) {
-            T element = stackArray[topIndex];
-            topIndex--;
-            return element;
-        } else {
-            return T();
-        }
+        if (top > 0)
+            return data[--top];
+        else
+            throw std::string("Empty!");
     }
-    T get() const {
-        if (topIndex == -1) {
-            return T();
-        } else {
-            return stackArray[topIndex];
-        }
+
+    bool isEmpty() {
+        return top == 0;
     }
-    bool isempty() const {
-        return topIndex == -1;
+
+    T get() {
+        if (!isEmpty())
+            return data[top - 1];
+        else
+            throw std::string("Empty");
     }
 };
 
