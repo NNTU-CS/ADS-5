@@ -3,6 +3,20 @@
 #include <map>
 #include "tstack.h"
 
+static int get_priority(char element) {
+    if (element == '(') {
+        return 0;
+    } else if (element == ')') {
+        return 1;
+    } else if ((element == '+') || (element == '-')) {
+        return 2;
+    } else if ((element == '*') || (element == '/')) {
+        return 3;
+    } else {
+        throw "Unknown Symbol!";
+    }
+}
+
 std::string infx2pstfx(std::string inf) {
     std::string out = "";
     TStack<char, 100> chars;
