@@ -7,6 +7,7 @@ class TStack {
  private:
     T *data = new T[100];
     int top = 0, size = 100;
+
  public:
     TStack() {
         data = new T[SIZE];
