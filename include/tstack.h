@@ -1,10 +1,33 @@
 // Copyright 2021 NNTU-CS
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
-
-template<typename T, int size>
+#include <string>
+template<typename T, const int size>
 class TStack {
-  // добавьте код стека
-};
+  T data[100];
+  int top;
 
+ public:
+  TStack() {
+   top = 0;
+  }
+  void PUSH(const T& item) {
+    if (top <= size - 1)
+     data[top++] = item;
+    else
+      throw std::string("Full!");
+  }
+ T POP() {
+    if (top > 0)
+      return data[--top];
+    else
+      throw std::string("Empty!");
+ }
+ T ViewTop() {
+    if (top > 0)
+      return data[top-1];
+    else
+      return -1;
+  }
+};
 #endif  // INCLUDE_TSTACK_H_
