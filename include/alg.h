@@ -6,5 +6,6 @@
 
 std::string infx2pstfx(std::string);
 int eval(std::string);
+int getPriority(char operand);
 
 #endif  // INCLUDE_ALG_H_
