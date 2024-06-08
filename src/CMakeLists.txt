@@ -1,6 +1,7 @@
 set(header_path "${${PROJECT_NAME}_SOURCE_DIR}/include")
 set(header ${header_path}/alg.h)
 set(src alg.cpp)
+set(header ${header_path}/tstack.h)
 
 add_library(${PROJECT_NAME} SHARED
   ${header}
