@@ -1,7 +1,7 @@
 // Copyright 2021 NNTU-CS
-#include "tstack.h"
 #include <string>
 #include <map>
+#include <tstack.h>
 
 int getPriority(char operand) {
   if (operand == '+' || operand == '-') return 1;
