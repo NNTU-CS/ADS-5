@@ -43,7 +43,7 @@ std::string infx2pstfx(const std::string& inf) {
             throw std::runtime_error("incorrect expression");
         }
     } else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
-        while (!opStack.empty() 
+        while (!opStack.empty()
             && precedence(opStack.top()) >= precedence(ch)) {
             output.push_back(opStack.top());
             output.push_back(' ');
@@ -70,7 +70,7 @@ std::string infx2pstfx(const std::string& inf) {
 
 int eval(const std::string& pref) {
   TStack<int, 100> numStack;
-  std::istringstream iss(post);
+  std::istringstream iss(pref);
   std::string token;
   while (iss >> token) {
     if (std::isdigit(token[0])) {
