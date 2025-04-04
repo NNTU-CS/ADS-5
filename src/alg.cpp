@@ -4,11 +4,11 @@
 #include "tstack.h"
 
 std::string infx2pstfx(const std::string& inf) {
-  // добавьте код
+  // 47
   return std::string("");
 }
 
 int eval(const std::string& pref) {
-  // добавьте код
+  // 47
   return 0;
 }
