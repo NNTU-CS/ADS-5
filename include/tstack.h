@@ -6,30 +6,38 @@
 template<typename T, int size>
 class TStack {
   private:
-    T arr[size];
-    int top;
-public:
-    TStack() : top(-1) {}
-    void push(T value) {
-        if (top >= size - 1) {
-            throw std::overflow_error("Stack is full");
+    T data[size];       
+    int topIndex;       
+  public:
+    TStack() : topIndex(-1) {}
+    bool empty() const {
+        return topIndex < 0;
+    }
+    bool full() const {
+        return topIndex >= size - 1;
+    }
+    void push(const T& item) {
+        if (full()) {
+            throw std::runtime_error("Error: Stack overflow");
         }
-        arr[++top] = value;
+        data[++topIndex] = item;
     }
-    T pop() {
-        if (top < 0) {
-            throw std::underflow_error("Stack is empty");
+    void pop() {
+        if (empty()) {
+            throw std::runtime_error("Error: stack is empty");
         }
-        return arr[top--];
+        --topIndex;
     }
-    T peek() const { 
-        if (top < 0) {
-            throw std::underflow_error("Stack is empty");
+    T& top() {
+        if (empty()) {
+            throw std::runtime_error("Error: stack is empty");
         }
-        return arr[top];
+        return data[topIndex];
     }
-    bool isEmpty() const {
-        return top < 0;
+    const T& top() const {
+        if (empty()) {
+            throw std::runtime_error("Error: stack is empty");
+        }
+        return data[topIndex];
     }
-};
 #endif  // INCLUDE_TSTACK_H_
