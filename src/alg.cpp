@@ -43,7 +43,8 @@ std::string infx2pstfx(const std::string& inf) {
             throw std::runtime_error("incorrect expression");
         }
     } else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
-        while (!opStack.empty() && precedence(opStack.top()) >= precedence(ch)) {
+        while (!opStack.empty() 
+            && precedence(opStack.top()) >= precedence(ch)) {
             output.push_back(opStack.top());
             output.push_back(' ');
             opStack.pop();
@@ -75,7 +76,7 @@ int eval(const std::string& pref) {
     if (std::isdigit(token[0])) {
       int num = std::stoi(token);
       numStack.push(num);
-    } else if (token.length() == 1 && (token[0] == '+' || token[0] == '-' 
+    } else if (token.length() == 1 && (token[0] == '+' || token[0] == '-'
         || token[0] == '*' || token[0] == '/')) {
       if (numStack.empty()) {
         throw std::runtime_error("not enough operands for the operation");
