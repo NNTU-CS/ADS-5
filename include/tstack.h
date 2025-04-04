@@ -5,10 +5,10 @@
 
 template<typename T, int size>
 class TStack {
-  private:
-    T data[size];       
-    int topIndex;       
-  public:
+   private:
+    T data[size];
+    int topIndex;
+   public:
     TStack() : topIndex(-1) {}
     bool empty() const {
         return topIndex < 0;
