@@ -40,7 +40,7 @@ std::string infx2pstfx(const std::string& inf) {
         if (!opStack.empty() && opStack.top() == '(') {
             opStack.pop();
         } else {
-            throw std::runtime_error("incorrect expression: the opening parenthesis is missing");
+            throw std::runtime_error("incorrect expression");
         }
     } else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
         while (!opStack.empty() && precedence(opStack.top()) >= precedence(ch)) {
@@ -50,12 +50,12 @@ std::string infx2pstfx(const std::string& inf) {
         }
         opStack.push(ch);
     } else {
-        throw std::runtime_error(std::string("Invalid character in the expression: ") + ch);
+        throw std::runtime_error(std::string("Invalid character") + ch);
     }
   }
   while (!opStack.empty()) {
     if (opStack.top() == '(' || opStack.top() == ')') {
-        throw std::runtime_error("Incorrect expression: mismatched brackets");
+        throw std::runtime_error("Incorrect expression");
     }
     output.push_back(opStack.top());
     output.push_back(' ');
@@ -75,14 +75,15 @@ int eval(const std::string& pref) {
     if (std::isdigit(token[0])) {
       int num = std::stoi(token);
       numStack.push(num);
-    } else if (token.length() == 1 && (token[0] == '+' || token[0] == '-' || token[0] == '*' || token[0] == '/')) {
+    } else if (token.length() == 1 && (token[0] == '+' || token[0] == '-' 
+        || token[0] == '*' || token[0] == '/')) {
       if (numStack.empty()) {
-        throw std::runtime_error("There are not enough operands for the operation");
+        throw std::runtime_error("not enough operands for the operation");
       }
       int operand2 = numStack.top();
       numStack.pop();
       if (numStack.empty()) {
-        throw std::runtime_error("There are not enough operands for the operation");
+        throw std::runtime_error("not enough operands for the operation");
       }
       int operand1 = numStack.top();
       numStack.pop();
@@ -93,16 +94,16 @@ int eval(const std::string& pref) {
         case '*': result = operand1 * operand2; break;
         case '/':
           if (operand2 == 0) {
-            throw std::runtime_error("Ошибка: Деление на ноль");
+            throw std::runtime_error("error");
           }
           result = operand1 / operand2;
           break;
         default:
-          throw std::runtime_error("Неизвестный оператор");
+          throw std::runtime_error("error");
         }
         numStack.push(result);
     } else {
-        throw std::runtime_error(std::string("Invalid token in the expression: ") + token);
+        throw std::runtime_error("Invalid token in the expression: ");
     }
   }
   if (numStack.empty()) {
@@ -111,7 +112,7 @@ int eval(const std::string& pref) {
   int finalResult = numStack.top();
   numStack.pop();
   if (!numStack.empty()) {
-    throw std::runtime_error("Incorrect expression: there is more than one element left in the stack.");
+    throw std::runtime_error("Incorrect expression");
   }
   return finalResult;
 }
