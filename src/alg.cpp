@@ -1,6 +1,7 @@
 // Copyright 2025 NNTU-CS
 #include <string>
 #include <map>
+#include <sstream>
 #include "tstack.h"
 
 int getPriority(char op) {
@@ -12,11 +13,11 @@ int getPriority(char op) {
 std::string infx2pstfx(const std::string& inf) {
   std::string output;
   TStack<char, 100> opStack;
-  
+
   for (size_t i = 0; i < inf.length(); i++) {
     char ch = inf[i];
     if (ch == ' ') continue;
-    
+
     if (isdigit(ch)) {
       while (i < inf.length() && isdigit(inf[i])) {
         output.push_back(inf[i]);
@@ -24,38 +25,35 @@ std::string infx2pstfx(const std::string& inf) {
       }
       i--;
       output.push_back(' ');
-    }
-    else if (ch == '(') {
-      opStack.Push(ch);
-    }
-    else if (ch == ')') {
-      while (!opStack.IsEmpty() && opStack.Top() != '(') {
-        output.push_back(opStack.Top());
+    } else if (ch == '(') {
+      opStack.push(ch);
+    } else if (ch == ')') {
+      while (!opStack.isEmpty() && opStack.top() != '(') {
+        output.push_back(opStack.top());
         output.push_back(' ');
-        opStack.Pop();
+        opStack.pop();
       }
-      opStack.Pop();
-    }
-    else {
-      while (!opStack.IsEmpty() && getPriority(opStack.Top()) >= getPriority(ch)) {
-        output.push_back(opStack.Top());
+      opStack.pop();
+    } else {
+      while (!opStack.isEmpty() && getPriority(opStack.top()) >= getPriority(ch)) {
+        output.push_back(opStack.top());
         output.push_back(' ');
-        opStack.Pop();
+        opStack.pop();
       }
-      opStack.Push(ch);
+      opStack.push(ch);
     }
   }
-  
-  while (!opStack.IsEmpty()) {
-    output.push_back(opStack.Top());
+
+  while (!opStack.isEmpty()) {
+    output.push_back(opStack.top());
     output.push_back(' ');
-    opStack.Pop();
+    opStack.pop();
   }
-  
+
   if (!output.empty() && output.back() == ' ') {
     output.pop_back();
   }
-  
+
   return output;
 }
 
@@ -63,21 +61,22 @@ int eval(const std::string& post) {
   TStack<int, 100> numStack;
   std::istringstream iss(post);
   std::string token;
-  
+
   while (iss >> token) {
     if (isdigit(token[0])) {
-      numStack.Push(stoi(token));
-    }
-    else {
-      int b = numStack.Top(); numStack.Pop();
-      int a = numStack.Top(); numStack.Pop();
-      
-      if (token == "+") numStack.Push(a + b);
-      else if (token == "-") numStack.Push(a - b);
-      else if (token == "*") numStack.Push(a * b);
-      else if (token == "/") numStack.Push(a / b);
+      numStack.push(stoi(token));
+    } else {
+      int b = numStack.top();
+      numStack.pop();
+      int a = numStack.top();
+      numStack.pop();
+
+      if (token == "+") numStack.push(a + b);
+      else if (token == "-") numStack.push(a - b);
+      else if (token == "*") numStack.push(a * b);
+      else if (token == "/") numStack.push(a / b);
     }
   }
-  
-  return numStack.Top();
+
+  return numStack.top();
 }
