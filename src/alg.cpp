@@ -26,28 +26,29 @@ std::string infx2pstfx(const std::string& inf) {
       i--;
       output.push_back(' ');
     } else if (ch == '(') {
-      opStack.push(ch);
+      opStack.Push(ch);
     } else if (ch == ')') {
-      while (!opStack.isEmpty() && opStack.top() != '(') {
-        output.push_back(opStack.top());
+      while (!opStack.IsEmpty() && opStack.Top() != '(') {
+        output.push_back(opStack.Top());
         output.push_back(' ');
-        opStack.pop();
+        opStack.Pop();
       }
-      opStack.pop();
+      opStack.Pop();
     } else {
-      while (!opStack.isEmpty() && getPriority(opStack.top()) >= getPriority(ch)) {
-        output.push_back(opStack.top());
+      while (!opStack.IsEmpty() && 
+             getPriority(opStack.Top()) >= getPriority(ch)) {
+        output.push_back(opStack.Top());
         output.push_back(' ');
-        opStack.pop();
+        opStack.Pop();
       }
-      opStack.push(ch);
+      opStack.Push(ch);
     }
   }
 
-  while (!opStack.isEmpty()) {
-    output.push_back(opStack.top());
+  while (!opStack.IsEmpty()) {
+    output.push_back(opStack.Top());
     output.push_back(' ');
-    opStack.pop();
+    opStack.Pop();
   }
 
   if (!output.empty() && output.back() == ' ') {
@@ -64,19 +65,19 @@ int eval(const std::string& post) {
 
   while (iss >> token) {
     if (isdigit(token[0])) {
-      numStack.push(stoi(token));
+      numStack.Push(stoi(token));
     } else {
-      int b = numStack.top();
-      numStack.pop();
-      int a = numStack.top();
-      numStack.pop();
+      int b = numStack.Top();
+      numStack.Pop();
+      int a = numStack.Top();
+      numStack.Pop();
 
-      if (token == "+") numStack.push(a + b);
-      else if (token == "-") numStack.push(a - b);
-      else if (token == "*") numStack.push(a * b);
-      else if (token == "/") numStack.push(a / b);
+      if (token == "+") numStack.Push(a + b);
+      else if (token == "-") numStack.Push(a - b);
+      else if (token == "*") numStack.Push(a * b);
+      else if (token == "/") numStack.Push(a / b);
     }
   }
 
-  return numStack.top();
+  return numStack.Top();
 }
