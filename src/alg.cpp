@@ -31,26 +31,26 @@ std::string infx2pstfx(const std::string& inf) {
       prevWasDigit = false;
 
       if (c == '(') {
-        stack.push(c);
+        stack.Push(c);
       } else if (c == ')') {
-        while (!stack.isEmpty() && stack.top() != '(') {
+        while (!stack.IsEmpty() && stack.Top() != '(') {
           postfix += ' ';
-          postfix += stack.pop();
+          postfix += stack.Pop();
         }
-        stack.pop();
+        stack.Pop();
       } else {
-        while (!stack.isEmpty() && getPriority(stack.top()) >= getPriority(c)) {
+        while (!stack.IsEmpty() && getPriority(stack.Top()) >= getPriority(c)) {
           postfix += ' ';
-          postfix += stack.pop();
+          postfix += stack.Pop();
         }
-        stack.push(c);
+        stack.Push(c);
       }
     }
   }
 
-  while (!stack.isEmpty()) {
+  while (!stack.IsEmpty()) {
     postfix += ' ';
-    postfix += stack.pop();
+    postfix += stack.Pop();
   }
 
   return postfix;
@@ -69,27 +69,27 @@ int eval(const std::string& post) {
       readingNum = true;
     } else {
       if (readingNum) {
-        stack.push(num);
+        stack.Push(num);
         num = 0;
         readingNum = false;
       }
 
       if (c == ' ') continue;
 
-      int right = stack.pop();
-      int left = stack.pop();
+      int right = stack.Pop();
+      int left = stack.Pop();
       switch (c) {
-        case '+': stack.push(left + right); break;
-        case '-': stack.push(left - right); break;
-        case '*': stack.push(left * right); break;
-        case '/': stack.push(left / right); break;
+        case '+': stack.Push(left + right); break;
+        case '-': stack.Push(left - right); break;
+        case '*': stack.Push(left * right); break;
+        case '/': stack.Push(left / right); break;
       }
     }
   }
 
   if (readingNum) {
-    stack.push(num);
+    stack.Push(num);
   }
 
-  return stack.pop();
+  return stack.Pop();
 }
