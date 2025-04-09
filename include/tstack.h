@@ -11,14 +11,13 @@ private:
 public:
   TStack() : top(-1) {}
 
-  T top() const {
-    return arr[top];
+  T get() const {
+    return data[top];
   }
 
   bool isEmpty() const {
     return top == -1;
   }
-
   bool isFull() const {
     return top == size - 1;
   }
@@ -26,9 +25,8 @@ public:
   void pop() {
     if (top >= 0) top--;
   }
-
   void push(T val) {
-    if (top < size - 1) arr[++top] = val;
+    if (top < size - 1) data[++top] = val;
   }
 };
 
