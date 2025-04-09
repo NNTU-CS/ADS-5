@@ -3,6 +3,8 @@
 #include <array>
 #include <stdexcept>
 
+#ifndef INCLUDE_TSTACK_H_
+#define INCLUDE_TSTACK_H_
 template<typename T, int max_size>
 class CustomStack {
  private:
@@ -48,3 +50,4 @@ class CustomStack {
         return items.at(current_index);  // Безопасный доступ к элементу массива
     }
 };
+#endif // INCLUDE_TSTACK_H_
