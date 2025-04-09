@@ -118,6 +118,7 @@ std::string infx2pstfx(const std::string& inf) {
       stack.pop();
     }
   }
+  out.pop_back();
   return out;
 }
 
