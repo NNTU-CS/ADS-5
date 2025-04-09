@@ -1,17 +1,15 @@
 // Copyright 2021 NNTU-CS
-#include <stdexcept>
 #include <string>
-#include <array>
-#ifndef INCLUDE_TSTACK_H_
-#define INCLUDE_TSTACK_H_
+#include <array>  
+#include <stdexcept>  
 
 template<typename T, int max_size>
 class CustomStack {
- private:
-    std::array<T, MaxSize> items;
+private:
+    std::array<T, max_size> items;  
     int current_index;
 
- public:
+public:
     constexpr CustomStack() : current_index(-1) {}
 
     bool is_empty() const {
@@ -24,31 +22,29 @@ class CustomStack {
 
     void add_item(const T& value) {
         if (is_full()) {
-            throw std::string("stack is full");
+            throw std::string("Stack is full");
         }
-        items[++current_index] = value;
+        items.at(++current_index) = value;
     }
 
     void remove_item() {
         if (is_empty()) {
-            throw std::string("stack is empty");
+            throw std::string("Stack is empty");
         }
         --current_index;
     }
 
     const T& peek() const {
         if (is_empty()) {
-            throw std::string("stack is empty");
+            throw std::string("Stack is empty");
         }
-        return items[current_index];
+        return items.at(current_index);
     }
 
     T& peek() {
         if (is_empty()) {
-            throw std::string("stack is empty");
+            throw std::string("Stack is empty");
         }
-        return items[current_index];
+        return items.at(current_index);  // Безопасный доступ к элементу массива
     }
 };
-
-#endif  // INCLUDE_TSTACK_H_
