@@ -1,15 +1,15 @@
 // Copyright 2021 NNTU-CS
 #include <string>
-#include <array>  
-#include <stdexcept>  
+#include <array>
+#include <stdexcept>
 
 template<typename T, int max_size>
 class CustomStack {
-private:
-    std::array<T, max_size> items;  
+ private:
+    std::array<T, max_size> items;
     int current_index;
 
-public:
+ public:
     constexpr CustomStack() : current_index(-1) {}
 
     bool is_empty() const {
