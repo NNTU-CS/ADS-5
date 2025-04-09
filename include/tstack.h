@@ -1,17 +1,18 @@
 // Copyright 2021 NNTU-CS
 #include <stdexcept>
 #include <string>
+#include <array>
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 
 template<typename T, int max_size>
 class CustomStack {
  private:
-    T items[max_size];
+    std::array<T, MaxSize> items;
     int current_index;
 
  public:
-    CustomStack() : current_index(-1) {}
+    constexpr CustomStack() : current_index(-1) {}
 
     bool is_empty() const {
         return current_index < 0;
