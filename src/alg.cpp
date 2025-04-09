@@ -45,9 +45,9 @@ std::string infx2pstfx(const std::string& inf) {
             } else {
                 throw std::string("not correct");
             }
-        } else if (curr=='+'||curr=='-'||curr=='*'||curr=='/') {
+        } else if (curr == '+'||curr == '-'||curr == '*'||curr == '/') {
             while (!operator_stack.is_empty() &&
-                   priority(operator_stack.peek())>=priority(curr)) {
+                   priority(operator_stack.peek()) >= priority(curr)) {
                 result += operator_stack.peek();
                 result += ' ';
                 operator_stack.remove_item();
@@ -84,7 +84,8 @@ int eval(const std::string& post) {
         if (std::isdigit(tok[0])) {
             int number = std::stoi(tok);
             number_stack.add_item(number);
-        } else if (tok.size() == 1&&(tok[0] =='+'||tok[0] == '-'||tok[0] == '*'||tok[0] == '/')) {
+        } else if (tok.size() == 1&&(tok[0] =='+'|| tok[0] == '-' \
+            || tok[0] == '*'|| tok[0] == '/')) {
             if (number_stack.is_empty()) {
                 throw std::string("not enough of operands");
             }
