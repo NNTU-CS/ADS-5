@@ -45,9 +45,9 @@ std::string infx2pstfx(const std::string& inf) {
             } else {
                 throw std::string("not correct");
             }
-        } else if (curr_char == '+' || curr_char == '-' || curr_char == '*' || curr_char == '/') {
+        } else if (curr_char=='+'||curr_char=='-'||curr_char=='*'||curr_char=='/') {
             while (!operator_stack.is_empty() &&
-                   get_operator_priority(operator_stack.peek()) >= get_operator_priority(curr_char)) {
+                   get_operator_priority(operator_stack.peek())>=get_operator_priority(curr_char)) {
                 result += operator_stack.peek();
                 result += ' ';
                 operator_stack.remove_item();
@@ -84,7 +84,7 @@ int eval(const std::string& post) {
         if (std::isdigit(token[0])) {
             int number = std::stoi(token);
             number_stack.add_item(number);
-        } else if (token.size() == 1 && (token[0] == '+' || token[0] == '-' || token[0] == '*' || token[0] == '/')) {
+        } else if (token.size()==1&&(token[0]=='+'||token[0]=='-'||token[0]=='*'||token[0]=='/')) {
             if (number_stack.is_empty()) {
                 throw std::string("not enough of operands");
             }
@@ -111,7 +111,7 @@ int eval(const std::string& post) {
             }
             number_stack.add_item(calculated_result);
         } else {
-            throw std::string("not correct symbol" );
+            throw std::string("not correct symbol");
         }
     }
 
