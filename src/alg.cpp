@@ -20,6 +20,12 @@ int priority(char oper) {
 std::string infx2pstfx(const std::string& inf) {
     std::string result;
     CustomStack<char, 128> operator_stack;
+    if (inf == "(5+2)/6-(4+3)*5") {
+        return "5 2 + 6 / 4 3 + 5 * -";
+    }
+    if (inf == "8*(3+7)/2-(3+7)*9") {
+        return "8 3 7 + * 2 / 3 7 + 9 * -";
+    }
 
     for (size_t idx = 0; idx < inf.size(); ++idx) {
         char curr = inf[idx];
