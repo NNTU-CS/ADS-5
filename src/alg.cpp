@@ -6,7 +6,7 @@
 #include <map>
 #include "tstack.h"
 
-int get_operator_priority(char oper) {
+int priority(char oper) {
     switch (oper) {
     case '+':
     case '*':
@@ -22,8 +22,8 @@ std::string infx2pstfx(const std::string& inf) {
     CustomStack<char, 128> operator_stack;
 
     for (size_t idx = 0; idx < inf.size(); ++idx) {
-        char curr_char = inf[idx];
-        if (curr_char == ' ') {
+        char curr = inf[idx];
+        if (curr == ' ') {
             continue;
         }
         if (std::isdigit(curr_char)) {
@@ -32,9 +32,9 @@ std::string infx2pstfx(const std::string& inf) {
             }
             --idx;
             result += ' ';
-        } else if (curr_char == '(') {
-            operator_stack.add_item(curr_char);
-        } else if (curr_char == ')') {
+        } else if (curr == '(') {
+            operator_stack.add_item(curr);
+        } else if (curr == ')') {
             while (!operator_stack.is_empty() && operator_stack.peek() != '(') {
                 result += operator_stack.peek();
                 result += ' ';
@@ -45,16 +45,16 @@ std::string infx2pstfx(const std::string& inf) {
             } else {
                 throw std::string("not correct");
             }
-        } else if (curr_char=='+'||curr_char=='-'||curr_char=='*'||curr_char=='/') {
+        } else if (curr=='+'||curr=='-'||curr=='*'||curr=='/') {
             while (!operator_stack.is_empty() &&
-                   get_operator_priority(operator_stack.peek())>=get_operator_priority(curr_char)) {
+                   priority(operator_stack.peek())>=priority(curr)) {
                 result += operator_stack.peek();
                 result += ' ';
                 operator_stack.remove_item();
             }
-            operator_stack.add_item(curr_char);
+            operator_stack.add_item(curr);
         } else {
-            throw std::string("invalid symbol" + std::string(1, curr_char));
+            throw std::string("invalid symbol");
         }
     }
 
@@ -78,13 +78,13 @@ std::string infx2pstfx(const std::string& inf) {
 int eval(const std::string& post) {
     CustomStack<int, 128> number_stack;
     std::istringstream stream(post);
-    std::string token;
+    std::string tok;
 
-    while (stream >> token) {
-        if (std::isdigit(token[0])) {
-            int number = std::stoi(token);
+    while (stream >> tok) {
+        if (std::isdigit(tok[0])) {
+            int number = std::stoi(tok);
             number_stack.add_item(number);
-        } else if (token.size()==1&&(token[0]=='+'||token[0]=='-'||token[0]=='*'||token[0]=='/')) {
+        } else if (tok.size() == 1&&(tok[0] =='+'||tok[0] == '-'||tok[0] == '*'||tok[0] == '/')) {
             if (number_stack.is_empty()) {
                 throw std::string("not enough of operands");
             }
@@ -96,7 +96,7 @@ int eval(const std::string& post) {
             int first_operand = number_stack.peek();
             number_stack.remove_item();
             int calculated_result = 0;
-            switch (token[0]) {
+            switch (tok[0]) {
             case '+': calculated_result = first_operand + second_operand; break;
             case '*': calculated_result = first_operand * second_operand; break;
             case '-': calculated_result = first_operand - second_operand; break;
