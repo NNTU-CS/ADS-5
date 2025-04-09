@@ -1,16 +1,16 @@
 // Copyright 2021 NNTU-CS
-#include <stdexcept>  
-#include <string>     
+#include <stdexcept>
+#include <string>
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 
 template<typename T, int max_size>
 class CustomStack {
-private:
+ private:
     T items[max_size];
     int current_index;
 
-public:
+ public:
     CustomStack() : current_index(-1) {}
 
     bool is_empty() const {
