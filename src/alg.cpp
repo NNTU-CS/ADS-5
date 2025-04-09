@@ -45,7 +45,7 @@ std::string infx2pstfx(const std::string& inf) {
             } else {
                 throw std::string("not correct");
             }
-        } else if (curr == '+'||curr == '-'||curr == '*'||curr == '/') {
+        } else if (curr == '+'|| curr == '-'|| curr == '*'|| curr == '/') {
             while (!operator_stack.is_empty() &&
                    priority(operator_stack.peek()) >= priority(curr)) {
                 result += operator_stack.peek();
