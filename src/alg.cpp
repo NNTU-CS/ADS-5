@@ -6,10 +6,10 @@
 
 int precedence(char oper) {
     switch (oper) {
-    case '*':
-    case '/': return 2;
     case '+':
     case '-': return 1;
+    case '*':
+    case '/': return 2;
     default: return 0;
     }
 }
@@ -22,7 +22,7 @@ std::string infx2pstfx(const std::string& inf) {
     if (sym == ' ') {
         continue;
     }
-      
+
     if (std::isdigit(sym)) {
         while (j < inf.length() && std::isdigit(inf[j])) {
             output.push_back(inf[j]);
@@ -43,9 +43,9 @@ std::string infx2pstfx(const std::string& inf) {
         } else {
             throw std::runtime_error("erroneously");
         }
-    } else if (sym == '+'  sym == '-'  sym == '*'  sym == '/') {
-        while (!operStack.empty()
-            && precedence(operStack.top()) >= precedence(sym)) {
+    } else if (sym == '+' || sym == '-' || sym == '*' || sym == '/') {
+        while (!operStack.empty() && precedence(operStack.top()) >=
+            precedence(sym)) {
             output.push_back(operStack.top());
             output.push_back(' ');
             operStack.pop();
@@ -56,7 +56,7 @@ std::string infx2pstfx(const std::string& inf) {
     }
   }
   while (!operStack.empty()) {
-    if (operStack.top() == '('  operStack.top() == ')') {
+    if (operStack.top() == '(' || operStack.top() == ')') {
         throw std::runtime_error("erroneously");
     }
     output.push_back(operStack.top());
@@ -83,13 +83,13 @@ int eval(const std::string& pref) {
       if (cntStack.empty()) {
         throw std::runtime_error("few operands");
       }
-        
-      int operand2 = cntStack.top();
+
+      int opt = cntStack.top();
       cntStack.pop();
       if (cntStack.empty()) {
         throw std::runtime_error("few operands");
       }
-        
+
       int opo = cntStack.top();
       cntStack.pop();
       int result = 0;
