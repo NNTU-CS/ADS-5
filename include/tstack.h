@@ -4,10 +4,11 @@
 
 template <typename T, int kSize>
 class TStack {
-private:
+ private:
     T data[kSize];
     int top;
-public:
+
+ public:
     TStack() : top(-1) {}
     bool isEmpty() const {
         return top == -1;
