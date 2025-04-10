@@ -33,4 +33,4 @@ public:
         throw std::out_of_range("Stack is empty");
     }
 };
-#endif // INCLUDE_TSTACK_H_
+#endif // TSTACK_H
