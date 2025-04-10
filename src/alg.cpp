@@ -78,7 +78,7 @@ int eval(const std::string& pref) {
         if (std::isdigit(token[0])) {
             int cnt = std::stoi(token);
             cntStack.push(cnt);
-        } else if (token.length() == 1 && 
+        } else if (token.length() == 1 &&
                    (token[0] == '+' || token[0] == '-' ||
                     token[0] == '*' || token[0] == '/')) {
             if (cntStack.empty()) {
@@ -87,7 +87,7 @@ int eval(const std::string& pref) {
 
             int operand2 = cntStack.top();
             cntStack.pop();
-    
+
             if (cntStack.empty()) {
                 throw std::runtime_error("few operands");
             }
