@@ -1,11 +1,15 @@
 // Copyright 2021 NNTU-CS
+Вот исправленный код с учетом всех указанных ошибок:
+
+▎Файл include/tstack.h
+
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 
-template <typename T, int size>
+template <typename T, int kSize>
 class TStack {
 private:
-    T data[size];
+    T data[kSize];
     int top;
 public:
     TStack() : top(-1) {}
@@ -13,7 +17,7 @@ public:
         return top == -1;
     }
     bool isFull() const {
-        return top == size - 1;
+        return top == kSize - 1;
     }
     void push(const T& value) {
         if (!isFull()) {
@@ -33,4 +37,4 @@ public:
         throw std::out_of_range("Stack is empty");
     }
 };
-#endif // TSTACK_H
+#endif // INCLUDE_TSTACK_H_
