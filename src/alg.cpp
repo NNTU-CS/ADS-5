@@ -1,76 +1,123 @@
 // Copyright 2025 NNTU-CS
+#include <iostream>
 #include <string>
 #include <sstream>
-#include <cctype>
-#include <stdexcept>
 #include "tstack.h"
 
-int precedence(char op) {
-    if (op == '+' || op == '-') return 1;
-    if (op == '*' || op == '/') return 2;
-    return 0;
+int precedence(char oper) {
+    switch (oper) {
+    case '*':
+    case '/': return 2;
+    case '+':
+    case '-': return 1;
+    default: return 0;
+    }
 }
 
 std::string infx2pstfx(const std::string& inf) {
-    TStack<char, 100> stack1;
-    std::ostringstream output;
-    std::istringstream tokens(inf);
-    std::string token;
-
-    while (tokens >> token) {
-        std::cout << "Processing token: " << token << std::endl;
-        if (isdigit(token[0])) {
-            output << token << ' ';
-        } else if (token[0] == '(') {
-            stack1.push('(');
-        } else if (token[0] == ')') {
-            while (!stack1.isEmpty() && stack1.peek() != '(') {
-                output << stack1.pop() << ' ';
-            }
-            if (!stack1.isEmpty()) {
-                stack1.pop(); // удаляем '('
-            }
-        } else {
-            while (!stack1.isEmpty() &&
-                precedence(stack1.peek()) >=
-                precedence(token[0])) {
-                output << stack1.pop() << ' ';
-            }
-            stack1.push(token[0]);
+  std::string output;
+  TStack<char, 100> operStack;
+  for (size_t j = 0; j < inf.length(); j++) {
+    char sym = inf[j];
+    if (sym == ' ') {
+        continue;
+    }
+      
+    if (std::isdigit(sym)) {
+        while (j < inf.length() && std::isdigit(inf[j])) {
+            output.push_back(inf[j]);
+            j++;
         }
+        j--;
+        output.push_back(' ');
+    } else if (sym == '(') {
+        operStack.push(sym);
+    } else if (sym == ')') {
+        while (!operStack.empty() && operStack.top() != '(') {
+            output.push_back(operStack.top());
+            output.push_back(' ');
+            operStack.pop();
+        }
+        if (!operStack.empty() && operStack.top() == '(') {
+            operStack.pop();
+        } else {
+            throw std::runtime_error("erroneously");
+        }
+    } else if (sym == '+'  sym == '-'  sym == '*'  sym == '/') {
+        while (!operStack.empty()
+            && precedence(operStack.top()) >= precedence(sym)) {
+            output.push_back(operStack.top());
+            output.push_back(' ');
+            operStack.pop();
+        }
+        operStack.push(sym);
+    } else {
+        throw std::runtime_error(std::string("Invalid character") + sym);
     }
-    while (!stack1.isEmpty()) {
-        output << stack1.pop() << ' ';
+  }
+  while (!operStack.empty()) {
+    if (operStack.top() == '('  operStack.top() == ')') {
+        throw std::runtime_error("erroneously");
     }
-    std::cout << "Postfix output: " << output.str() << std::endl;
-    return output.str();
+    output.push_back(operStack.top());
+    output.push_back(' ');
+    operStack.pop();
+  }
+  if (!output.empty() && output.back() == ' ') {
+    output.pop_back();
+  }
+  return output;
 }
 
-int eval(const std::string& post) {
-    TStack<int, 100> stack2;
-    std::istringstream tokens(post);
-    std::string token;
-    while (tokens >> token) {
-        std::cout << "Evaluating token: " << token << std::endl;
-        if (isdigit(token[0])) {
-            stack2.push(std::stoi(token));
-        } else {
-            if (stack2.isEmpty()) throw std::out_of_range("Noenoughoper");
-            int right = stack2.pop();
-            if (stack2.isEmpty()) throw std::out_of_range("Noenoughoper");
-            int left = stack2.pop();
-            switch (token[0]) {
-                case '+': stack2.push(left + right); break;
-                case '-': stack2.push(left - right); break;
-                case '*': stack2.push(left * right); break;
-                case '/':
-                    if (right == 0) throw std::invalid_argument("Diviszero");
-                    stack2.push(left / right);
-                    break;
-                default: throw std::invalid_argument("Unknown");
-            }
+
+int eval(const std::string& pref) {
+  TStack<int, 100> cntStack;
+  std::istringstream iss(pref);
+  std::string token;
+  while (iss >> token) {
+    if (std::isdigit(token[0])) {
+      int cnt = std::stoi(token);
+      numStack.push(cnt);
+    } else if (token.length() == 1 && (token[0] == '+'  token[0] == '-'
+         token[0] == '*' || token[0] == '/')) {
+      if (cntStack.empty()) {
+        throw std::runtime_error("few operands");
+      }
+        
+      int operand2 = cntStack.top();
+      cntStack.pop();
+      if (cntStack.empty()) {
+        throw std::runtime_error("few operands");
+      }
+        
+      int opo = cntStack.top();
+      cntStack.pop();
+      int result = 0;
+      switch (token[0]) {
+        case '+': result = opo + opt; break;
+        case '-': result = opo - opt; break;
+        case '*': result = opo * opt; break;
+        case '/':
+          if (opt == 0) {
+            throw std::runtime_error("error");
+          }
+          result = opo / opt;
+          break;
+        default:
+          throw std::runtime_error("error");
         }
+        cntStack.push(result);
+    } else {
+        throw std::runtime_error("wrong token: ");
     }
-    if (stack2.isEmpty()) throw std::out_of_range("Stackisempty");
-    return stack2.pop();
+  }
+  if (cntStack.empty()) {
+    throw std::runtime_error("stack is empty");
+  }
+  int res = cntStack.top();
+  cntStack.pop();
+  if (!cntStack.empty()) {
+    throw std::runtime_error("erroneously");
+  }
+  return res;
 }
