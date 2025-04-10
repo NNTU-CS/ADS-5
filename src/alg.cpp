@@ -74,13 +74,12 @@ int eval(const std::string& pref) {
     TStack<int, 100> cntStack;
     std::istringstream iss(pref);
     std::string token;
-    
     while (iss >> token) {
         if (std::isdigit(token[0])) {
             int cnt = std::stoi(token);
             cntStack.push(cnt);
         } else if (token.length() == 1 && 
-                   (token[0] == '+' || token[0] == '-' || 
+                   (token[0] == '+' || token[0] == '-' ||
                     token[0] == '*' || token[0] == '/')) {
             if (cntStack.empty()) {
                 throw std::runtime_error("few operands");
@@ -88,7 +87,7 @@ int eval(const std::string& pref) {
 
             int operand2 = cntStack.top();
             cntStack.pop();
-            
+    
             if (cntStack.empty()) {
                 throw std::runtime_error("few operands");
             }
@@ -105,7 +104,7 @@ int eval(const std::string& pref) {
                     if (operand2 == 0) {
                         throw std::runtime_error("Division by zero");
                     }
-                    result = operand1 / operand2; 
+                    result = operand1 / operand2;
                     break;
                 default:
                     throw std::runtime_error("error");
@@ -115,17 +114,17 @@ int eval(const std::string& pref) {
             throw std::runtime_error("wrong token: " + token);
         }
     }
-    
+
     if (cntStack.empty()) {
         throw std::runtime_error("stack is empty");
     }
 
     int res = cntStack.top();
     cntStack.pop();
-    
+
     if (!cntStack.empty()) {
         throw std::runtime_error("erroneously");
     }
-    
+
     return res;
 }
