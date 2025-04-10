@@ -1,8 +1,4 @@
 // Copyright 2021 NNTU-CS
-Вот исправленный код с учетом всех указанных ошибок:
-
-▎Файл include/tstack.h
-
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 
