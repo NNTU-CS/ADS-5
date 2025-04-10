@@ -2,7 +2,6 @@
 #include <string>
 #include <sstream>
 #include <cctype>
-#include <vector>
 #include "tstack.h"
 
 int precedence(char op) {
@@ -60,4 +59,3 @@ int eval(const std::string& post) {
     }
     return stack2.pop();
 }
-    
