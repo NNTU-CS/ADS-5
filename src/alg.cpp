@@ -71,53 +71,61 @@ std::string infx2pstfx(const std::string& inf) {
 
 
 int eval(const std::string& pref) {
-  TStack<int, 100> cntStack;
-  std::istringstream iss(pref);
-  std::string token;
-  while (iss >> token) {
-    if (std::isdigit(token[0])) {
-      int cnt = std::stoi(token);
-      numStack.push(cnt);
-    } else if (token.length() == 1 && (token[0] == '+'  token[0] == '-'
-         token[0] == '*' || token[0] == '/')) {
-      if (cntStack.empty()) {
-        throw std::runtime_error("few operands");
-      }
+    TStack<int, 100> cntStack;
+    std::istringstream iss(pref);
+    std::string token;
+    
+    while (iss >> token) {
+        if (std::isdigit(token[0])) {
+            int cnt = std::stoi(token);
+            cntStack.push(cnt);
+        } else if (token.length() == 1 && 
+                   (token[0] == '+' || token[0] == '-' || 
+                    token[0] == '*' || token[0] == '/')) {
+            if (cntStack.empty()) {
+                throw std::runtime_error("few operands");
+            }
 
-      int opt = cntStack.top();
-      cntStack.pop();
-      if (cntStack.empty()) {
-        throw std::runtime_error("few operands");
-      }
+            int operand2 = cntStack.top();
+            cntStack.pop();
+            
+            if (cntStack.empty()) {
+                throw std::runtime_error("few operands");
+            }
 
-      int opo = cntStack.top();
-      cntStack.pop();
-      int result = 0;
-      switch (token[0]) {
-        case '+': result = opo + opt; break;
-        case '-': result = opo - opt; break;
-        case '*': result = opo * opt; break;
-        case '/':
-          if (opt == 0) {
-            throw std::runtime_error("error");
-          }
-          result = opo / opt;
-          break;
-        default:
-          throw std::runtime_error("error");
+            int operand1 = cntStack.top();
+            cntStack.pop();
+            int result = 0;
+
+            switch (token[0]) {
+                case '+': result = operand1 + operand2; break;
+                case '-': result = operand1 - operand2; break;
+                case '*': result = operand1 * operand2; break;
+                case '/':
+                    if (operand2 == 0) {
+                        throw std::runtime_error("Division by zero");
+                    }
+                    result = operand1 / operand2; 
+                    break;
+                default:
+                    throw std::runtime_error("error");
+            }
+            cntStack.push(result);
+        } else {
+            throw std::runtime_error("wrong token: " + token);
         }
-        cntStack.push(result);
-    } else {
-        throw std::runtime_error("wrong token: ");
     }
-  }
-  if (cntStack.empty()) {
-    throw std::runtime_error("stack is empty");
-  }
-  int res = cntStack.top();
-  cntStack.pop();
-  if (!cntStack.empty()) {
-    throw std::runtime_error("erroneously");
-  }
-  return res;
+    
+    if (cntStack.empty()) {
+        throw std::runtime_error("stack is empty");
+    }
+
+    int res = cntStack.top();
+    cntStack.pop();
+    
+    if (!cntStack.empty()) {
+        throw std::runtime_error("erroneously");
+    }
+    
+    return res;
 }
