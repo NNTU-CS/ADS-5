@@ -18,6 +18,7 @@ std::string infx2pstfx(const std::string& inf) {
     std::string token;
 
     while (tokens >> token) {
+        std::cout << "Processing token: " << token << std::endl;
         if (isdigit(token[0])) {
             output << token << ' ';
         } else if (token[0] == '(') {
@@ -41,7 +42,7 @@ std::string infx2pstfx(const std::string& inf) {
     while (!stack1.isEmpty()) {
         output << stack1.pop() << ' ';
     }
-
+    std::cout << "Postfix output: " << output.str() << std::endl;
     return output.str();
 }
 
@@ -50,25 +51,26 @@ int eval(const std::string& post) {
     std::istringstream tokens(post);
     std::string token;
     while (tokens >> token) {
+        std::cout << "Evaluating token: " << token << std::endl;
         if (isdigit(token[0])) {
             stack2.push(std::stoi(token));
         } else {
-            if (stack2.isEmpty()) throw std::out_of_range("Notenoughop");
+            if (stack2.isEmpty()) throw std::out_of_range("Noenoughoper");
             int right = stack2.pop();
-            if (stack2.isEmpty()) throw std::out_of_range("Notenoughop");
+            if (stack2.isEmpty()) throw std::out_of_range("Noenoughoper");
             int left = stack2.pop();
             switch (token[0]) {
                 case '+': stack2.push(left + right); break;
                 case '-': stack2.push(left - right); break;
                 case '*': stack2.push(left * right); break;
                 case '/':
-                    if (right == 0) throw std::invalid_argument("Divisbyzero");
+                    if (right == 0) throw std::invalid_argument("Diviszero");
                     stack2.push(left / right);
                     break;
-                default: throw std::invalid_argument("Unknown operator");
+                default: throw std::invalid_argument("Unknown");
             }
         }
     }
-    if (stack2.isEmpty()) throw std::out_of_range("Stackis empty");
+    if (stack2.isEmpty()) throw std::out_of_range("Stackisempty");
     return stack2.pop();
 }
