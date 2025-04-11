@@ -3,15 +3,16 @@
 #define INCLUDE_TSTACK_H_
 #include <stdexcept>
 
-template<typename T, int size>
+template<typename T, int kSize>
 class TStack {
-private:
-    T data[size];
+ private:
+    T data[kSize];
     int top_index;
-public:
+
+ public:
     TStack() : top_index(-1) {}
     void push(const T& value) {
-        if (top_index >= size - 1) {
+        if (top_index >= kSize - 1) {
             throw std::overflow_error("Стек переполнен");
         }
         data[++top_index] = value;
