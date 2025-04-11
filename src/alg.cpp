@@ -32,7 +32,7 @@ std::string infx2pstfx(const std::string& inf) {
                 while (!stack.isEmpty() && stack.peek() != '(') {
                     result << stack.pop() << " ";
                 }
-                stack.pop(); // Удаляем '(' из стека
+                stack.pop();
             } else if (c == '+' || c == '-' || c == '*' || c == '/') {
                 while (!stack.isEmpty() &&
                     getPriorityOp(stack.peek()) >= getPriorityOp(c)) {
@@ -60,7 +60,7 @@ std::string infx2pstfx(const std::string& inf) {
 
 int eval(const std::string& pref) {
     TStack<int, 100> stack;
-    std::stringstream ss(post);
+    std::stringstream ss(pref);
     std::string token;
 
     while (ss >> token) {
