@@ -1,7 +1,41 @@
 // Copyright 2025 NNTU-CS
 #include <string>
 #include <map>
-#include "tstack.h"
+#include <cctype>
+
+template <typename T, int SIZE>
+class TStack {
+private:
+  T data[SIZE];
+  int topIndex;
+
+public:
+  TStack() : topIndex(-1) {}
+
+  void push(const T& value) {
+    if (topIndex < SIZE - 1) {
+      data[++topIndex] = value;
+    }
+  }
+
+  T pop() {
+    if (topIndex >= 0) {
+      return data[topIndex--];
+    }
+    return T();
+  }
+
+  T top() const {
+    if (topIndex >= 0) {
+      return data[topIndex];
+    }
+    return T();
+  }
+
+  bool isEmpty() const {
+    return topIndex == -1;
+  }
+};
 
 std::string infx2pstfx(const std::string& inf) {
   TStack<char, 100> stack;
@@ -20,20 +54,17 @@ std::string infx2pstfx(const std::string& inf) {
       }
       result += ' ';
       i--;
-    }
-    else if (c == '(') {
+    } else if (c == '(') {
       stack.push(c);
-    }
-    else if (c == ')') {
-      while (!stack.isEmpty() && stack.peek() != '(') {
+    } else if (c == ')') {
+      while (!stack.isEmpty() && stack.top() != '(') {
         result += stack.pop();
         result += ' ';
       }
       stack.pop();
-    }
-    else if (precedence.count(c)) {
-      while (!stack.isEmpty() && stack.peek() != '(' && 
-             precedence[stack.peek()] >= precedence[c]) {
+    } else if (precedence.count(c)) {
+      while (!stack.isEmpty() && stack.top() != '(' && 
+             precedence[stack.top()] >= precedence[c]) {
         result += stack.pop();
         result += ' ';
       }
@@ -60,12 +91,10 @@ int eval(const std::string& post) {
   for (char c : post) {
     if (isdigit(c)) {
       numStr += c;
-    }
-    else if (c == ' ' && !numStr.empty()) {
+    } else if (c == ' ' && !numStr.empty()) {
       stack.push(std::stoi(numStr));
       numStr.clear();
-    }
-    else if (c == '+' || c == '-' || c == '*' || c == '/') {
+    } else if (c == '+' || c == '-' || c == '*' || c == '/') {
       int right = stack.pop();
       int left = stack.pop();
       
