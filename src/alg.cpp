@@ -8,6 +8,7 @@ class TStack {
  private:
   T data[SIZE];
   int topIndex;
+
  public:
   TStack() : topIndex(-1) {
     for (int i = 0; i < SIZE; ++i) {
@@ -60,7 +61,8 @@ std::string infx2pstfx(const std::string& inf) {
       }
       stack.pop();
     } else if (precedence.count(c)) {
-      while (!stack.isEmpty() && stack.top() != '(' && precedence[stack.top()] >= precedence[c]) {
+      while (!stack.isEmpty() && stack.top() != '(' && 
+       precedence[stack.top()] >= precedence[c]) {
         result += stack.pop();
         result += ' ';
       }
