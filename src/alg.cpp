@@ -75,5 +75,5 @@ while (ss >> token) {
   }
 }
 }
-     return stack.pop();
+return stack.pop();
  }
