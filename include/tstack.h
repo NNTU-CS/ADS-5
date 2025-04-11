@@ -6,12 +6,12 @@
 template<typename T, int size>
 class TStack {
 private:
-    T data[SIZE];
+    T data[size];
     int topIndex;
 public:
     TStack() : topIndex(-1) {}
     void push(const T& value) {
-        if (topIndex >= SIZE - 1) {
+        if (topIndex >= size - 1) {
             throw std::overflow_error("Стек переполнен");
         }
         data[++topIndex] = value;
