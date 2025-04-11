@@ -5,33 +5,32 @@
 
 template<typename T, int size>
 class TStack {
-
-private:
+    private:
     T data[size];
-    int topIndex;
+    int top_index;
 
-public:
-    TStack() : topIndex(-1) {}
+    public:
+    TStack() : top_index(-1) {}
     void push(const T& value) {
-        if (topIndex >= size - 1) {
+        if (top_index >= size - 1) {
             throw std::overflow_error("Стек переполнен");
         }
-        data[++topIndex] = value;
+        data[++top_index] = value;
     }
     T pop() {
         if (isEmpty()) {
             throw std::underflow_error("Стек неполный");
         }
-        return data[topIndex--];
+        return data[top_index--];
     }
     T peek() const {
         if (isEmpty()) {
             throw std::underflow_error("Стек пуст");
         }
-        return data[topIndex];
+        return data[top_index];
     }
     bool isEmpty() const {
-        return topIndex == -1;
+        return top_index == -1;
     }
 };
 
