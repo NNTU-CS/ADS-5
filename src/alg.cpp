@@ -37,18 +37,18 @@ class TStack {
   }
 };
 
-std::string infx2pstfx(const std::string& infixExpression) {
-  TStack<char, 100> operatorStack; // More descriptive name
+std::string infx2pstfx(const std::string& infixExpr) {
+  TStack<char, 100> operatorStack;
   std::string postfixResult;
   std::map<char, int> operatorPrecedence = {
     {'+', 1}, {'-', 1},
     {'*', 2}, {'/', 2}
   };
-  for (size_t i = 0; i < infixExpression.size(); ++i) {
-    char currentChar = infixExpression[i];
+  for (size_t i = 0; i < infixExpr.size(); ++i) {
+    char currentChar = infixExpr[i];
     if (isdigit(currentChar)) {
-      while (i < infixExpression.size() && isdigit(infixExpression[i])) {
-        postfixResult += infixExpression[i++];
+      while (i < infixExpr.size() && isdigit(infixExpr[i])) {
+        postfixResult += infixExpr[i++];
       }
       postfixResult += ' ';
       i--;
@@ -62,7 +62,8 @@ std::string infx2pstfx(const std::string& infixExpression) {
       operatorStack.pop();
     } else if (operatorPrecedence.count(currentChar)) {
       while (!operatorStack.isEmpty() && operatorStack.top() != '(' &&
-       operatorPrecedence[operatorStack.top()] >= operatorPrecedence[currentChar]) {
+             operatorPrecedence[operatorStack.top()] >=
+                 operatorPrecedence[currentChar]) {
         postfixResult += operatorStack.pop();
         postfixResult += ' ';
       }
@@ -79,16 +80,17 @@ std::string infx2pstfx(const std::string& infixExpression) {
   return postfixResult;
 }
 
-int eval(const std::string& postfixExpression) {
-  TStack<int, 100> operandStack; // More descriptive name
+int eval(const std::string& postfixExpr) {
+  TStack<int, 100> operandStack;
   std::string currentNumberString;
-  for (char currentChar : postfixExpression) {
+  for (char currentChar : postfixExpr) {
     if (isdigit(currentChar)) {
       currentNumberString += currentChar;
     } else if (currentChar == ' ' && !currentNumberString.empty()) {
       operandStack.push(std::stoi(currentNumberString));
       currentNumberString.clear();
-    } else if (currentChar == '+' || currentChar == '-' || currentChar == '*' || currentChar == '/') {
+    } else if (currentChar == '+' || currentChar == '-' ||
+               currentChar == '*' || currentChar == '/') {
       int rightOperand = operandStack.pop();
       int leftOperand = operandStack.pop();
       switch (currentChar) {
