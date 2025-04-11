@@ -1,82 +1,103 @@
 // Copyright 2025 NNTU-CS
-#include <iostream>
 #include <string>
-#include <sstream>
-#include "tstack.h"
+#include <map>
+#include <cctype>
 
-int precedence(char oper) {
-    switch (oper) {
-        case '+':
-        case '-':
-            return 1;
-        case '*':
-        case '/':
-            return 2;
-        default:
-            return 0;
+template <typename DataType, int StackSize>
+class TStack {
+ private:
+  DataType stackData[StackSize];
+  int topOfStackIndex;
+
+ public:
+  TStack() : topOfStackIndex(-1) {
+    for (int i = 0; i < StackSize; ++i) {
+      stackData[i] = DataType();
     }
+  }
+  void push(const DataType& value) {
+    if (topOfStackIndex < StackSize - 1) {
+      stackData[++topOfStackIndex] = value;
+    }
+  }
+  DataType pop() {
+    if (topOfStackIndex >= 0) {
+      return stackData[topOfStackIndex--];
+    }
+    return DataType();
+  }
+  DataType top() const {
+    if (topOfStackIndex >= 0) {
+      return stackData[topOfStackIndex];
+    }
+    return DataType();
+  }
+  bool isEmpty() const {
+    return topOfStackIndex == -1;
+  }
+};
+
+std::string infx2pstfx(const std::string& infixExpression) {
+  TStack<char, 100> operatorStack; // More descriptive name
+  std::string postfixResult;
+  std::map<char, int> operatorPrecedence = {
+    {'+', 1}, {'-', 1},
+    {'*', 2}, {'/', 2}
+  };
+  for (size_t i = 0; i < infixExpression.size(); ++i) {
+    char currentChar = infixExpression[i];
+    if (isdigit(currentChar)) {
+      while (i < infixExpression.size() && isdigit(infixExpression[i])) {
+        postfixResult += infixExpression[i++];
+      }
+      postfixResult += ' ';
+      i--;
+    } else if (currentChar == '(') {
+      operatorStack.push(currentChar);
+    } else if (currentChar == ')') {
+      while (!operatorStack.isEmpty() && operatorStack.top() != '(') {
+        postfixResult += operatorStack.pop();
+        postfixResult += ' ';
+      }
+      operatorStack.pop();
+    } else if (operatorPrecedence.count(currentChar)) {
+      while (!operatorStack.isEmpty() && operatorStack.top() != '(' &&
+       operatorPrecedence[operatorStack.top()] >= operatorPrecedence[currentChar]) {
+        postfixResult += operatorStack.pop();
+        postfixResult += ' ';
+      }
+      operatorStack.push(currentChar);
+    }
+  }
+  while (!operatorStack.isEmpty()) {
+    postfixResult += operatorStack.pop();
+    postfixResult += ' ';
+  }
+  if (!postfixResult.empty() && postfixResult.back() == ' ') {
+    postfixResult.pop_back();
+  }
+  return postfixResult;
 }
 
-std::string infx2pstfx(const std::string& expression) {
-    std::string result;
-    TStack<char, 100> operatorStack;
-
-    for (size_t i = 0; i < expression.length(); ++i) {
-        char current = expression[i];
-
-        if (current == ' ') {
-            continue;
-        }
-
-        if (std::isdigit(current)) {
-            while (i < expression.length() && std::isdigit(expression[i])) {
-                result.push_back(expression[i]);
-                ++i;
-            }
-            --i;
-            result.push_back(' ');
-        } else if (current == '(') {
-            operatorStack.push(current);
-        } else if (current == ')') {
-            while (!operatorStack.empty() && operatorStack.top() != '(') {
-                result.push_back(operatorStack.top());
-                result.push_back(' ');
-                operatorStack.pop();
-            }
-            if (!operatorStack.empty() && operatorStack.top() == '(') {
-                operatorStack.pop();
-            } else {
-                throw std::runtime_error("Unmatched parenthesis");
-            }
-        } else if (current == '+'  current == '-'  current == '*' || current == '/') {
-            while (!operatorStack.empty() && precedence(operatorStack.top()) >= precedence(current)) {
-                result.push_back(operatorStack.top());
-                result.push_back(' ');
-                operatorStack.pop();
-            }
-            operatorStack.push(current);
-        } else {
-            throw std::runtime_error(std::string("Invalid character: ") + current);
-        }
+int eval(const std::string& postfixExpression) {
+  TStack<int, 100> operandStack; // More descriptive name
+  std::string currentNumberString;
+  for (char currentChar : postfixExpression) {
+    if (isdigit(currentChar)) {
+      currentNumberString += currentChar;
+    } else if (currentChar == ' ' && !currentNumberString.empty()) {
+      operandStack.push(std::stoi(currentNumberString));
+      currentNumberString.clear();
+    } else if (currentChar == '+' || currentChar == '-' || currentChar == '*' || currentChar == '/') {
+      int rightOperand = operandStack.pop();
+      int leftOperand = operandStack.pop();
+      switch (currentChar) {
+        case '+': operandStack.push(leftOperand + rightOperand); break;
+        case '-': operandStack.push(leftOperand - rightOperand); break;
+        case '*': operandStack.push(leftOperand * rightOperand); break;
+        case '/': operandStack.push(leftOperand / rightOperand); break;
+      }
     }
-
-    while (!operatorStack.empty()) {
-        if (operatorStack.top() == '(' || operatorStack.top() == ')') {
-            throw std::runtime_error("Unmatched parenthesis in final stack");
-        }
-        result.push_back(operatorStack.top());
-        result.push_back(' ');
-        operatorStack.pop();
-    }
-
-    if (!result.empty() && result.back() == ' ') {
-        result.pop_back();
-    }
-
-    return result;
+  }
+  return operandStack.pop();
 }
-
-int eval(const std::string& postfixExpr) {
-    TStack<int, 100> valueStack;
-    std::istringstream tokenizer(postfixExpr);
-    std::string token
