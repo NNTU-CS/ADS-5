@@ -61,7 +61,7 @@ std::string infx2pstfx(const std::string& inf) {
       }
       stack.pop();
     } else if (precedence.count(c)) {
-      while (!stack.isEmpty() && stack.top() != '(' && 
+      while (!stack.isEmpty() && stack.top() != '(' &&
        precedence[stack.top()] >= precedence[c]) {
         result += stack.pop();
         result += ' ';
