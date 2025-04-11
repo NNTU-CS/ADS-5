@@ -30,25 +30,28 @@ std::string infx2pstfx(const std::string& inf) {
       if (c == '(') {
         stack.push(c);
       } else if (c == ')') {
-        while (!stack.isEmpty() && stack.peek() != '(') {
-          result << stack.pop() << " ";
-        }
-        stack.pop();
+          while (!stack.isEmpty() && stack.peek() != '(') {
+            result << stack.pop() << " ";
+          }
+          stack.pop();
       } else if (c == '+' || c == '-' || c == '*' || c == '/') {
-        while (!stack.isEmpty() &&
-          getPriorityOp(stack.peek()) >= getPriorityOp(c)) {
-          result << stack.pop() << " ";
-        }
+          while (!stack.isEmpty() &&
+            getPriorityOp(stack.peek()) >= getPriorityOp(c)) {
+            result << stack.pop() << " ";
+          }
         stack.push(c);
       }
     }
   }
+  
   if (!number.empty()) {
     result << number << " ";
   }
+  
   while (!stack.isEmpty()) {
     result << stack.pop() << " ";
   }
+  
   std::string outputPos = result.str();
   if (!outputPos.empty() && outputPos.back() == ' ') {
     outputPos.pop_back();
@@ -56,24 +59,24 @@ std::string infx2pstfx(const std::string& inf) {
   return outputPos;
 }
 
-int eval(const std::string& pref) 
-TStack<int, 100> stack;
-std::stringstream ss(pref);
-std::string token;
-
-while (ss >> token) {
-  if (isdigit(token[0])) {
-    stack.push(std::stoi(token));
-  } else {
-    int b = stack.pop();
-    int a = stack.pop();
-    switch (token[0]) 
-    case '+': stack.push(a + b); break;
-    case '-': stack.push(a - b); break;
-    case '*': stack.push(a * b); break;
-    case '/': stack.push(a / b); break;
+int eval(const std::string& pref){
+  TStack<int, 100> stack;
+  std::stringstream ss(pref);
+  std::string token;
+  
+  while (ss >> token) {
+    if (isdigit(token[0])) {
+      stack.push(std::stoi(token));
+    } else {
+      int b = stack.pop();
+      int a = stack.pop();
+      switch (token[0]) 
+      case '+': stack.push(a + b); break;
+      case '-': stack.push(a - b); break;
+      case '*': stack.push(a * b); break;
+      case '/': stack.push(a / b); break;
+    }
   }
-}
 }
 return stack.pop();
 }
