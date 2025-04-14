@@ -32,32 +32,32 @@ std::string infx2pstfx(const std::string& inf) {
       finall << c;
       flag = true;
     } else if (c == '(') {
-      opStack.push(c);
+      stack1.push(c);
       flag = false;
     } else if (c == ')') {
-      while (!opStack.isEmpty() && opStack.peek() != '(') {
-        finall << ' ' << opStack.pop();
+      while (!stack1.isEmpty() && stack1.peek() != '(') {
+        finall << ' ' << stack1.pop();
       }
-      if (opStack.isEmpty()) {
-        throw std::invalid("There is no pair");
+      if (stack1.isEmpty()) {
+        throw std::invalid_argument("There is no pair");
       }
-      opStack.pop();
+      stack1.pop();
       flag = true;
     } else if (opperator(c)) {
-      while (!opStack.isEmpty() && prioritet(c) <= prioritet(opStack.peek())) {
-        finall << ' ' << opStack.pop();
+      while (!stack1.isEmpty() && prioritet(c) <= prioritet(stack1.peek())) {
+        finall << ' ' << stack1.pop();
       }
-      opStack.push(c);
+      stack1.push(c);
       flag = true;
     } else {
-      throw std::invalid("Invalid character");
+      throw std::invalid_argument("Invalid character");
     }
   }
-  while (!opStack.isEmpty()) {
-    if (opStack.peek() == '(') {
-      throw std::invalid("There is no pair");
+  while (!stack1.isEmpty()) {
+    if (stack1.peek() == '(') {
+      throw std::invalid_argument("There is no pair");
     }
-    finall << ' ' << opStack.pop();
+    finall << ' ' << stack1.pop();
   }
   return finall;
 }
@@ -66,40 +66,40 @@ int eval(const std::string& pref) {
   TStack<int, 100> stack2;
   std::istringstream stream(post);
   std::string token;
-   while(stream >> token) {
-    if (std::isdigit(token[0])) {
-      int number = std::stoi(token);
-      numStack.push(number);
-    } else if (operator(token[0]) && token.size() == 1) {
-      if (numStack.isEmpty()) {
-        throw std::invalid("Emptiness");
+    while(stream >> token) {
+      if (std::isdigit(token[0])) {
+        int number = std::stoi(token);
+        stack2.push(number);
+      } else if (operator(token[0]) && token.size() == 1) {
+        if (stack2.isEmpty()) {
+          throw std::invalid_argument("Emptiness");
+        }
+        int oper2 = stack2.pop();
+        if (stack2.isEmpty()) {
+          throw std::invalid_argument("Emptiness");
+        }
+        int oper1 = stack2.pop();
+        switch (token[0]) {
+          case '+': stack2.push(oper1 + oper2); break;
+          case '-': stack2.push(oper1 - oper2); break;
+          case '*': stack2.push(oper1 * oper2); break;
+          case '/':
+            if (oper2 == 0) {
+              throw std::runtime_error("ERROR");
+            }
+            stack2.push(oper1 / oper2);
+            break;
+        }
+      } else {
+        throw std::invalid_argument("Invalid token");
       }
-      int oper2 = numStack.pop();
-      if (numStack.isEmpty()) {
-        throw std::invalid("Emptiness");
-      }
-      int oper1 = numStack.pop();
-      switch (token[0]) {
-        case '+': numStack.push(oper1 + oper2); break;
-        case '-': numStack.push(oper1 - oper2); break;
-        case '*': numStack.push(oper1 * oper2); break;
-        case '/':
-          if (oper2 == 0) {
-            throw std::error("ERROR");
-          }
-          numStack.push(oper1 / oper2);
-          break;
-      }
-    } else {
-      throw std::invalid("Invalid token");
     }
-  }
-  if (numStack.isEmpty()) {
-    throw std::invalid("Emptiness");
-  }
-  int result = numStack.pop();
-  if (!numStack.isEmpty()) {
-    throw std::invalid("Very much");
-  }
+    if (stack2.isEmpty()) {
+      throw std::invalid_argument("Emptiness");
+    }
+    int result = stack2.pop();
+    if (!stack2.isEmpty()) {
+      throw std::invalid_argument("Very much");
+    }
   return result;
 }
