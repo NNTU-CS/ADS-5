@@ -4,84 +4,101 @@
 #include "tstack.h"
 
 std::string infx2pstfx(const std::string& inf) {
-  std::string outputExpr;
-  TStack<char, 100> opStack;
-  std::map<char, int> precedence = {
+  std::string postfixNotation;
+  TStack<char, 100> operatorStorage;
+  std::map<char, int> operationPriority = {
     {'+', 1}, {'-', 1},
     {'*', 2}, {'/', 2}
   };
 
-  for (size_t i = 0; i < inf.size(); ++i) {
-    char ch = inf[i];
+  for (size_t pos = 0; pos < inf.size(); ++pos) {
+    char currSym = inf[pos];
     
-    if (isdigit(ch)) {
-      while (i < inf.size() && isdigit(inf[i])) {
-        outputExpr += inf[i++];
+    if (isdigit(currSym)) {
+      while (pos < inf.size() && isdigit(inf[pos])) {
+        postfixNotation += inf[pos++];
       }
-      outputExpr += ' ';
-      i--;
-    } else if (ch == '(') {
-      opStack.push(ch);
-    } else if (ch == ')') {
-      while (!opStack.empty() && opStack.get() != '(') {
-        outputExpr += opStack.get();
-        outputExpr += ' ';
-        opStack.pop();
+      postfixNotation += ' ';
+      pos--;
+    } 
+    else if (currSym == '(') {
+      operatorStorage.push(currSym);
+    } 
+    else if (currSym == ')') {
+      while (!operatorStorage.empty() && 
+             operatorStorage.get() != '(') {
+        postfixNotation += operatorStorage.get();
+        postfixNotation += ' ';
+        operatorStorage.pop();
       }
-      opStack.pop();
-    } else {
-      while (!opStack.empty() && opStack.get() != '(' && 
-            precedence[ch] <= precedence[opStack.get()]) {
-        outputExpr += opStack.get();
-        outputExpr += ' ';
-        opStack.pop();
+      operatorStorage.pop();
+    } 
+    else {
+      while (!operatorStorage.empty() && 
+             operatorStorage.get() != '(' && 
+             operationPriority[currSym] <= 
+             operationPriority[operatorStorage.get()]) {
+        postfixNotation += operatorStorage.get();
+        postfixNotation += ' ';
+        operatorStorage.pop();
       }
-      opStack.push(ch);
+      operatorStorage.push(currSym);
     }
   }
 
-  while (!opStack.empty()) {
-    outputExpr += opStack.get();
-    outputExpr += ' ';
-    opStack.pop();
+  while (!operatorStorage.empty()) {
+    postfixNotation += operatorStorage.get();
+    postfixNotation += ' ';
+    operatorStorage.pop();
   }
 
-  if (!outputExpr.empty() && outputExpr.back() == ' ') {
-    outputExpr.pop_back();
+  if (!postfixNotation.empty() && 
+      postfixNotation.back() == ' ') {
+    postfixNotation.pop_back();
   }
 
-  return outputExpr;
+  return postfixNotation;
 }
 
 int eval(const std::string& pref) {
-  TStack<int, 100> numStack;
+  TStack<int, 100> calcStack;
 
-  for (size_t j = 0; j < pref.size(); ++j) {
-    char symb = pref[j];
+  for (size_t idx = 0; idx < pref.size(); ++idx) {
+    char currChar = pref[idx];
     
-    if (isdigit(symb)) {
-      int val = 0;
-      while (j < pref.size() && isdigit(pref[j])) {
-        val = val * 10 + (pref[j++] - '0');
+    if (isdigit(currChar)) {
+      int numVal = 0;
+      while (idx < pref.size() && isdigit(pref[idx])) {
+        numVal = numVal * 10 + (pref[idx++] - '0');
       }
-      numStack.push(val);
-      j--;
-    } else if (symb == ' ') {
+      calcStack.push(numVal);
+      idx--;
+    } 
+    else if (currChar == ' ') {
       continue;
-    } else {
-      int rhs = numStack.get();
-      numStack.pop();
-      int lhs = numStack.get();
-      numStack.pop();
+    } 
+    else {
+      int rightOp = calcStack.get();
+      calcStack.pop();
+      int leftOp = calcStack.get();
+      calcStack.pop();
       
-      switch (symb) {
-        case '+': numStack.push(lhs + rhs); break;
-        case '-': numStack.push(lhs - rhs); break;
-        case '*': numStack.push(lhs * rhs); break;
-        case '/': numStack.push(lhs / rhs); break;
+      switch (currChar) {
+        case '+': 
+          calcStack.push(leftOp + rightOp); 
+          break;
+        case '-': 
+          calcStack.push(leftOp - rightOp); 
+          break;
+        case '*': 
+          calcStack.push(leftOp * rightOp); 
+          break;
+        case '/': 
+          calcStack.push(leftOp / rightOp); 
+          break;
       }
     }
   }
 
-  return numStack.get();
+  return calcStack.get();
 }
