@@ -25,10 +25,8 @@ std::string infx2pstfx(const std::string& inf) {
     for (size_t i = 0; i < inf.size(); ++i) {
         char c = inf[i];
         if (c == ' ') continue;
-        if (isdigit(c))
-        {
-            if (flag) 
-            {
+        if (isdigit(c)) {
+            if (flag) {
                 finall << c;
             } else {
                 if (!finall.str().empty()) finall << ' ';
@@ -47,7 +45,8 @@ std::string infx2pstfx(const std::string& inf) {
                 }
                 if (!stack1.isEmpty()) stack1.pop();
             } else if (opperator(c)) {
-                while (!stack1.isEmpty() && stack1.peek() != '(' && prioritet(c) <= prioritet(stack1.peek())) {
+                while (!stack1.isEmpty() && stack1.peek() != '(' &&
+                    prioritet(c) <= prioritet(stack1.peek())) {
                     finall << ' ' << stack1.pop();
                 }
                 stack1.push(c);
@@ -67,8 +66,7 @@ int eval(const std::string& post) {
     while (stream >> token) {
         if (std::isdigit(token[0])) {
             stack2.push(std::stoi(token));
-        } else if (opperator(token[0]) && token.size() == 1) 
-        {
+        } else if (opperator(token[0]) && token.size() == 1) {
             if (stack2.isEmpty()) {
                 throw std::invalid_argument("Not enough operands");
             }
