@@ -79,12 +79,12 @@ int eval(const std::string& pref) {
     } else if (token.length() == 1 && (token[0] == '+' || token[0] == '-'
         || token[0] == '*' || token[0] == '/')) {
       if (numStack.empty()) {
-        throw std::runtime_error("not enough operands for the operation");
+        throw std::runtime_error("Not enough operands for the operation");
       }
       int operand2 = numStack.top();
       numStack.pop();
       if (numStack.empty()) {
-        throw std::runtime_error("not enough operands for the operation");
+        throw std::runtime_error("Not enough operands for the operation");
       }
       int operand1 = numStack.top();
       numStack.pop();
@@ -95,12 +95,12 @@ int eval(const std::string& pref) {
         case '*': result = operand1 * operand2; break;
         case '/':
           if (operand2 == 0) {
-            throw std::runtime_error("error");
+            throw std::runtime_error("Error");
           }
           result = operand1 / operand2;
           break;
         default:
-          throw std::runtime_error("error");
+          throw std::runtime_error("Error");
         }
         numStack.push(result);
     } else {
