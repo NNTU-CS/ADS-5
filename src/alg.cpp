@@ -9,7 +9,7 @@ std::string infx2pstfx(const std::string& inf) {
   std::map<char, int> precedence = {
     {'+', 1}, {'-', 1},
     {'*', 2}, {'/', 2}
-  }; 
+  };
 
   for (size_t i = 0; i < inf.size(); ++i) {
     char ch = inf[i];
