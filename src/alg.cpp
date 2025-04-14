@@ -34,9 +34,7 @@ std::string infx2pstfx(const std::string& inf) {
             }
             flag = true;
         } else {
-            if (flag) {
                 flag = false;
-            }
             if (c == '(') {
                 stack1.push(c);
             } else if (c == ')') {
