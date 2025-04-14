@@ -62,7 +62,7 @@ std::string infx2pstfx(const std::string& inf) {
   return finall.str();
 }
 
-int eval(const std::string& pref) {
+int eval(const std::string& post) {
   TStack<int, 100> stack2;
   std::istringstream stream(post);
   std::string token;
