@@ -32,22 +32,24 @@ int calculate(double a, double b, char op) {
 		return a * b;
 	case '/':
 		return a / b;
+	default:
+		return -1;
 	}
 }
 
 std::string infx2pstfx(const std::string& inf) {
-	std::string post;
+	string post;
 	TStack<char> stack;
+	bool needSpace = false;
 	for (int i = 0; i < inf.size(); i++){
 		char current = inf[i];
 		int currentPrior = prior(current);
-		bool needSpace = false;
 		if (currentPrior == -1) {
 			if (needSpace){
 				post += ' ';
 			}
 			post += current;
-			needSpace = true;
+			needSpace = false;
 		}
 		else if (current == '(') {
 			stack.push(current);
@@ -61,26 +63,27 @@ std::string infx2pstfx(const std::string& inf) {
 			}
 			stack.pop();
 			needSpace = true;
-		}
-		else {
-			while (!stack.isEmpty() &&
-				prior(stack.get()) >= currentPrior &&
-				stack.get() != '(') {
-				post += ' ';
-				post += stack.get();
-				stack.pop();
-			}
-			stack.push(current);
-			post += ' ';
-			needSpace = false;
-		}
-	}
-	while (!stack.isEmpty()) {
-		post += ' ';
-		post += stack.get();
-		stack.pop();
-	}
-	return post;
+		} else {
+            while (!stack.empty() &&
+                  prior(stack.top()) >= currentPrior &&
+                  stack.top() != '(') {
+                post += ' ';
+                post += stack.top();
+                stack.pop();
+            }
+            post += ' ';
+            stack.push(current);
+            needSpace = false;
+        }
+    }
+
+    while (!stack.empty()) {
+        post += ' ';
+        post += stack.top();
+        stack.pop();
+    }
+
+    return post;
 }
 
 int eval(const std::string& pref) {
