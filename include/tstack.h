@@ -4,7 +4,7 @@
 
 const int size = 100;
 
-template<typename T, int size>
+template<typename T>
 class TStack {
   private:
     T arr[size];
