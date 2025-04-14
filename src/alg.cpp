@@ -36,7 +36,7 @@ int calculate(double a, double b, char op) {
 }
 
 std::string infx2pstfx(const std::string& inf) {
-	string post;
+	std::string post;
 	TStack<char> stack;
 	for (int i = 0; i < inf.size(); i++){
 		char current = inf[i];
