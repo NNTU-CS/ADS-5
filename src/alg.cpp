@@ -51,7 +51,7 @@ std::string infx2pstfx(const std::string& inf) {
       flag = true;
     } else {
       throw std::invalid("Invalid character");
-    } 
+    }
   }
   while (!opStack.isEmpty()) {
     if (opStack.peek() == '(') {
@@ -66,11 +66,11 @@ int eval(const std::string& pref) {
   TStack<int, 100> stack2;
   std::istringstream stream(post);
   std::string token;
-  while(stream >> token) {
+   while(stream >> token) {
     if (std::isdigit(token[0])) {
       int number = std::stoi(token);
       numStack.push(number);
-    } else if(operator(token[0]) && token.size() == 1) {
+    } else if (operator(token[0]) && token.size() == 1) {
       if (numStack.isEmpty()) {
         throw std::invalid("Emptiness");
       }
