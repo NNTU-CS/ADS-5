@@ -11,7 +11,7 @@ int prioty(char op) {
       return 1;
   if (op == '*' || op == '/')
       return 2;
-  return 0;  
+  return 0; 
 }
 
 std::string infx2pstfx(const std::string& inf) {
@@ -29,19 +29,17 @@ std::string infx2pstfx(const std::string& inf) {
       }
       if (c == '(') {
           stack.push(c);
-      }
-      else if (c == ')') {
+      } else if (c == ')') {
           while (!stack.is_empty() && stack.peek() != '(') {
               output += stack.peek();
               output += " ";
               stack.pop();
           }
           if (!stack.is_empty()) {
-              stack.pop();  
+              stack.pop();
           }
-      }
-      else if (is_operator(c)) {
-          while (!stack.is_empty() && stack.peek() != '(' && 
+      } else if (is_operator(c)) {
+          while (!stack.is_empty() && stack.peek() != '(' &&
                 prioty(stack.peek()) >= prioty(c)) {
               output += stack.peek();
               output += " ";
@@ -73,22 +71,18 @@ int eval(const std::string& pref) {
     char c = pref[i];
     if (isdigit(c)) {
       number += c;
-    }
-    else if (c == ' ') {
+    } else if (c == ' ') {
       if (!number.empty()) {
         stack2.push(std::stoi(number));
         number = "";
       }
-    }
-    else if (is_operator(c)) {
+    } else if (is_operator(c)) {
       if (!stack2.is_empty()) {
         int b = stack2.peek();
         stack2.pop();
-        
         if (!stack2.is_empty()) {
           int a = stack2.peek();
           stack2.pop();
-          
           if (c == '+') stack2.push(a + b);
           else if (c == '-') stack2.push(a - b);
           else if (c == '*') stack2.push(a * b);
@@ -97,11 +91,8 @@ int eval(const std::string& pref) {
       }
     }
   }
-  
   if (!number.empty()) {
     stack2.push(std::stoi(number));
   }
-  
   return stack2.peek();
-  return 0;
 }
