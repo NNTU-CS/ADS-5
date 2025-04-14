@@ -66,7 +66,7 @@ int eval(const std::string& pref) {
   TStack<int, 100> stack2;
   std::istringstream stream(post);
   std::string token;
-     while(stream >> token) {
+     while (stream >> token) {
       if (std::isdigit(token[0])) {
         int number = std::stoi(token);
         stack2.push(number);
