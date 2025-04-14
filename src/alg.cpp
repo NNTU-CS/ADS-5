@@ -11,7 +11,7 @@ int prioty(char op) {
       return 1;
   if (op == '*' || op == '/')
       return 2;
-  return 0; 
+  return 0;
 }
 
 std::string infx2pstfx(const std::string& inf) {
