@@ -22,11 +22,10 @@ std::string infx2pstfx(const std::string& inf) {
     TStack<char, 100> stack1;
     std::ostringstream finall;
     bool flag = false;
-    for (size_t i = 0; i < inf.size(); ++i) 
-    {
+    for (size_t i = 0; i < inf.size(); ++i) {
         char c = inf[i];
         if (c == ' ') continue;
-        if (isdigit(c)) 
+        if (isdigit(c))
         {
             if (flag) 
             {
@@ -104,13 +103,11 @@ int eval(const std::string& post) {
             }
         }
     }
-    if (stack2.isEmpty()) 
-    {
+    if (stack2.isEmpty()) {
         throw std::invalid_argument("Empty expression");
     }
     int result = stack2.pop();
-    if (!stack2.isEmpty()) 
-    {
+    if (!stack2.isEmpty()) {
         throw std::invalid_argument("Too many operands");
     }
     return result;
