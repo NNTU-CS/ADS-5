@@ -50,8 +50,7 @@ std::string infx2pstfx(const std::string& inf) {
             stack1.pop();
             flag = true;
         } else if (opperator(c)) {
-            while (!stack1.isEmpty() && stack1.peek() != '(' && 
-                   prioritet(c) <= prioritet(stack1.peek())) {
+            while (!stack1.isEmpty() && stack1.peek() != '(' && prioritet(c) <= prioritet(stack1.peek())) {
                 finall << ' ' << stack1.pop();
             }
             stack1.push(c);
