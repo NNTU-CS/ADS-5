@@ -59,7 +59,7 @@ std::string infx2pstfx(const std::string& inf) {
     }
     finall << ' ' << stack1.pop();
   }
-  return finall;
+  return finall.str();
 }
 
 int eval(const std::string& pref) {
@@ -70,7 +70,7 @@ int eval(const std::string& pref) {
       if (std::isdigit(token[0])) {
         int number = std::stoi(token);
         stack2.push(number);
-      } else if (operator(token[0]) && token.size() == 1) {
+      } else if (opperator(token[0]) && token.size() == 1) {
         if (stack2.isEmpty()) {
           throw std::invalid_argument("Emptiness");
         }
