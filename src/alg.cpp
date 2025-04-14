@@ -60,6 +60,9 @@ std::string infx2pstfx(const std::string& inf) {
       }
       stack.pop();
   }
+  if (!output.empty() && output.back() == ' ') {
+    output.pop_back();
+  }
   return output;
 }
 
