@@ -25,37 +25,33 @@ std::string infx2pstfx(const std::string& inf) {
 
     for (size_t i = 0; i < inf.size(); ++i) {
         char c = inf[i];
-
-        if (std::isspace(c)) continue;
-
-        if (std::isdigit(c)) {
+        if (c == ' ') continue;
+        if (isdigit(c)) {
             if (flag) {
-                finall << ' ';
-            }
-            finall << c;
-            // Собираем все цифры числа подряд
-            while (i + 1 < inf.size() && std::isdigit(inf[i+1])) {
-                finall << inf[++i];
+                finall << c;
+            } else {
+                if (!finall.str().empty()) finall << ' ';
+                finall << c;
             }
             flag = true;
-        } else if (c == '(') {
-            stack1.push(c);
-            flag = false;
-        } else if (c == ')') {
-            while (!stack1.isEmpty() && stack1.peek() != '(') {
-                finall << ' ' << stack1.pop();
+        } else {
+            if (flag) {
+                flag = false;
             }
-            if (!stack1.isEmpty() && stack1.peek() == '(') {
-                stack1.pop();
+            if (c == '(') {
+                stack1.push(c);
+            } else if (c == ')') {
+                while (!stack1.isEmpty() && stack1.peek() != '(') {
+                    finall << ' ' << stack1.pop();
+                }
+                if (!stack1.isEmpty()) stack1.pop();
+            } else if (opperator(c)) {
+                while (!stack1.isEmpty() && stack1.peek() != '(' && 
+                       prioritet(c) <= prioritet(stack1.peek())) {
+                    finall << ' ' << stack1.pop();
+                }
+                stack1.push(c);
             }
-            flag = true;
-        } else if (opperator(c)) {
-            while (!stack1.isEmpty() && stack1.peek() != '(' && 
-                   prioritet(c) <= prioritet(stack1.peek())) {
-                finall << ' ' << stack1.pop();
-            }
-            stack1.push(c);
-            flag = true;
         }
     }
 
