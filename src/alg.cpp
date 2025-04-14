@@ -14,98 +14,89 @@ int prioritet(char op) {
     }
 }
 
-bool opperator(char c) {
+bool isOperator(char c) {
     return c == '+' || c == '-' || c == '*' || c == '/';
 }
 
 std::string infx2pstfx(const std::string& inf) {
-    TStack<char, 100> stack1;
-    std::ostringstream finall;
+    TStack<char, 100> stack;
+    std::ostringstream result;
     bool flag = false;
-
     for (size_t i = 0; i < inf.size(); ++i) {
         char c = inf[i];
-
         if (std::isspace(c)) continue;
-
         if (std::isdigit(c)) {
             if (flag) {
-                finall << ' ';
+                result << ' ';
             }
-            finall << c;
-            while (i + 1 < inf.size() && std::isdigit(inf[i+1])) {
-                finall << inf[++i];
+            while (i < inf.size() && std::isdigit(inf[i])) {
+                result << inf[i++];
             }
             flag = true;
-        } else if (c == '(') {
-            stack1.push(c);
+        }
+        else if (c == '(') {
+            stack.push(c);
             flag = false;
-        } else if (c == ')') {
-            while (!stack1.isEmpty() && stack1.peek() != '(') {
-                finall << ' ' << stack1.pop();
+        }
+        else if (c == ')') {
+            while (!stack.isEmpty() && stack.peek() != '(') {
+                result << ' ' << stack.pop();
             }
-            if (stack1.isEmpty()) {
+            if (stack.isEmpty()) {
                 throw std::invalid_argument("Mismatched parentheses");
             }
-            stack1.pop();
+            stack.pop(); // Удаляем '('
             flag = true;
-        } else if (opperator(c)) {
-            while (!stack1.isEmpty() && stack1.peek() != '(' && prioritet(c) <= prioritet(stack1.peek())) {
-                finall << ' ' << stack1.pop();
+        }
+        else if (isOperator(c)) {
+            while (!stack.isEmpty() && stack.peek() != '(' && prioritet(c) <= prioritet(stack.peek())) {
+                result << ' ' << stack.pop();
             }
-            stack1.push(c);
+            stack.push(c);
             flag = true;
-        } else {
+        }
+        else {
             throw std::invalid_argument("Invalid character");
         }
     }
-    while (!stack1.isEmpty()) {
-        if (stack1.peek() == '(') {
+    while (!stack.isEmpty()) {
+        if (stack.peek() == '(') {
             throw std::invalid_argument("Mismatched parentheses");
         }
-        finall << ' ' << stack1.pop();
+        result << ' ' << stack.pop();
     }
-    return finall.str();
+    return result.str();
 }
 
 int eval(const std::string& post) {
-    TStack<int, 100> stack2;
-    std::istringstream stream(post);
+    TStack<int, 100> stack;
+    std::istringstream iss(post);
     std::string token;
-    while (stream >> token) {
+    while (iss >> token) {
         if (std::isdigit(token[0])) {
-            stack2.push(std::stoi(token));
-        } else if (opperator(token[0]) && token.size() == 1) {
-            if (stack2.isEmpty()) {
-                throw std::invalid_argument("Not enough operands");
-            }
-            int oper2 = stack2.pop();
-            if (stack2.isEmpty()) {
-                throw std::invalid_argument("Not enough operands");
-            }
-            int oper1 = stack2.pop();
-
+            stack.push(std::stoi(token));
+        }
+        else if (isOperator(token[0]) && token.size() == 1) {
+            if (stack.isEmpty()) throw std::invalid_argument("Not enough operands");
+            int right = stack.pop();
+            if (stack.isEmpty()) throw std::invalid_argument("Not enough operands");
+            int left = stack.pop();
             switch (token[0]) {
-                case '+': stack2.push(oper1 + oper2); break;
-                case '-': stack2.push(oper1 - oper2); break;
-                case '*': stack2.push(oper1 * oper2); break;
+                case '+': stack.push(left + right); break;
+                case '-': stack.push(left - right); break;
+                case '*': stack.push(left * right); break;
                 case '/':
-                    if (oper2 == 0) {
-                        throw std::runtime_error("Division by zero");
-                    }
-                    stack2.push(oper1 / oper2);
+                    if (right == 0) throw std::runtime_error("Division by zero");
+                    stack.push(left / right);
                     break;
             }
-        } else {
+        }
+        else {
             throw std::invalid_argument("Invalid token");
         }
     }
-    if (stack2.isEmpty()) {
-        throw std::invalid_argument("Empty expression");
-    }
-    int result = stack2.pop();
-    if (!stack2.isEmpty()) {
-        throw std::invalid_argument("Too many operands");
-    }
+    if (stack.isEmpty()) throw std::invalid_argument("Empty expression");
+    int result = stack.pop();
+    if (!stack.isEmpty()) throw std::invalid_argument("Too many operands");
     return result;
 }
