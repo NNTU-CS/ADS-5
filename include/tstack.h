@@ -8,7 +8,7 @@
 
 template<typename T, int size>
 class TStack {
-public:
+ public:
     TStack() : topIndex(-1) {}
 
     bool isEmpty() const noexcept {
@@ -44,7 +44,7 @@ public:
         topIndex = -1;
     }
 
-private:
+ private:
     std::array<T, size> data;
     int topIndex;
 };
