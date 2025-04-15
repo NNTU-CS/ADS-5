@@ -89,9 +89,9 @@ int eval(const std::string& pref) {
             stack.pop();
             switch (c) {
             case '+': stack.push(a + b); break;
-	    case '-': stack.push(a - b); break;
-	    case '*': stack.push(a * b); break;
-	    case '/': stack.push(a / b); break;
+	     case '-': stack.push(a - b); break;
+	     case '*': stack.push(a * b); break;
+	     case '/': stack.push(a / b); break;
     }
     }
     }
