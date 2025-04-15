@@ -4,7 +4,7 @@
 
 #include <string>
 
-std::string infx2pstfx(std::string);
-int eval(std::string);
+std::string infixToPostfix(const std::string&);
+int evaluatePostfix(const std::string&);
 
 #endif  // INCLUDE_ALG_H_
