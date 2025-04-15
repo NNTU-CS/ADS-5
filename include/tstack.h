@@ -2,11 +2,9 @@
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 
-const int size = 100;
-
-template<typename T>
+template<typename T, int size>
 class TStack {
-  private:
+ private:
     T arr[size];
     int top;
 public:
