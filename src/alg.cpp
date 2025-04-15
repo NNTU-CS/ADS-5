@@ -41,11 +41,11 @@ std::string infx2pstfx(const std::string& inf) {
 	string post;
 	TStack<char> stack;
 	bool needSpace = false;
-	for (int i = 0; i < inf.size(); i++){
+	for (int i = 0; i < inf.size(); i++) {
 		char current = inf[i];
 		int currentPrior = prior(current);
 		if (currentPrior == -1) {
-			if (needSpace){
+			if (needSpace) {
 				post += ' ';
 			}
 			post += current;
@@ -63,27 +63,28 @@ std::string infx2pstfx(const std::string& inf) {
 			}
 			stack.pop();
 			needSpace = true;
-		} else {
-            while (!stack.empty() &&
-                  prior(stack.top()) >= currentPrior &&
-                  stack.top() != '(') {
-                post += ' ';
-                post += stack.top();
-                stack.pop();
-            }
-            post += ' ';
-            stack.push(current);
-            needSpace = false;
-        }
-    }
+		}
+		else {
+			while (!stack.isEmpty() &&
+				prior(stack.get()) >= currentPrior &&
+				stack.get() != '(') {
+				post += ' ';
+				post += stack.get();
+				stack.pop();
+			}
+			post += ' ';
+			stack.push(current);
+			needSpace = false;
+		}
+	}
 
-    while (!stack.empty()) {
-        post += ' ';
-        post += stack.top();
-        stack.pop();
-    }
+	while (!stack.isEmpty()) {
+		post += ' ';
+		post += stack.get();
+		stack.pop();
+	}
 
-    return post;
+	return post;
 }
 
 int eval(const std::string& pref) {
