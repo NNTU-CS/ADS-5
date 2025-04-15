@@ -88,13 +88,13 @@ int eval(const std::string& pref) {
             int a = stack.get();
             stack.pop();
             switch (c) {
-             case '+': stack.push(a + b); break;
-	     case '-': stack.push(a - b); break;
-	     case '*': stack.push(a * b); break;
-	     case '/': stack.push(a / b); break;
-	     }
-	    }
-	}
+            case '+': stack.push(a + b); break;
+	    case '-': stack.push(a - b); break;
+	    case '*': stack.push(a * b); break;
+	    case '/': stack.push(a / b); break;
+    }
+    }
+    }
     }
     }
     if (!number.empty()) {
