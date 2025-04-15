@@ -7,7 +7,7 @@ class TStack {
  private:
     T arr[size];
     int top;
-public:
+ public:
     TStack() :top(-1) {}
     T get() const {
         return arr[top];
