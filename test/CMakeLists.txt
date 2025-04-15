@@ -1,24 +1,16 @@
-include(FetchContent)
+cmake_minimum_required(VERSION 3.14)
+project(ADS-5-test)
 
-FetchContent_Declare(
-  googletest
-  GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG        release-1.12.0
+include(GoogleTest)
+
+add_executable(ADS-5.test 
+    tests.cpp
 )
-FetchContent_MakeAvailable(googletest)
 
-include_directories(${gtest_SOURCE_DIR}/include)
-message(PROJECT_SOURCE_DIR="${gtest_SOURCE_DIR}/include")
-include_directories(${${PROJECT_NAME}_SOURCE_DIR}/include)
-set(header ${${PROJECT_NAME}_SOURCE_DIR}/include)
-
-#add_library(gtest IMPORTED STATIC GLOBAL)
-
-add_executable(${PROJECT_NAME}.test
-  AllTests.cpp
-  tests.cpp)
-
-target_link_libraries(${PROJECT_NAME}.test
-    ${PROJECT_NAME}
-    gtest
+target_link_libraries(ADS-5.test PRIVATE 
+    ADS-5 
+    GTest::GTest 
+    GTest::Main
 )
+
+gtest_discover_tests(ADS-5.test)
