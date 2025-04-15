@@ -80,22 +80,22 @@ int eval(const std::string& pref) {
       stack.push(std::stoi(number));
       number = "";
       }
-	} else if (prior(c) >= 2) {
-	    if (!stack.isEmpty()) {
+      } else if (prior(c) >= 2) {
+         if (!stack.isEmpty()) {
             int b = stack.get();
             stack.pop();
             if (!stack.isEmpty()) {
             int a = stack.get();
             stack.pop();
             switch (c) {
-            case '+': stack.push(a + b); break;
-	    case '-': stack.push(a - b); break;
-	    case '*': stack.push(a * b); break;
-	    case '/': stack.push(a / b); break;
+             case '+': stack.push(a + b); break;
+	     case '-': stack.push(a - b); break;
+	     case '*': stack.push(a * b); break;
+	     case '/': stack.push(a / b); break;
+	     }
 	    }
-	    }
-	    }
-        }
+	}
+    }
     }
     if (!number.empty()) {
     stack.push(std::stoi(number));
