@@ -1,17 +1,17 @@
-cmake_minimum_required (VERSION 3.10.2)
-project (ADS-5)
+cmake_minimum_required(VERSION 3.10)
+project(ADS-5)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -g")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -O3 -g -pthread")
 
-set(tool_dest "bin")
-set(lib_dest "lib")
-set(include_dest "include/")
-
-add_library(ADS-5 STATIC 
+add_library(ADS-5 STATIC
     src/alg.cpp
     src/tstack.h
 )
 
-add_subdirectory(src)
+cmake_policy(SET CMP0079 NEW)
+
+find_package(Threads REQUIRED)
+target_link_libraries(ADS-5 PRIVATE Threads::Threads)
+
 add_subdirectory(test)
