@@ -29,33 +29,33 @@ std::string infx2pstfx(const std::string& infix) {
       postfixStr += currentChar;
       addSpace = false;
     } else if (currentChar == '(') {
-      operatorStack.push(currentChar);
+      operatorStack.Push(currentChar);
       addSpace = false;
     } else if (currentChar == ')') {
-      while (!operatorStack.empty() && operatorStack.top() != '(') {
+      while (!operatorStack.isEmpty() && operatorStack.get() != '(') {
         postfixStr += ' ';
-        postfixStr += operatorStack.top();
-        operatorStack.pop();
+        postfixStr += operatorStack.get();
+        operatorStack.Pop();
       }
-      operatorStack.pop();
+      operatorStack.Pop();
       addSpace = true;
     } else {
-      while (!operatorStack.empty() &&
-             prior(operatorStack.top()) >= currentPriority &&
-             operatorStack.top() != '(') {
+      while (!operatorStack.isEmpty() &&
+             prior(operatorStack.get()) >= currentPriority &&
+             operatorStack.get() != '(') {
         postfixStr += ' ';
-        postfixStr += operatorStack.top();
-        operatorStack.pop();
+        postfixStr += operatorStack.get();
+        operatorStack.Pop();
       }
       postfixStr += ' ';
-      operatorStack.push(currentChar);
+      operatorStack.Push(currentChar);
       addSpace = false;
     }
   }
-  while (!operatorStack.empty()) {
+  while (!operatorStack.isEmpty()) {
     postfixStr += ' ';
-    postfixStr += operatorStack.top();
-    operatorStack.pop();
+    postfixStr += operatorStack.get();
+    operatorStack.Pop();
   }
   return postfixStr;
 }
@@ -67,27 +67,27 @@ int eval(const std::string& postfix) {
     if (isdigit(currentChar)) {
       currentNumber += currentChar;
     } else if (currentChar == ' ') {
-      if (!currentNumber.empty()) {
-        calculationStack.push(std::stoi(currentNumber));
+      if (!currentNumber.isEmpty()) {
+        calculationStack.Push(std::stoi(currentNumber));
         currentNumber.clear();
       }
     } else if (prior(currentChar) >= 2) {
-      if (calculationStack.empty()) continue;
-      int rightOperand = calculationStack.top();
-      calculationStack.pop();
-      if (calculationStack.empty()) continue;
-      int leftOperand = calculationStack.top();
-      calculationStack.pop();
+      if (calculationStack.isEmpty()) continue;
+      int rightOperand = calculationStack.get();
+      calculationStack.Pop();
+      if (calculationStack.isEmpty()) continue;
+      int leftOperand = calculationStack.get();
+      calculationStack.Pop();
       switch (currentChar) {
-        case '+': calculationStack.push(leftOperand + rightOperand); break;
-        case '-': calculationStack.push(leftOperand - rightOperand); break;
-        case '*': calculationStack.push(leftOperand * rightOperand); break;
-        case '/': calculationStack.push(leftOperand / rightOperand); break;
+        case '+': calculationStack.Push(leftOperand + rightOperand); break;
+        case '-': calculationStack.Push(leftOperand - rightOperand); break;
+        case '*': calculationStack.Push(leftOperand * rightOperand); break;
+        case '/': calculationStack.Push(leftOperand / rightOperand); break;
       }
     }
   }
-  if (!currentNumber.empty()) {
-    calculationStack.push(std::stoi(currentNumber));
+  if (!currentNumber.isEmpty()) {
+    calculationStack.Push(std::stoi(currentNumber));
   }
-  return calculationStack.empty() ? 0 : calculationStack.top();
+  return calculationStack.isEmpty() ? 0 : calculationStack.get();
 }
