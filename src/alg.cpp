@@ -31,31 +31,29 @@ std::string infx2pstfx(const std::string& inf) {
     char current = inf[i];
     int currentPrior = prior(current);
     if (currentPrior == -1) {
-	if (needSpace) {
-	post += ' ';
-	}
-	post += current;
-	needSpace = false;
+    if (needSpace) {
+    post += ' ';
     }
-    else if (current == '(') {
-	stack.push(current);
-	needSpace = false;
-    }
-    else if (current == ')') {
-	while (!stack.isEmpty() && stack.get() != '(') {
-	post += ' ';
-	post += stack.get();
-	stack.pop();
+    post += current;
+    needSpace = false;
+    } else if (current == '(') {
+    stack.push(current);
+    needSpace = false;
+    } else if (current == ')') {
+    while (!stack.isEmpty() && stack.get() != '(') {
+    post += ' ';
+    post += stack.get();
+    stack.pop();
     }
     stack.pop();
     needSpace = true;
     } else {
-	while (!stack.isEmpty() &&
-	prior(stack.get()) >= currentPrior &&
-	stack.get() != '(') {
-	post += ' ';
-	post += stack.get();
-	stack.pop();
+    while (!stack.isEmpty() &&
+    prior(stack.get()) >= currentPrior &&
+    stack.get() != '(') {
+    post += ' ';
+    post += stack.get();
+    stack.pop();
     }
     post += ' ';	
     stack.push(current);
@@ -75,23 +73,21 @@ int eval(const std::string& pref) {
       std::string number = "";
       for (size_t i = 0; i < pref.length(); i++) {
       char c = pref[i];
-	      if (isdigit(c)) {
-              number += c;
-	      }
-	      else if (c == ' ') {
-		      if (!number.empty()) {
-		      stack.push(std::stoi(number));
-		      number = "";
-		      }
-	      }
-	      else if (prior(c) >= 2) {
-	      if (!stack.isEmpty()) {
-	      int b = stack.get();
-	      stack.pop();
-	      if (!stack.isEmpty()) {
-	      int a = stack.get();
-	      stack.pop();
-	      switch (c) {
+	if (isdigit(c)) {
+        number += c;
+       } else if (c == ' ') {
+	      if (!number.empty()) {
+	      stack.push(std::stoi(number));
+	      number = "";
+	      }	
+	} else if (prior(c) >= 2) {
+	    if (!stack.isEmpty()) {
+            int b = stack.get();
+            stack.pop();
+            if (!stack.isEmpty()) {
+            int a = stack.get();
+            stack.pop();
+            switch (c) {
 	      case '+': stack.push(a + b); break;
 	      case '-': stack.push(a - b); break;
 	      case '*': stack.push(a * b); break;
