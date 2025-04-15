@@ -55,7 +55,7 @@ std::string infx2pstfx(const std::string& inf) {
     post += stack.get();
     stack.pop();
     }
-    post += ' ';	
+    post += ' ';
     stack.push(current);
     needSpace = false;
     }
@@ -73,13 +73,13 @@ int eval(const std::string& pref) {
       std::string number = "";
       for (size_t i = 0; i < pref.length(); i++) {
       char c = pref[i];
-	if (isdigit(c)) {
-        number += c;
-       } else if (c == ' ') {
-	      if (!number.empty()) {
-	      stack.push(std::stoi(number));
-	      number = "";
-	      }	
+      if (isdigit(c)) {
+      number += c;
+      } else if (c == ' ') {
+      if (!number.empty()) {
+      stack.push(std::stoi(number));
+      number = "";
+      }
 	} else if (prior(c) >= 2) {
 	    if (!stack.isEmpty()) {
             int b = stack.get();
@@ -88,17 +88,17 @@ int eval(const std::string& pref) {
             int a = stack.get();
             stack.pop();
             switch (c) {
-	      case '+': stack.push(a + b); break;
-	      case '-': stack.push(a - b); break;
-	      case '*': stack.push(a * b); break;
-	      case '/': stack.push(a / b); break;
-	      }
-	      }
-	      }
-	}
-      }
-	if (!number.empty()) {
-	stack.push(std::stoi(number));
-	}
-	return stack.get();
+            case '+': stack.push(a + b); break;
+	    case '-': stack.push(a - b); break;
+	    case '*': stack.push(a * b); break;
+	    case '/': stack.push(a / b); break;
+	    }
+	    }
+	    }
+        }
+    }
+    if (!number.empty()) {
+    stack.push(std::stoi(number));
+    }
+    return stack.get();
 }
