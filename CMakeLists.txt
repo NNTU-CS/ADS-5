@@ -1,18 +1,12 @@
-cmake_minimum_required(VERSION 3.10)
-project(ADS-5-test)
+cmake_minimum_required(VERSION 3.14)
+project(ADS-5)
 
-include(GoogleTest)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -pthread")
 
-set(TEST_SOURCES 
-    ${CMAKE_CURRENT_SOURCE_DIR}/tests.cpp
+add_library(ADS-5 STATIC
+    src/alg.cpp
+    src/tstack.h
 )
 
-add_executable(ADS-5.test ${TEST_SOURCES})
-
-target_link_libraries(ADS-5.test PRIVATE 
-    ADS-5 
-    GTest::GTest 
-    GTest::Main
-)
-
-gtest_discover_tests(ADS-5.test)
+add_subdirectory(test)
