@@ -1,5 +1,9 @@
 // Copyright 2025 NNTU-CS
+#include <iostream>
 #include <string>
+#include <stack>
+#include <sstream>
+#include <cctype>
 #include <map>
 #include "tstack.h"
 int precedence(char op) {
@@ -12,7 +16,6 @@ std::string infx2pstfx(const std::string& inf) {
     std::string result;
     std::istringstream iss(inf);
     std::string token;
-
     while (iss >> token) {
         if (isdigit(token[0])) {
             result += token + " ";
