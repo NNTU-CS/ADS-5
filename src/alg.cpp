@@ -21,84 +21,73 @@ std::string infx2pstfx(const std::string& infix) {
   std::string postfixStr;
   TStack<char, 100> operatorStack;
   bool addSpace = false;
-  
   for (size_t index = 0; index < infix.size(); index++) {
     char currentChar = infix[index];
     int currentPriority = prior(currentChar);
-    
     if (currentPriority == -1) {
       if (addSpace) postfixStr += ' ';
       postfixStr += currentChar;
       addSpace = false;
     } else if (currentChar == '(') {
-      operatorStack.Push(currentChar);
+      operatorStack.push(currentChar);
       addSpace = false;
     } else if (currentChar == ')') {
-      while (!operatorStack.isEmpty() && operatorStack.get() != '(') {
+      while (!operatorStack.empty() && operatorStack.top() != '(') {
         postfixStr += ' ';
-        postfixStr += operatorStack.get();
-        operatorStack.Pop();
+        postfixStr += operatorStack.top();
+        operatorStack.pop();
       }
-      operatorStack.Pop();
+      operatorStack.pop();
       addSpace = true;
     } else {
-      while (!operatorStack.isEmpty() && 
-             prior(operatorStack.get()) >= currentPriority &&
-             operatorStack.get() != '(') {
+      while (!operatorStack.empty() &&
+             prior(operatorStack.top()) >= currentPriority &&
+             operatorStack.top() != '(') {
         postfixStr += ' ';
-        postfixStr += operatorStack.get();
-        operatorStack.Pop();
+        postfixStr += operatorStack.top();
+        operatorStack.pop();
       }
       postfixStr += ' ';
-      operatorStack.Push(currentChar);
+      operatorStack.push(currentChar);
       addSpace = false;
     }
   }
-  
-  while (!operatorStack.isEmpty()) {
+  while (!operatorStack.empty()) {
     postfixStr += ' ';
-    postfixStr += operatorStack.get();
-    operatorStack.Pop();
+    postfixStr += operatorStack.top();
+    operatorStack.pop();
   }
-  
   return postfixStr;
 }
-
 int eval(const std::string& postfix) {
   TStack<int, 100> calculationStack;
   std::string currentNumber;
-  
   for (size_t index = 0; index < postfix.length(); index++) {
     char currentChar = postfix[index];
-    
     if (isdigit(currentChar)) {
       currentNumber += currentChar;
     } else if (currentChar == ' ') {
       if (!currentNumber.empty()) {
-        calculationStack.Push(std::stoi(currentNumber));
+        calculationStack.push(std::stoi(currentNumber));
         currentNumber.clear();
       }
     } else if (prior(currentChar) >= 2) {
-      if (calculationStack.isEmpty()) continue;
-      int rightOperand = calculationStack.get();
-      calculationStack.Pop();
-      
-      if (calculationStack.isEmpty()) continue;
-      int leftOperand = calculationStack.get();
-      calculationStack.Pop();
-      
+      if (calculationStack.empty()) continue;
+      int rightOperand = calculationStack.top();
+      calculationStack.pop();
+      if (calculationStack.empty()) continue;
+      int leftOperand = calculationStack.top();
+      calculationStack.pop();
       switch (currentChar) {
-        case '+': calculationStack.Push(leftOperand + rightOperand); break;
-        case '-': calculationStack.Push(leftOperand - rightOperand); break;
-        case '*': calculationStack.Push(leftOperand * rightOperand); break;
-        case '/': calculationStack.Push(leftOperand / rightOperand); break;
+        case '+': calculationStack.push(leftOperand + rightOperand); break;
+        case '-': calculationStack.push(leftOperand - rightOperand); break;
+        case '*': calculationStack.push(leftOperand * rightOperand); break;
+        case '/': calculationStack.push(leftOperand / rightOperand); break;
       }
     }
   }
-  
   if (!currentNumber.empty()) {
-    calculationStack.Push(std::stoi(currentNumber));
+    calculationStack.push(std::stoi(currentNumber));
   }
-  
-  return calculationStack.isEmpty() ? 0 : calculationStack.get();
+  return calculationStack.empty() ? 0 : calculationStack.top();
 }
