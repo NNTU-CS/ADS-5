@@ -37,6 +37,13 @@ std::string infx2pstfx(const std::string& inf) {
             stack.push(token[0]);
         }
     }
+    while (!stack.empty()) {
+        result += stack.top();
+        result += " ";
+        stack.pop();
+    }
+
+    return result;
 }
 int eval(const std::string& pref) {
     std::stack<int> stack;
