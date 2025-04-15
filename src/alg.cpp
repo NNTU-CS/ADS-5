@@ -22,20 +22,6 @@ int prior(const char a) {
 	}
 }
 
-int calculate(double a, double b, char op) {
-	switch (op) {
-	case '+':
-		return a + b;
-	case '-':
-		return a - b;
-	case '*':
-		return a * b;
-	case '/':
-		return a / b;
-	default:
-		return -1;
-	}
-}
 
 std::string infx2pstfx(const std::string& inf) {
 	std::string post;
@@ -89,39 +75,39 @@ std::string infx2pstfx(const std::string& inf) {
 
 int eval(const std::string& pref) {
 	TStack<int> stack;
-	int num = 0;
-	bool readingNum = false;
-	bool negative = false;
+	std::string number = "";
 
-	for (char c : pref) {
-		if (c == ' ') {
-			if (readingNum) {
-				stack.push(negative ? -num : num);
-				num = 0;
-				readingNum = false;
-				negative = false;
-			}
-			continue;
-		}
-
+	for (size_t i = 0; i < pref.length(); i++) {
+		char c = pref[i];
 		if (isdigit(c)) {
-			num = num * 10 + (c - '0');
-			readingNum = true;
+			number += c;
 		}
-		else if (c == '-' && !readingNum) {
-			negative = true;
+		else if (c == ' ') {
+			if (!number.empty()) {
+				stack.push(std::stoi(number));
+				number = "";
+			}
 		}
-		else {
-			int b = stack.get();
-			stack.pop();
-			int a = stack.get();
-			stack.pop();
-			stack.push(calculate(a, b, c));
+		else if (prior(c) >= 2) {  // Проверка на оператор (+, -, *, /)
+			if (!stack.isEmpty()) {
+				int b = stack.get();
+				stack.pop();
+				if (!stack.isEmpty()) {
+					int a = stack.get();
+					stack.pop();
+					switch (c) {
+					case '+': stack.push(a + b); break;
+					case '-': stack.push(a - b); break;
+					case '*': stack.push(a * b); break;
+					case '/': stack.push(a / b); break;
+					}
+				}
+			}
 		}
 	}
 
-	if (readingNum) {
-		stack.push(negative ? -num : num);
+	if (!number.empty()) {
+		stack.push(std::stoi(number));
 	}
 
 	return stack.get();
