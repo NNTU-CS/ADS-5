@@ -3,9 +3,11 @@ project(ADS-5-test)
 
 include(GoogleTest)
 
-add_executable(ADS-5.test 
+set(TEST_SOURCES 
     ${CMAKE_CURRENT_SOURCE_DIR}/tests.cpp
 )
+
+add_executable(ADS-5.test ${TEST_SOURCES})
 
 target_link_libraries(ADS-5.test PRIVATE 
     ADS-5 
