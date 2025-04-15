@@ -47,9 +47,8 @@ std::string infx2pstfx(const std::string& inf) {
 }
 int eval(const std::string& pref) {
     std::stack<int> stack;
-    std::istringstream iss(post);
+    std::istringstream iss(pref);
     std::string token;
-
     while (iss >> token) {
         if (isdigit(token[0])) {
             stack.push(std::stoi(token));
