@@ -36,7 +36,6 @@ std::string infixToPostfix(const std::string& infixExpr) {
       isDigitPrevious = true;
     } else {
       isDigitPrevious = false;
-      
       if (ch == '(') {
         opStack.push(ch);
       } else if (ch == ')') {
@@ -57,7 +56,6 @@ std::string infixToPostfix(const std::string& infixExpr) {
   while (!opStack.isEmpty()) {
     output << ' ' << opStack.pop();
   }
-  
   std::string result = output.str();
   if (!result.empty() && result.back() == ' ') {
     result.pop_back();
@@ -74,10 +72,11 @@ int evaluatePostfix(const std::string& postfixExpr) {
     if (isdigit(token[0])) {
       evalStack.push(std::stoi(token));
     } else if (isOperator(token[0]) && token.size() == 1) {
-      if (evalStack.isEmpty()) throw std::invalid_argument("Not enough operands");
+      if (evalStack.isEmpty()) 
+        throw std::invalid_argument("Not enough operands");
       int rightOperand = evalStack.pop();
-      
-      if (evalStack.isEmpty()) throw std::invalid_argument("Not enough operands");
+      if (evalStack.isEmpty()) 
+        throw std::invalid_argument("Not enough operands");
       int leftOperand = evalStack.pop();
 
       switch (token[0]) {
