@@ -1,93 +1,99 @@
 // Copyright 2025 NNTU-CS
-#include <iostream>
 #include <string>
 #include <map>
 #include <sstream>
+#include <cctype>
+#include <stdexcept>
 #include "tstack.h"
 
-int prior(const char op) {
+int getPriority(char op) {
   switch (op) {
-    case '(': return 0;
-    case ')': return 1;
-    case '+': return 2;
-    case '-': return 2;
-    case '*': return 3;
-    case '/': return 3;
-    default:  return -1;
+    case '+': case '-': return 1;
+    case '*': case '/': return 2;
+    default: return 0;
   }
 }
 
-std::string infx2pstfx(const std::string& infix) {
-  std::string postfixStr;
-  TStack<char, 100> operatorStack;
-  bool addSpace = false;
-  for (size_t index = 0; index < infix.size(); index++) {
-    char currentChar = infix[index];
-    int currentPriority = prior(currentChar);
-    if (currentPriority == -1) {
-      if (addSpace) postfixStr += ' ';
-      postfixStr += currentChar;
-      addSpace = false;
-    } else if (currentChar == '(') {
-      operatorStack.push(currentChar);
-      addSpace = false;
-    } else if (currentChar == ')') {
-      while (!operatorStack.empty() && operatorStack.top() != '(') {
-        postfixStr += ' ';
-        postfixStr += operatorStack.top();
-        operatorStack.pop();
-      }
-      operatorStack.pop();
-      addSpace = true;
-    } else {
-      while (!operatorStack.empty() &&
-             prior(operatorStack.top()) >= currentPriority &&
-             operatorStack.top() != '(') {
-        postfixStr += ' ';
-        postfixStr += operatorStack.top();
-        operatorStack.pop();
-      }
-      postfixStr += ' ';
-      operatorStack.push(currentChar);
-      addSpace = false;
-    }
-  }
-  while (!operatorStack.empty()) {
-    postfixStr += ' ';
-    postfixStr += operatorStack.top();
-    operatorStack.pop();
-  }
-  return postfixStr;
+bool isOperator(char c) {
+  return c == '+' || c == '-' || c == '*' || c == '/';
 }
-int eval(const std::string& postfix) {
-  TStack<int, 100> calculationStack;
-  std::string currentNumber;
-  for (size_t index = 0; index < postfix.length(); index++) {
-    char currentChar = postfix[index];
-    if (isdigit(currentChar)) {
-      currentNumber += currentChar;
-    } else if (currentChar == ' ') {
-      if (!currentNumber.empty()) {
-        calculationStack.push(std::stoi(currentNumber));
-        currentNumber.clear();
+
+std::string infixToPostfix(const std::string& infixExpr) {
+  TStack<char, 100> opStack;
+  std::ostringstream output;
+  bool isDigitPrevious = false;
+
+  for (char ch : infixExpr) {
+    if (ch == ' ') continue;
+
+    if (isdigit(ch)) {
+      if (isDigitPrevious) {
+        output << ch;
+      } else {
+        if (!output.str().empty()) output << ' ';
+        output << ch;
       }
-    } else if (prior(currentChar) >= 2) {
-      if (calculationStack.empty()) continue;
-      int rightOperand = calculationStack.top();
-      calculationStack.pop();
-      if (calculationStack.empty()) continue;
-      int leftOperand = calculationStack.top();
-      calculationStack.pop();
-      switch (currentChar) {
-        case '+': calculationStack.push(leftOperand + rightOperand); break;
-        case '-': calculationStack.push(leftOperand - rightOperand); break;
-        case '*': calculationStack.push(leftOperand * rightOperand); break;
-        case '/': calculationStack.push(leftOperand / rightOperand); break;
+      isDigitPrevious = true;
+    } else {
+      isDigitPrevious = false;
+      
+      if (ch == '(') {
+        opStack.push(ch);
+      } else if (ch == ')') {
+        while (!opStack.isEmpty() && opStack.peek() != '(') {
+          output << ' ' << opStack.pop();
+        }
+        if (!opStack.isEmpty()) opStack.pop();
+      } else if (isOperator(ch)) {
+        while (!opStack.isEmpty() && opStack.peek() != '(' &&
+            getPriority(ch) <= getPriority(opStack.peek())) {
+          output << ' ' << opStack.pop();
+        }
+        opStack.push(ch);
       }
     }
   }
-  if (!currentNumber.empty()) {
-    calculationStack.push(std::stoi(currentNumber));
+
+  while (!opStack.isEmpty()) {
+    output << ' ' << opStack.pop();
   }
-  return calculationStack.empty() ? 0 : calculationStack.top();
+  
+  std::string result = output.str();
+  if (!result.empty() && result.back() == ' ') {
+    result.pop_back();
+  }
+  return result;
+}
+
+int evaluatePostfix(const std::string& postfixExpr) {
+  TStack<int, 100> evalStack;
+  std::istringstream iss(postfixExpr);
+  std::string token;
+
+  while (iss >> token) {
+    if (isdigit(token[0])) {
+      evalStack.push(std::stoi(token));
+    } else if (isOperator(token[0]) && token.size() == 1) {
+      if (evalStack.isEmpty()) throw std::invalid_argument("Not enough operands");
+      int rightOperand = evalStack.pop();
+      
+      if (evalStack.isEmpty()) throw std::invalid_argument("Not enough operands");
+      int leftOperand = evalStack.pop();
+
+      switch (token[0]) {
+        case '+': evalStack.push(leftOperand + rightOperand); break;
+        case '-': evalStack.push(leftOperand - rightOperand); break;
+        case '*': evalStack.push(leftOperand * rightOperand); break;
+        case '/':
+          if (rightOperand == 0) throw std::runtime_error("Division by zero");
+          evalStack.push(leftOperand / rightOperand);
+          break;
+      }
+    }
+  }
+
+  if (evalStack.isEmpty()) throw std::invalid_argument("Empty expression");
+  int result = evalStack.pop();
+  if (!evalStack.isEmpty()) throw std::invalid_argument("Too many operands");
+  return result;
 }
