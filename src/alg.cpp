@@ -23,7 +23,7 @@ std::string infx2pstfx(const std::string& inf) {
     if (curChar == ' ') {
       continue;
     }
-    if (std::isdigit(currentChar)) {
+    if (std::isdigit(curChar)) {
       while (idx < inf.length() && std::isdigit(inf[idx])) {
         resultStr.push_back(inf[idx]);
         idx++;
