@@ -17,7 +17,7 @@ bool isOperator(char c) {
 
 std::string infx2pstfx(const std::string& inf) {
   TStack<char, 100> stack;
-  std::ostringstream out;
+  std::string out;
 
   for (size_t i = 0; i < inf.length(); ++i) {
     char ch = inf[i];
@@ -26,31 +26,38 @@ std::string infx2pstfx(const std::string& inf) {
 
     if (std::isdigit(ch)) {
       while (i < inf.length() && std::isdigit(inf[i])) {
-        out << inf[i++];
+        out += inf[i++];
       }
-      out << ' ';
+      out += ' ';
       --i;
     } else if (ch == '(') {
       stack.push(ch);
     } else if (ch == ')') {
       while (!stack.isEmpty() && stack.peek() != '(') {
-        out << stack.pop() << ' ';
+        out += stack.pop();
+        out += ' ';
       }
       if (!stack.isEmpty()) stack.pop();
     } else if (isOperator(ch)) {
       while (!stack.isEmpty() && precedence(stack.peek()) >= precedence(ch)) {
-        out << stack.pop() << ' ';
+        out += stack.pop();
+        out += ' ';
       }
       stack.push(ch);
     }
   }
 
   while (!stack.isEmpty()) {
-    out << stack.pop() << ' ';
+    out += stack.pop();
+    out += ' ';
   }
 
-  return out.str();
+  if (!out.empty() && out.back() == ' ')
+    out.pop_back();
+
+  return out;
 }
+
 
 int eval(const std::string& pref) {
   TStack<int, 100> stack;
