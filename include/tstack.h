@@ -6,11 +6,11 @@
 
 template<typename T, int kMaxSize>
 class TStack {
-private:
+ private:
   T items[kMaxSize];
   int index;
 
-public:
+ public:
   TStack() : index(-1) {}
 
   void push(const T& value) {
