@@ -1,7 +1,7 @@
 // Copyright 2025 NNTU-CS
 #include <string>
 #include <map>
-#include "stack.h"
+#include "tstack.h"
 
 int to_int(std::string& str) {
   int res = 0;
