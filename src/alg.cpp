@@ -32,7 +32,8 @@ std::string infx2pstfx(const std::string& inf) {
       }
       if (!stack.isEmpty()) stack.pop();
     } else if (isOperator(inf[i])) {
-      while (!stack.isEmpty() && precedence(stack.top()) >= precedence(inf[i])) {
+      while (!stack.isEmpty() &&
+       precedence(stack.top()) >= precedence(inf[i])) {
         postfix += stack.pop();
         postfix += ' ';
       }
