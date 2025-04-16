@@ -6,7 +6,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -pthread")
 
 add_library(ADS-5 STATIC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/alg.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/scr/tstack.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/tstack.h
 )
 
 add_subdirectory(test)
