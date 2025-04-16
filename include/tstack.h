@@ -2,11 +2,12 @@
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 #include <stdexcept>
+#include <array>
 
 template<typename T, int kStackSize>
 class TStack {
  private:
-  T data[kStackSize];
+  std::array<T, kStackSize> data;
   int topIndex;
 
  public:
@@ -21,7 +22,7 @@ class TStack {
     if (full()) {
       throw std::runtime_error("Error: Stack overflow");
     }
-    data[++topIndex] = item;
+    data.at(++topIndex) = item;
   }
   void pop() {
     if (empty()) {
@@ -33,13 +34,13 @@ class TStack {
     if (empty()) {
       throw std::runtime_error("Error: stack is empty");
     }
-    return data[topIndex];
+    return data.at(topIndex);
   }
   const T& top() const {
     if (empty()) {
       throw std::runtime_error("Error: stack is empty");
     }
-    return data[topIndex];
+    return data.at(topIndex);
   }
 };
 #endif  // INCLUDE_TSTACK_H_
