@@ -1,14 +1,95 @@
 // Copyright 2025 NNTU-CS
 #include <string>
 #include <map>
-#include "tstack.h"
+#include "stack.h"
+
+int to_int(std::string& str) {
+  int res = 0;
+  for (int i = 0; i < str.size(); i++)
+    res += (str[str.size() - 1 - i] - '0') * pow(10, i);
+  return res;
+}
 
 std::string infx2pstfx(const std::string& inf) {
-  // добавьте код
-  return std::string("");
+  TStack<char, 100> stack;
+  std::map<char, int> pr = {
+  {'+', 0},
+  {'-', 0},
+  {'*', 1},
+  {'/', 1},
+  {'(', 2}};
+  std::string out;
+  bool isNum = false;
+  for (int i = 0; i < inf.size(); i++) {
+
+    if (inf[i] >= '0' && inf[i] <= '9') {
+      out.push_back(inf[i]);
+      if (i != inf.size() - 1 && (inf[i + 1] >= '0' && inf[i + 1] <= '9'))
+        isNum = true;
+      else isNum = false;
+      if (!isNum)
+        out.push_back(' ');
+    } else if (inf[i] == ')') {
+        while (stack.getTop() != '(') {
+          out.push_back(stack.pop());
+          out.push_back(' ');
+        }
+        stack.pop();
+    } else if (stack.isEmpty() || (pr[inf[i]] == 0 && stack.getTop() == '(') || pr[inf[i]] > pr[stack.getTop()])
+        stack.push(inf[i]);
+      else {
+        while (!stack.isEmpty() && pr[inf[i]] <= pr[stack.getTop()]) {
+          out.push_back(stack.pop());
+          out.push_back(' ');
+        }
+        stack.push(inf[i]);
+    }
+  }
+
+  while (!stack.isEmpty()) {
+    out.push_back(stack.pop());
+    out.push_back(' ');
+  }
+
+  if (out[out.size() - 1] == ' ')
+    out.pop_back();
+
+  return out;
 }
 
 int eval(const std::string& pref) {
-  // добавьте код
-  return 0;
+  TStack<int, 100> stack;
+  std::string temp;
+  int sum = 0;
+  bool isNum = false;
+  for (int i = 0; i < pref.size(); i++) {
+    if (pref[i] >= '0' && pref[i] <= '9') {
+    temp.push_back(pref[i]);
+    } else if (pref[i] == ' ') {
+        if (temp.size()) {
+        stack.push(to_int(temp));
+        temp = "";
+        } else continue;
+	} else {
+        switch (pref[i]){
+          case '+':
+          sum = stack.pop() + stack.pop();
+          break;
+          case '-':
+          sum = (stack.pop() - stack.pop()) * -1;
+          break;
+          case '*':
+          sum = stack.pop() * stack.pop();
+          break;
+          case '/':
+          sum = stack.pop();
+          sum = stack.pop() / sum;
+          break;
+          default:
+          throw std::string("Undefined symbol");
+        }
+        stack.push(sum);
+    }
+  }
+  return stack.pop();
 }
