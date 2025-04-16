@@ -29,7 +29,8 @@ std::string infx2pstfx(const std::string& infix) {
     char ch = infix[i];
     if (ch >= '0' && ch <= '9') {
       output.push_back(ch);
-      if (i + 1 == infix.size() || !(infix[i + 1] >= '0' && infix[i + 1] <= '9')) {
+      if (i + 1 == infix.size() ||
+          !(infix[i + 1] >= '0' && infix[i + 1] <= '9')) {
         output.push_back(' ');
       }
     } else if (ch == '(') {
