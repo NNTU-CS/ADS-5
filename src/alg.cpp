@@ -53,7 +53,7 @@ std::string infx2pstfx(const std::string& inf) {
     result.pop_back();
   }
   return result;
-{
+}
 int applyOp(int a, int b, char op) {
   switch (op) {
     case '+': return a + b;
@@ -67,7 +67,6 @@ int eval(const std::string& post) {
   TStack<int, 100> stack;
   std::istringstream in(post);
   std::string token;
-
   while (in >> token) {
     if (isdigit(token[0])) {
       stack.push(std::stoi(token));
