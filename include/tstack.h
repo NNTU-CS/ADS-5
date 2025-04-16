@@ -3,43 +3,43 @@
 #define INCLUDE_TSTACK_H_
 #include <stdexcept>
 
-template<typename T, int size>
+template<typename T, int kStackSize>
 class TStack {
  private:
-  T elements[size];
-  int currentIndex;
+  T data[kStackSize];
+  int topIndex;
 
  public:
-  TStack() : currentIndex(-1) {}
+  TStack() : topIndex(-1) {}
   bool empty() const {
-    return currentIndex < 0;
+    return topIndex < 0;
   }
   bool full() const {
-    return currentIndex >= size - 1;
+    return topIndex >= kStackSize - 1;
   }
-  void push(const T& value) {
+  void push(const T& item) {
     if (full()) {
       throw std::runtime_error("Error: Stack overflow");
     }
-    elements[++currentIndex] = value;
+    data[++topIndex] = item;
   }
   void pop() {
     if (empty()) {
       throw std::runtime_error("Error: stack is empty");
     }
-    --currentIndex;
+    --topIndex;
   }
   T& top() {
     if (empty()) {
       throw std::runtime_error("Error: stack is empty");
     }
-    return elements[currentIndex];
+    return data[topIndex];
   }
   const T& top() const {
     if (empty()) {
       throw std::runtime_error("Error: stack is empty");
     }
-    return elements[currentIndex];
+    return data[topIndex];
   }
 };
 #endif  // INCLUDE_TSTACK_H_
