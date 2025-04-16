@@ -3,36 +3,34 @@
 #define INCLUDE_TSTACK_H_
 #include <stdexcept>
 
-template <typename T, int kSize>
+template <typename T, int SIZE>
 class TStack {
  private:
-  T data[kSize];
+  T data[SIZE];
   int top;
+
  public:
   TStack() : top(-1) {}
   void push(const T& value) {
-    if (top >= kSize - 1) {
-      throw std::overflow_error("Stack overflow");
+    if (top >= SIZE - 1) {
+      throw "Stack overflow";
     }
     data[++top] = value;
   }
   void pop() {
     if (isEmpty()) {
-      throw std::underflow_error("Stack underflow");
+      throw "Stack underflow";
     }
     --top;
   }
   T get() const {
     if (isEmpty()) {
-      throw std::underflow_error("Stack underflow");
+      throw "Stack is empty";
     }
     return data[top];
   }
   bool isEmpty() const {
     return top == -1;
-  }
-  int count() const {
-    return top + 1;
   }
 };
 #endif
