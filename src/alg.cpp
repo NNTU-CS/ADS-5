@@ -26,14 +26,10 @@ std::string infx2pstfx(const std::string& inf) {
   {'/', 1},
   {'(', 2}};
   std::string out;
-  bool isNum = false;
   for (int i = 0; i < inf.size(); i++) {
     if (inf[i] >= '0' && inf[i] <= '9') {
       out.push_back(inf[i]);
-      if (i != inf.size() - 1 && (inf[i + 1] >= '0' && inf[i + 1] <= '9'))
-        isNum = true;
-      else isNum = false;
-      if (!isNum)
+      if (!(i != inf.size() - 1 && (inf[i + 1] >= '0' && inf[i + 1] <= '9')))
         out.push_back(' ');
     } else if (inf[i] == ')') {
         while (stack.getTop() != '(') {
@@ -47,11 +43,11 @@ std::string infx2pstfx(const std::string& inf) {
           out.push_back(' ');
         }
         stack.push(inf[i]);
-    } else if (stack.isEmpty() || 
-pr[inf[i]] == 0 || 
-pr[inf[i]] > pr[stack.getTop()])
+    } else if (stack.isEmpty() ||
+pr[inf[i]] == 0 ||
+pr[inf[i]] > pr[stack.getTop()]) {
         stack.push(inf[i]);
-      else {
+    } else {
         while (!stack.isEmpty() && pr[inf[i]] <= pr[stack.getTop()]) {
           out.push_back(stack.pop());
           out.push_back(' ');
@@ -75,7 +71,6 @@ int eval(const std::string& pref) {
   TStack<int, 100> stack;
   std::string temp;
   int sum = 0;
-  bool isNum = false;
   for (int i = 0; i < pref.size(); i++) {
     if (pref[i] >= '0' && pref[i] <= '9') {
     temp.push_back(pref[i]);
@@ -83,7 +78,9 @@ int eval(const std::string& pref) {
         if (temp.size()) {
         stack.push(to_int(temp));
         temp = "";
-        } else { continue; }
+        } else {
+          continue;
+        }
     } else {
         switch (pref[i]) {
           case '+':
