@@ -11,18 +11,21 @@ class TStack {
  public:
   TStack() : top(-1) {}
   void push(const T& value) {
-    if (top >= kSize - 1)
+    if (top >= kSize - 1) {
       throw std::overflow_error("Stack overflow");
+    }
     data[++top] = value;
   }
   void pop() {
-    if (isEmpty())
+    if (isEmpty()) {
       throw std::underflow_error("Stack underflow");
+    }
     --top;
   }
   T get() const {
-    if (isEmpty())
+    if (isEmpty()) {
       throw std::underflow_error("Stack underflow");
+    }
     return data[top];
   }
   bool isEmpty() const {
