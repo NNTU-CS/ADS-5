@@ -13,7 +13,7 @@ static int getPriority(char op) {
 std::string infx2pstfx(const std::string& inf) {
   TStack<char, 100> stack;
   std::stringstream postfix;
-  bool prevWasDigit = false;
+  bool first = true;
 
   for (size_t i = 0; i < inf.size(); ++i) {
     char c = inf[i];
@@ -23,25 +23,22 @@ std::string infx2pstfx(const std::string& inf) {
     }
 
     if (isdigit(c)) {
-      if (prevWasDigit) {
-        postfix << c;
-      } else {
-        if (i != 0) postfix << ' ';
-        postfix << c;
+      if (!first) {
+        postfix << ' ';
       }
-      prevWasDigit = true;
+      postfix << c;
+      first = false;
     } else {
-      prevWasDigit = false;
-
       if (c == '(') {
         stack.push(c);
       } else if (c == ')') {
         while (!stack.isEmpty() && stack.peek() != '(') {
           postfix << ' ' << stack.pop();
         }
-        stack.pop(); // Remove '(' from stack
+        stack.pop(); // Remove '('
       } else {
-        while (!stack.isEmpty() && getPriority(stack.peek()) >= getPriority(c)) {
+        while (!stack.isEmpty() && stack.peek() != '(' && 
+               getPriority(stack.peek()) >= getPriority(c)) {
           postfix << ' ' << stack.pop();
         }
         stack.push(c);
