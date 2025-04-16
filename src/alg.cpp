@@ -102,5 +102,5 @@ int eval(const std::string& pref) {
         stack.push(sum);
     }
   }
-  return stack.pop();
+  return (stack.pop()) * -1;
 }
