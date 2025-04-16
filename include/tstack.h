@@ -1,35 +1,42 @@
 // Copyright 2021 NNTU-CS
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
-#include <stdexcept>
 
-template <typename T, int SIZE>
+template <typename T, size_t N>
 class TStack {
- private:
-  T data[SIZE];
-  int top;
-
- public:
-  TStack() : top(-1) {}
-  void push(const T& value) {
-    if (top >= SIZE - 1) {
-      throw "Stack overflow";
+private:
+    T arr[N];
+    int top = -1;
+public:
+    bool isEmpty() const {
+        return top == -1;
     }
-    data[++top] = value;
-  }
-  void pop() {
-    if (isEmpty()) {
-      throw "Stack underflow";
+    void push(const T& value) {
+        if (top < static_cast<int>(N) - 1) {
+            arr[++top] = value;
+        } else {
+            throw "Stack overflow";
+        }
     }
-    --top;
-  }
-  T get() const {
-    if (isEmpty()) {
-      throw "Stack is empty";
+    void pop() {
+        if (!isEmpty()) {
+            --top;
+        } else {
+            throw "Stack underflow";
+        }
     }
-    return data[top];
-  }
-  bool isEmpty() const {
+    T get() const {
+        if (!isEmpty()) {
+            return arr[top];
+        } else {
+            throw "Stack is empty";
+        }
+    }
+    size_t size() const {
+        return top + 1;
+    }
+};
+#endif
     return top == -1;
   }
 };
