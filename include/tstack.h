@@ -4,7 +4,6 @@
 
 template <typename T, int Size>
 class TStack {
-
  private:
   T arr[Size];
   int top;
