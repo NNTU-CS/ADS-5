@@ -1,12 +1,19 @@
 // Copyright 2025 NNTU-CS
 #include <string>
 #include <map>
-#include "tstack.h"
+#include "stack.h"
 
-int to_int(std::string& str) {
+int tPow (int g) { 
+  int temp = 1;
+  for (int i = 0; i < g; i++)
+    temp *= 10;
+  return temp;
+}
+
+int to_int(const std::string& str) {
   int res = 0;
   for (int i = 0; i < str.size(); i++)
-    res += (str[str.size() - 1 - i] - '0') * pow(10, i);
+    res += (str[str.size() - 1 - i] - '0') * tPow(i);
   return res;
 }
 
@@ -35,7 +42,13 @@ std::string infx2pstfx(const std::string& inf) {
           out.push_back(' ');
         }
         stack.pop();
-    } else if (stack.isEmpty() || (pr[inf[i]] == 0 && stack.getTop() == '(') || pr[inf[i]] > pr[stack.getTop()])
+    } else if (pr[inf[i]] == 0 && pr[stack.getTop()] == 1) {
+        while (!stack.isEmpty() && pr[stack.getTop()] == 1) {
+          out.push_back(stack.pop());
+          out.push_back(' ');
+        }
+        stack.push(inf[i]);
+    } else if (stack.isEmpty() || pr[inf[i]] == 0 || pr[inf[i]] > pr[stack.getTop()])
         stack.push(inf[i]);
       else {
         while (!stack.isEmpty() && pr[inf[i]] <= pr[stack.getTop()]) {
