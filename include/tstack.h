@@ -1,6 +1,7 @@
 // Copyright 2021 NNTU-CS
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
+#include <string>
 
 template<typename T, int size>
 class TStack {
@@ -16,11 +17,12 @@ class TStack {
       throw std::string("stack overflow");
   }
 
-  T pop() { 
-    if (top >= 0)
+  T pop() {
+    if (top >= 0) {
       return arr[top--];
-	else
+    } else {
       throw std::string("stack is empty");
+    }
   }
 
   T getTop() const { return arr[top]; }
