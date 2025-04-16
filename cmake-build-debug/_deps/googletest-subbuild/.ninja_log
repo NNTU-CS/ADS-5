@@ -1,0 +1,21 @@
+# ninja log v6
+0	12	1744828920535910500	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-mkdir	eb7940fa99b7e81e
+0	12	1744828920535910500	/Users/pavelzolin/Desktop/ADS6/ADS-5/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-mkdir	eb7940fa99b7e81e
+12	29973	1744828950496667910	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-download	fc3a06ff666bd3ee
+12	29973	1744828950496667910	/Users/pavelzolin/Desktop/ADS6/ADS-5/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-download	fc3a06ff666bd3ee
+29973	29996	1744828950497430497	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-update	bc089ebba7aa9f66
+29973	29996	1744828950497430497	/Users/pavelzolin/Desktop/ADS6/ADS-5/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-update	bc089ebba7aa9f66
+29996	30004	1744828950528234213	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-patch	dbbb317e943fe5ec
+29996	30004	1744828950528234213	/Users/pavelzolin/Desktop/ADS6/ADS-5/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-patch	dbbb317e943fe5ec
+30004	30011	1744828950535641037	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-configure	7b3061bcf4482e72
+30004	30011	1744828950535641037	/Users/pavelzolin/Desktop/ADS6/ADS-5/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-configure	7b3061bcf4482e72
+30012	30019	1744828950543005361	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-build	9726afe857cbb87c
+30012	30019	1744828950543005361	/Users/pavelzolin/Desktop/ADS6/ADS-5/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-build	9726afe857cbb87c
+30019	30026	1744828950550011849	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-install	fa7be76e6177edbf
+30019	30026	1744828950550011849	/Users/pavelzolin/Desktop/ADS6/ADS-5/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-install	fa7be76e6177edbf
+30026	30033	1744828950557155006	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-test	2c9125ad242e4c30
+30026	30033	1744828950557155006	/Users/pavelzolin/Desktop/ADS6/ADS-5/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-test	2c9125ad242e4c30
+30033	30043	1744828950566923715	CMakeFiles/googletest-populate-complete	7974705272d1871c
+30033	30043	1744828950566923715	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-done	7974705272d1871c
+30033	30043	1744828950566923715	/Users/pavelzolin/Desktop/ADS6/ADS-5/cmake-build-debug/_deps/googletest-subbuild/CMakeFiles/googletest-populate-complete	7974705272d1871c
+30033	30043	1744828950566923715	/Users/pavelzolin/Desktop/ADS6/ADS-5/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-done	7974705272d1871c
