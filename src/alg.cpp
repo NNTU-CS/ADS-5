@@ -35,9 +35,9 @@ std::string infx2pstfx(const std::string& inf) {
         while (!stack.isEmpty() && stack.peek() != '(') {
           postfix << ' ' << stack.pop();
         }
-        stack.pop(); // Remove '('
+        stack.pop();
       } else {
-        while (!stack.isEmpty() && stack.peek() != '(' && 
+        while (!stack.isEmpty() && stack.peek() != '(' &&
                getPriority(stack.peek()) >= getPriority(c)) {
           postfix << ' ' << stack.pop();
         }
@@ -64,7 +64,7 @@ int eval(const std::string& post) {
     } else {
       int right = stack.pop();
       int left = stack.pop();
-      
+
       switch (token[0]) {
         case '+': stack.push(left + right); break;
         case '-': stack.push(left - right); break;
