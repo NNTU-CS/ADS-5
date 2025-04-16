@@ -1,11 +1,10 @@
 // Copyright 2025 NNTU-CS
 #include <string>
-#include <map>
 #include <sstream>
 #include <cctype>
 #include "tstack.h"
 
-static int GetPriority(char op) {
+static int getPriority(char op) {
   if (op == '+' || op == '-') return 1;
   if (op == '*' || op == '/') return 2;
   return 0;
@@ -14,7 +13,7 @@ static int GetPriority(char op) {
 std::string infx2pstfx(const std::string& inf) {
   TStack<char, 100> stack;
   std::stringstream postfix;
-  bool prev_was_digit = false;
+  bool prevWasDigit = false;
 
   for (size_t i = 0; i < inf.size(); ++i) {
     char c = inf[i];
@@ -24,28 +23,25 @@ std::string infx2pstfx(const std::string& inf) {
     }
 
     if (isdigit(c)) {
-      if (prev_was_digit) {
+      if (prevWasDigit) {
         postfix << c;
       } else {
-        if (i != 0) {
-          postfix << ' ';
-        }
+        if (i != 0) postfix << ' ';
         postfix << c;
       }
-      prev_was_digit = true;
+      prevWasDigit = true;
     } else {
-      prev_was_digit = false;
+      prevWasDigit = false;
 
       if (c == '(') {
         stack.push(c);
       } else if (c == ')') {
-        while (!stack.empty() && stack.top() != '(') {
+        while (!stack.isEmpty() && stack.peek() != '(') {
           postfix << ' ' << stack.pop();
         }
-        stack.pop();
+        stack.pop(); // Remove '(' from stack
       } else {
-        while (!stack.empty() &&
-               GetPriority(stack.top()) >= GetPriority(c)) {
+        while (!stack.isEmpty() && getPriority(stack.peek()) >= getPriority(c)) {
           postfix << ' ' << stack.pop();
         }
         stack.push(c);
@@ -53,7 +49,7 @@ std::string infx2pstfx(const std::string& inf) {
     }
   }
 
-  while (!stack.empty()) {
+  while (!stack.isEmpty()) {
     postfix << ' ' << stack.pop();
   }
 
@@ -71,20 +67,12 @@ int eval(const std::string& post) {
     } else {
       int right = stack.pop();
       int left = stack.pop();
-
+      
       switch (token[0]) {
-        case '+':
-          stack.push(left + right);
-          break;
-        case '-':
-          stack.push(left - right);
-          break;
-        case '*':
-          stack.push(left * right);
-          break;
-        case '/':
-          stack.push(left / right);
-          break;
+        case '+': stack.push(left + right); break;
+        case '-': stack.push(left - right); break;
+        case '*': stack.push(left * right); break;
+        case '/': stack.push(left / right); break;
       }
     }
   }
