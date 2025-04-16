@@ -2,44 +2,41 @@
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 
-#include <stdexcept>
-
-template <typename T, size_t N>
+template<typename T, int size>
 class TStack {
  private:
-  T arr[N];
-  int top = -1;
+  T data[size];
+  int top;
 
  public:
-  TStack() = default;
+  TStack() : top(-1) {}
+
+  void push(const T& value) {
+    if (top < size - 1) {
+      data[++top] = value;
+    }
+  }
+
+  T pop() {
+    if (top >= 0) {
+      return data[top--];
+    }
+    return T();
+  }
+
+  T topElement() const {
+    if (top >= 0) {
+      return data[top];
+    }
+    return T();
+  }
+
+  T top() const {
+    return topElement();
+  }
 
   bool isEmpty() const {
     return top == -1;
-  }
-
-  void push(const T& value) {
-    if (top >= static_cast<int>(N) - 1) {
-      throw std::overflow_error("Stack overflow");
-    }
-    arr[++top] = value;
-  }
-
-  void pop() {
-    if (isEmpty()) {
-      throw std::underflow_error("Stack underflow");
-    }
-    --top;
-  }
-
-  T get() const {
-    if (isEmpty()) {
-      throw std::underflow_error("Stack is empty");
-    }
-    return arr[top];
-  }
-
-  size_t size() const {
-    return top + 1;
   }
 };
 
