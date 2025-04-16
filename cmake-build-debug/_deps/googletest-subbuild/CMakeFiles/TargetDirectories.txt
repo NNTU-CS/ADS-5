@@ -1,3 +1,0 @@
-/Users/pavelzolin/Desktop/ADS6/ADS-5/cmake-build-debug/_deps/googletest-subbuild/CMakeFiles/googletest-populate.dir
-/Users/pavelzolin/Desktop/ADS6/ADS-5/cmake-build-debug/_deps/googletest-subbuild/CMakeFiles/edit_cache.dir
-/Users/pavelzolin/Desktop/ADS6/ADS-5/cmake-build-debug/_deps/googletest-subbuild/CMakeFiles/rebuild_cache.dir
