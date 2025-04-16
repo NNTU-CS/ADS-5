@@ -1,9 +1,9 @@
 // Copyright 2025 NNTU-CS
 #include <string>
 #include <map>
-#include "stack.h"
+#include "tstack.h"
 
-int tPow (int g) { 
+int tPow(int g) {
   int temp = 1;
   for (int i = 0; i < g; i++)
     temp *= 10;
@@ -28,7 +28,6 @@ std::string infx2pstfx(const std::string& inf) {
   std::string out;
   bool isNum = false;
   for (int i = 0; i < inf.size(); i++) {
-
     if (inf[i] >= '0' && inf[i] <= '9') {
       out.push_back(inf[i]);
       if (i != inf.size() - 1 && (inf[i + 1] >= '0' && inf[i + 1] <= '9'))
@@ -48,7 +47,9 @@ std::string infx2pstfx(const std::string& inf) {
           out.push_back(' ');
         }
         stack.push(inf[i]);
-    } else if (stack.isEmpty() || pr[inf[i]] == 0 || pr[inf[i]] > pr[stack.getTop()])
+    } else if (stack.isEmpty() || 
+pr[inf[i]] == 0 || 
+pr[inf[i]] > pr[stack.getTop()])
         stack.push(inf[i]);
       else {
         while (!stack.isEmpty() && pr[inf[i]] <= pr[stack.getTop()]) {
@@ -82,9 +83,9 @@ int eval(const std::string& pref) {
         if (temp.size()) {
         stack.push(to_int(temp));
         temp = "";
-        } else continue;
-	} else {
-        switch (pref[i]){
+        } else { continue; }
+    } else {
+        switch (pref[i]) {
           case '+':
           sum = stack.pop() + stack.pop();
           break;
