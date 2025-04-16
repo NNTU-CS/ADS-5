@@ -2,32 +2,34 @@
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 
-template<typename T, int size>
+#include <string>
+
+template<typename T, int kMaxSize>
 class TStack {
 private:
-  T items[size];
+  T items[kMaxSize];
   int index;
 
 public:
   TStack() : index(-1) {}
 
   void push(const T& value) {
-    if (index >= size - 1) {
-      throw std::string("Stack overflow");
+    if (index >= kMaxSize - 1) {
+      throw std::string("Стек переполнен");
     }
     items[++index] = value;
   }
 
   T pop() {
     if (isEmpty()) {
-      throw std::string("Stack is empty");
+      throw std::string("В стеке ничего нет");
     }
     return items[index--];
   }
 
   T getTop() const {
     if (isEmpty()) {
-      throw std::string("Stack is empty");
+      throw std::string("В стеке ничего нет");
     }
     return items[index];
   }
