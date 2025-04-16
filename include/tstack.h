@@ -5,11 +5,11 @@
 
 template<typename T, int size>
 class TStack {
-private:
+ private:
   T elements[size];
   int currentIndex;
 
-public:
+ public:
   TStack() : currentIndex(-1) {}
   bool empty() const {
     return currentIndex < 0;
