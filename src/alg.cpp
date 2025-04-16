@@ -35,7 +35,7 @@ std::string infx2pstfx(const std::string& inf) {
             if (!stack.isEmpty()) stack.pop();
             i++;
         } else { // оператор
-            while (!stack.isEmpty() && priority(stack.get()) >= priority(inf[i])) {
+            while (!stack.isEmpty() && priority(stack.get()) >= priority(inf[i])) { {
                 out << stack.get() << ' ';
                 stack.pop();
             }
