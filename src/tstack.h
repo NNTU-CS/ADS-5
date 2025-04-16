@@ -1,7 +1,7 @@
 // Copyright 2025 NNTU-CS
 
-#ifndef INCLUDE_TSTACK_H_
-#define INCLUDE_TSTACK_H_
+#ifndef SRC_TSTACK_H_  // <- Исправлено!
+#define SRC_TSTACK_H_  // <- Исправлено!
 
 #include <array>
 #include <stdexcept>
@@ -50,4 +50,4 @@ class TStack {
     int top;
 };
 
-#endif  // INCLUDE_TSTACK_H_
+#endif  // SRC_TSTACK_H_  // <- Исправлено!
