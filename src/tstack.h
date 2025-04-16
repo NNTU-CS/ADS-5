@@ -10,7 +10,7 @@
 template<typename T, int size>
 class TStack {
  public:
-    TStack() : top(-1) {}
+    TStack() : elements(), top(-1) {}
 
     bool isEmpty() const noexcept {
         return top == -1;
