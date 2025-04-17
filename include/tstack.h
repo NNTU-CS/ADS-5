@@ -1,7 +1,8 @@
+// Copyright 2025 NNTU-CS
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 
-template<typename T, constexpr int kStackSize>
+template<typename T, int kStackSize>
 class TStack {
     T data[kStackSize];
     int top;
