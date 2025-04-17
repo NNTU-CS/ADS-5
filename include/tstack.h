@@ -8,6 +8,7 @@ class TStack {
   static const int kSize = size;
   T data[kSize];
   int top;
+
  public:
   TStack() : top(-1) {}
 
