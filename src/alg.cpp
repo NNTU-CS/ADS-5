@@ -40,7 +40,7 @@ std::string infx2pstfx(const std::string& inf) {
               transStack.pop();
           }
       } else if (cur == '+' || cur == '-' || cur == '*' || cur == '/') {
-          while (!transStack.isEmpty() 
+          while (!transStack.isEmpty()
             && priority(cur) <= priority(transStack.get())) {
               postfix += transStack.pop();
               postfix += " ";
@@ -72,10 +72,10 @@ int eval(const std::string& post) {
               countStack.push(stoi(currentNumber));
               currentNumber.clear();
           }
-      } else if (curSym == '+' || curSym == '-' 
+      } else if (curSym == '+' || curSym == '-'
         || curSym == '*' || curSym == '/') {
           if (countStack.isEmpty()) {
-              return 0; 
+              return 0;
           }
           int operand2 = countStack.pop();
           if (countStack.isEmpty()) {
