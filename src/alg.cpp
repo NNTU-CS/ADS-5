@@ -17,7 +17,7 @@ int checkpriority(char sign) {
 
 std::string infx2pstfx(const std::string& inf) {
   std::string postfix = "";
-  Tstack<char, 100> SignStack;
+  TStack<char, 100> SignStack;
   for (int i = 0; i < inf.length(); i++) {
     char temp = inf[i];
     if (isdigit(temp)) {
@@ -60,7 +60,7 @@ std::string infx2pstfx(const std::string& inf) {
 }
 
 int eval(const std::string& pref) {
-  Tstack<int, 100> NumberStack;
+  TStack<int, 100> NumberStack;
   for (int i = 0; i < post.length(); i++) {
     char temp = post[i];
     if (isdigit(temp)) {
