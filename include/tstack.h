@@ -5,34 +5,28 @@
 template<typename T, int size>
 class TStack {
  private:
-  T data[size];
-  int topIndex;
-
+  static const int kSize = size;
+  T data[kSize];
+  int top;
  public:
-  TStack() : topIndex(-1) {}
+  TStack() : top(-1) {}
 
   void push(const T& value) {
-    if (topIndex < size - 1) {
-      data[++topIndex] = value;
-    }
+    if (top < kSize - 1)
+      data[++top] = value;
   }
 
   void pop() {
-    if (topIndex >= 0) {
-      --topIndex;
-    }
+    if (top >= 0)
+      --top;
   }
 
-  T& top() {
-    return data[topIndex];
-  }
-
-  const T& top() const {
-    return data[topIndex];
+  T topElement() const {
+    return data[top];
   }
 
   bool isEmpty() const {
-    return topIndex == -1;
+    return top == -1;
   }
 };
 
