@@ -28,8 +28,8 @@ std::string infx2pstfx(const std::string& inf) {
                 post += ' ';
             }
             if (!ops.isEmpty()) ops.pop();
-        } else if (inf[i] == '+' || 
-            inf[i] == '-' || inf[i] == '*' || inf[i] == '/') {
+        } else if (inf[i] == '+' || inf[i] == '-' ||
+            inf[i] == '*' || inf[i] == '/') {
             while (!ops.isEmpty() && priority(inf[i]) <= priority(ops.peek())) {
                 post += ops.pop();
                 post += ' ';
