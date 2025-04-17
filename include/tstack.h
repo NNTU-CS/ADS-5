@@ -1,17 +1,16 @@
-// Copyright 2021 NNTU-CS
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 
-template<typename T, constexpr int size>
+template<typename T, constexpr int kStackSize>
 class TStack {
-    T data[size];
+    T data[kStackSize];
     int top;
 
 public:
     TStack() : top(-1) {}
 
     void Push(T value) {
-        if (top < size - 1) {
+        if (top < kStackSize - 1) {
             data[++top] = value;
         }
     }
