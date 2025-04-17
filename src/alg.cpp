@@ -4,11 +4,16 @@
 #include "tstack.h"
 
 static const std::map<char, int> kPrecedenceMap = {
-    {'+', 1}, {'-', 1}, {'*', 2}, {'/', 2}
+    {'+', 1}, {'-', 1},
+    {'*', 2}, {'/', 2}
 };
 
 static bool IsOperator(char c) {
   return kPrecedenceMap.find(c) != kPrecedenceMap.end();
+}
+
+static bool IsDigit(char c) {
+  return c >= '0' && c <= '9';
 }
 
 std::string infx2pstfx(const std::string& inf) {
@@ -20,44 +25,45 @@ std::string infx2pstfx(const std::string& inf) {
 
     if (c == ' ') continue;
 
-    if (c >= '0' && c <= '9') {
-      while (i < inf.length() && inf[i] >= '0' && inf[i] <= '9') {
+    if (IsDigit(c)) {
+      output += c;
+      ++i;
+      while (i < inf.length() && IsDigit(inf[i])) {
         output += inf[i++];
       }
       output += ' ';
       --i;
     } else if (c == '(') {
-      op_stack.push(c);
+      op_stack.Push(c);
     } else if (c == ')') {
-      while (!op_stack.empty() && op_stack.top() != '(') {
-        output += op_stack.top();
+      while (!op_stack.IsEmpty() && op_stack.Top() != '(') {
+        output += op_stack.Top();
         output += ' ';
-        op_stack.pop();
+        op_stack.Pop();
       }
-      if (!op_stack.empty() && op_stack.top() == '(') {
-        op_stack.pop();
+      if (!op_stack.IsEmpty() && op_stack.Top() == '(') {
+        op_stack.Pop();
       }
     } else if (IsOperator(c)) {
-      while (!op_stack.empty() && IsOperator(op_stack.top()) &&
-             kPrecedenceMap.at(op_stack.top()) >= kPrecedenceMap.at(c)) {
-        output += op_stack.top();
+      while (!op_stack.IsEmpty() && IsOperator(op_stack.Top()) &&
+             kPrecedenceMap.at(op_stack.Top()) >= kPrecedenceMap.at(c)) {
+        output += op_stack.Top();
         output += ' ';
-        op_stack.pop();
+        op_stack.Pop();
       }
-      op_stack.push(c);
+      op_stack.Push(c);
     }
   }
 
-  while (!op_stack.empty()) {
-    output += op_stack.top();
+  while (!op_stack.IsEmpty()) {
+    output += op_stack.Top();
     output += ' ';
-    op_stack.pop();
+    op_stack.Pop();
   }
 
   if (!output.empty() && output.back() == ' ') {
     output.pop_back();
   }
-
   return output;
 }
 
@@ -78,24 +84,19 @@ int eval(const std::string& pref) {
     }
 
     if (token.size() == 1 && IsOperator(token[0])) {
-      int right = val_stack.top();
-      val_stack.pop();
-      int left = val_stack.top();
-      val_stack.pop();
+      int right = val_stack.Top(); val_stack.Pop();
+      int left = val_stack.Top(); val_stack.Pop();
       int result = 0;
-
       switch (token[0]) {
         case '+': result = left + right; break;
         case '-': result = left - right; break;
         case '*': result = left * right; break;
         case '/': result = left / right; break;
       }
-
-      val_stack.push(result);
+      val_stack.Push(result);
     } else {
-      val_stack.push(std::stoi(token));
+      val_stack.Push(std::stoi(token));
     }
   }
-
-  return val_stack.top();
+  return val_stack.Top();
 }
