@@ -38,10 +38,14 @@ std::string infx2pstfx(const std::string& inf) {
         }
     }
     while (!ops.isEmpty()) {
-        post += ops.pop();
-        post += ' ';
-    }
-    return post;
+  post += ops.pop();
+  post += ' ';
+}
+
+if (!post.empty() && post.back() == ' ')
+  post.pop_back();
+
+return post;
 }
 
 int eval(const std::string& post) {
