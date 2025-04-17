@@ -52,17 +52,6 @@ std::string infx2pstfx(const std::string& inf) {
   return postfix;
 }
 
-int eval(const std::string& pref) {
-  int primt(int a, int b, char op) {
-  switch (op) {
-    case '+': return a + b;
-    case '-': return a - b;
-    case '*': return a * b;
-    case '/': return a / b;
-  }
-  return 0;
-}
-
 int eval(const std::string& post) {
   TStack<int, 100> stack;
 
@@ -78,4 +67,14 @@ int eval(const std::string& post) {
     }
   }
   return stack.pop();
+}
+
+int primt(int a, int b, char op) {
+  switch (op) {
+    case '+': return a + b;
+    case '-': return a - b;
+    case '*': return a * b;
+    case '/': return a / b;
+  }
+  return 0;
 }
