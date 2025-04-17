@@ -8,6 +8,7 @@ class TStack {
     int top;
 
 public:
+
     TStack() : top(-1) {}
 
     void Push(T value) {
