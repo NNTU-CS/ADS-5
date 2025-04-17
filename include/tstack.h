@@ -4,12 +4,12 @@
 
 template<typename T, int size>
 class TStack {
-private:
+ private:
   static constexpr int kMaxSize = size;
   T data[kMaxSize];
   int topIndex;
 
-public:
+ public:
   TStack() : topIndex(-1) {}
 
   void push(const T& value) {
@@ -30,5 +30,6 @@ public:
     return topIndex == -1;
   }
 };
+
 
 #endif  // INCLUDE_TSTACK_H_
