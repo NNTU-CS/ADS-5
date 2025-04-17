@@ -1,11 +1,12 @@
 // Copyright 2025 NNTU-CS
 #include "tstack.h"
+#include "alg.h"
 #include <string>
 #include <cctype>
 #include <sstream>
 #include <map>
 
-int precedence(char op) {
+int prioritet(char op) {
     if (op == '+' || op == '-') return 1;
     if (op == '*' || op == '/') return 2;
     return 0;
