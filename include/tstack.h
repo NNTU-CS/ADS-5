@@ -4,28 +4,27 @@
 
 template<typename T, int size>
 class TStack {
-private:
-    T data[size];
+  private:
+    T data[size];  // NOLINT(runtime/arrays)
     int top;
-public:
+
+  public:
     TStack() : top(-1) {}
+
     void push(const T& val) {
-        if (top < size - 1) {
+        if (top < size - 1)
             data[++top] = val;
-        }
     }
 
     T pop() {
-        if (!isEmpty()) {
+        if (!isEmpty())
             return data[top--];
-        }
         return T();
     }
 
     T peek() const {
-        if (!isEmpty()) {
+        if (!isEmpty())
             return data[top];
-        }
         return T();
     }
 
