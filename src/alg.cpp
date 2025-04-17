@@ -31,7 +31,7 @@ std::string infx2pstfx(const std::string& inf) {
     } else if (temp == '(') {
       SignStack.push(temp);
     } else if (temp == ')') {
-      while (!SignStack.isempty() && !SignStack.top() == '(') {
+      while (!SignStack.isempty() && SignStack.top() != '(') {
         postfix += SignStack.top() + " ";
         SignStack.pop();
       }
