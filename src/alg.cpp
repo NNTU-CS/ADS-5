@@ -34,6 +34,11 @@ std::string infx2pstfx(const std::string& inf) {
       continue;
     }
 
+    if (ch == '(') {
+      ops.push(ch);
+      continue;
+    }
+
     if (ch == ')') {
       while (!ops.empty() && ops.top() != '(') {
         out += ops.top();
