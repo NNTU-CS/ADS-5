@@ -32,9 +32,8 @@ std::string infx2pstfx(const std::string& inf) {
         postfix += ' ';
       }
       if (!stack.isEmpty()) stack.pop();
-    } else if (isOperator(inf[i])) {
-      while (!stack.isEmpty() &&
-       precedence(stack.top()) >= precedence(inf[i])) {
+    } else if (operacia(inf[i])) {
+      while (!stack.isEmpty() && prioritet(stack.top()) >= prioritet(inf[i])) {
         postfix += stack.pop();
         postfix += ' ';
       }
@@ -54,6 +53,29 @@ std::string infx2pstfx(const std::string& inf) {
 }
 
 int eval(const std::string& pref) {
-  // добавьте код
+  int primt(int a, int b, char op) {
+  switch (op) {
+    case '+': return a + b;
+    case '-': return a - b;
+    case '*': return a * b;
+    case '/': return a / b;
+  }
   return 0;
+}
+
+int eval(const std::string& post) {
+  TStack<int, 100> stack;
+
+  for (size_t i = 0; i < post.length(); i++) {
+    if (isspace(post[i])) continue;
+
+    if (isdigit(post[i])) {
+      stack.push(post[i] - '0');
+    } else if (operacia(post[i])) {
+      int a = stack.pop();
+      int b = stack.pop();
+      stack.push(primt(a, b, post[i]));
+    }
+  }
+  return stack.pop();
 }
