@@ -7,6 +7,7 @@ class TStack {
 private:
   T arr[size];
   int index;
+
  public:
   Tstack() : index(-1) {}
   bool isempty() const {
