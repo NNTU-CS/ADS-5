@@ -7,8 +7,6 @@ class TStack {
     T data[kStackSize];
     int top;
 
-public:
-
     TStack() : top(-1) {}
 
     void Push(T value) {
