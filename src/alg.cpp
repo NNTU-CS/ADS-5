@@ -63,9 +63,9 @@ std::string infx2pstfx(const std::string& inf) {
     for (int i = 0; i < inf.length(); ++i) {
         char cur = inf[i];
 
-        if (std::isdigit(cur)) {
+        if (isdigit(cur)) {
             std::string num;
-            while (i < inf.length() && isdigit(cur)) {
+            while (i < inf.length() && isdigit(inf[i])) {
                 num += inf[i];
                 i++;
             }
@@ -112,11 +112,11 @@ int eval(const std::string& post) {
     for (int i = 0; i < post.length(); ++i) {
         char curSym = post[i];
 
-        if (std::isdigit(curSym)) {
+        if (isdigit(curSym)) {
             currentNumber += curSym;
         } else if (curSym == ' ') {
             if (!currentNumber.empty()) {
-                countStack.push(std::stoi(currentNumber));
+                countStack.push(stoi(currentNumber));
                 currentNumber.clear();
             }
         } else if (curSym == '+' || curSym == '-' || curSym == '*' || curSym == '/') {
@@ -158,5 +158,4 @@ int eval(const std::string& post) {
     }
 
     return countStack.pop();
-}
 }
