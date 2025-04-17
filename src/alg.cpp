@@ -37,7 +37,7 @@ std::string infx2pstfx(const std::string& inf) {
             i++;
         }
         else if (c == '+' || c == '-' || c == '*' || c == '/') {
-            while (!op_stack.IsEmpty() && op_stack.Top() != '(' && priotitet(c) <= prioritet(op_stack.Top())) {
+            while (!op_stack.IsEmpty() && op_stack.Top() != '(' && prioritet(c) <= prioritet(op_stack.Top())) {
                 output += op_stack.Pop() + " ";
             }
             op_stack.Push(c);
