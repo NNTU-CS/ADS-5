@@ -39,7 +39,8 @@ std::string infx2pstfx(const std::string& inf) {
         SignStack.pop();
       }
     } else if (temp == '+' || temp == '-' || temp == '*' || temp == '/') {
-      while (!SignStack.isempty() && checkpriority(temp) <= checkpriority(SignStack.top())) {
+      while (!SignStack.isempty() && 
+        checkpriority(temp) <= checkpriority(SignStack.top())) {
         postfix += SignStack.top() + " ";
         SignStack.pop();
       }
