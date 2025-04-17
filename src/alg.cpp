@@ -60,8 +60,8 @@ std::string infx2pstfx(const std::string& inf) {
 int eval(const std::string& pref) {
   TStack<int, 100> stack;
   std::string num;
-  for (size_t i = 0; i < post.length(); ++i) {
-    char ch = post[i];
+  for (size_t i = 0; i < pref.length(); ++i) {
+    char ch = pref[i];
     if (ch == ' ') {
       if (!num.empty()) {
         stack.push(toInt(num));
