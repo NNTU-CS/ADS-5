@@ -1,4 +1,7 @@
 // Copyright 2021 NNTU-CS
+#ifndef INCLUDE_TSTACK_H_
+#define INCLUDE_TSTACK_H_
+
 template<typename T, int size>
 class TStack {
  public:
@@ -29,3 +32,5 @@ class TStack {
   T data[size];  // NOLINT(runtime/arrays)
   int top;
 };
+
+#endif  // INCLUDE_TSTACK_H_
