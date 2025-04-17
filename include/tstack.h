@@ -5,14 +5,15 @@
 template<typename T, int size>
 class TStack {
 private:
-  T data[size];
+  static constexpr int kMaxSize = size;
+  T data[kMaxSize];
   int topIndex;
 
 public:
   TStack() : topIndex(-1) {}
 
   void push(const T& value) {
-    if (topIndex < size - 1) {
+    if (topIndex < kMaxSize - 1) {
       data[++topIndex] = value;
     }
   }

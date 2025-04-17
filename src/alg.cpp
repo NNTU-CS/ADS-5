@@ -39,10 +39,11 @@ std::string infx2pstfx(const std::string& inf) {
             }
             stack.pop();
         } else if (isOperator(c)) {
-            while (!stack.isEmpty() && precedence(stack.top()) >= precedence(c)) {
+            while (!stack.isEmpty() &&
+                   precedence(stack.top()) >= precedence(c)) {
                 postfix += stack.pop();
                 postfix += ' ';
-            }
+                   }
             stack.push(c);
         }
     }
