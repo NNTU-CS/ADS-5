@@ -9,7 +9,7 @@ class TStack {
   int index;
 
  public:
-  Tstack() : index(-1) {}
+  TStack() : index(-1) {}
   bool isempty() const {
     return index < 0;
   }
