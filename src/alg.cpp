@@ -1,104 +1,118 @@
-// Copyright 2025 NNTU-CS
+// Copyright 2021 NNTU-CS
 #include <string>
 #include <map>
 #include "tstack.h"
 
-std::string infx2pstfx(const std::string& inf) {
-  std::string postfixNotation;
-  TStack<char, 100> operatorStorage;
-  std::map<char, int> operationPriority = {
-    {'+', 1}, {'-', 1},
-    {'*', 2}, {'/', 2}
-  };
-
-  for (size_t pos = 0; pos < inf.size(); ++pos) {
-    char currSym = inf[pos];
-    
-    if (isdigit(currSym)) {
-      while (pos < inf.size() && isdigit(inf[pos])) {
-        postfixNotation += inf[pos++];
-      }
-      postfixNotation += ' ';
-      pos--;
-    } 
-    else if (currSym == '(') {
-      operatorStorage.push(currSym);
-    } 
-    else if (currSym == ')') {
-      while (!operatorStorage.empty() && 
-             operatorStorage.get() != '(') {
-        postfixNotation += operatorStorage.get();
-        postfixNotation += ' ';
-        operatorStorage.pop();
-      }
-      operatorStorage.pop();
-    } 
-    else {
-      while (!operatorStorage.empty() && 
-             operatorStorage.get() != '(' && 
-             operationPriority[currSym] <= 
-             operationPriority[operatorStorage.get()]) {
-        postfixNotation += operatorStorage.get();
-        postfixNotation += ' ';
-        operatorStorage.pop();
-      }
-      operatorStorage.push(currSym);
+int getOpPriority(char operationSign) {
+  std::pair<char, int> priorityTable[6];
+  switch (operationSign) {
+    case '(': priorityTable[0] = {'(', 0}; break;
+    case ')': priorityTable[1] = {')', 1}; break;
+    case '+': priorityTable[2] = {'+', 2}; break;
+    case '-': priorityTable[3] = {'-', 2}; break;
+    case '*': priorityTable[4] = {'*', 3}; break;
+    case '/': priorityTable[5] = {'/', 3}; break;
+  }
+  int foundPriority = -1;
+  for (int tableIdx = 0; tableIdx < 6; ++tableIdx) {
+    if (operationSign == priorityTable[tableIdx].first) {
+      foundPriority = priorityTable[tableIdx].second;
+      break;
     }
   }
-
-  while (!operatorStorage.empty()) {
-    postfixNotation += operatorStorage.get();
-    postfixNotation += ' ';
-    operatorStorage.pop();
-  }
-
-  if (!postfixNotation.empty() && 
-      postfixNotation.back() == ' ') {
-    postfixNotation.pop_back();
-  }
-
-  return postfixNotation;
+  return foundPriority;
 }
 
-int eval(const std::string& pref) {
-  TStack<int, 100> calcStack;
+std::string formatExpression(const std::string& inputExpr) {
+  if (inputExpr.length() <= 2) return inputExpr;
+  int startPos = 2 - inputExpr.length() % 2;
+  std::string resultStr(inputExpr, 0, startPos);
+  for (auto symbol = inputExpr.begin() + startPos; 
+       symbol != inputExpr.end();) {
+    resultStr += ' ';
+    resultStr += *symbol++;
+  }
+  return resultStr;
+}
 
-  for (size_t idx = 0; idx < pref.size(); ++idx) {
-    char currChar = pref[idx];
-    
-    if (isdigit(currChar)) {
-      int numVal = 0;
-      while (idx < pref.size() && isdigit(pref[idx])) {
-        numVal = numVal * 10 + (pref[idx++] - '0');
-      }
-      calcStack.push(numVal);
-      idx--;
-    } 
-    else if (currChar == ' ') {
-      continue;
-    } 
-    else {
-      int rightOp = calcStack.get();
-      calcStack.pop();
-      int leftOp = calcStack.get();
-      calcStack.pop();
-      
-      switch (currChar) {
-        case '+': 
-          calcStack.push(leftOp + rightOp); 
-          break;
-        case '-': 
-          calcStack.push(leftOp - rightOp); 
-          break;
-        case '*': 
-          calcStack.push(leftOp * rightOp); 
-          break;
-        case '/': 
-          calcStack.push(leftOp / rightOp); 
-          break;
+std::string infx2pstfx(std::string inputExpr) {
+  std::string outputResult;
+  TStack<char, 100> operationsStack;
+  
+  for (auto& currentChar : inputExpr) {
+    int charPriority = getOpPriority(currentChar);
+    if (charPriority == -1) {
+      outputResult += currentChar;
+    } else {
+      if (operationsStack.get() < charPriority || 
+          charPriority == 0 || 
+          operationsStack.isEmpty()) {
+        operationsStack.push(currentChar);
+      } else if (currentChar == ')') {
+        char stackTop = operationsStack.get();
+        while (getOpPriority(stackTop) >= charPriority) {
+          outputResult += stackTop;
+          operationsStack.pop();
+          stackTop = operationsStack.get();
+        }
+        operationsStack.pop();
+      } else {
+        char stackTop = operationsStack.get();
+        while (getOpPriority(stackTop) >= charPriority) {
+          outputResult += stackTop;
+          operationsStack.pop();
+          stackTop = operationsStack.get();
+        }
+        operationsStack.push(currentChar);
       }
     }
   }
+  
+  while (!operationsStack.isEmpty()) {
+    outputResult += operationsStack.get();
+    operationsStack.pop();
+  }
+  
+  return formatExpression(outputResult);
+}
 
-  return calcStack.get();
+int performCalculation(const int& firstOperand,
+                      const int& secondOperand,
+                      const int& operationType) {
+  switch (operationType) {
+    case '+': return firstOperand + secondOperand;
+    case '-': return firstOperand - secondOperand;
+    case '*': return firstOperand * secondOperand;
+    case '/': return firstOperand / secondOperand;
+    default: return 0;
+  }
+}
+
+int eval(std::string postfixExpr) {
+  TStack<int, 100> calculationStack;
+  std::string currentNumber = "";
+  
+  for (size_t charPos = 0; charPos < postfixExpr.size(); charPos++) {
+    if (getOpPriority(postfixExpr[charPos]) == -1) {
+      if (postfixExpr[charPos] == ' ') {
+        continue;
+      } else if (isdigit(postfixExpr[charPos + 1])) {
+        currentNumber += postfixExpr[charPos];
+        continue;
+      } else {
+        currentNumber += postfixExpr[charPos];
+        calculationStack.push(atoi(currentNumber.c_str()));
+        currentNumber = "";
+      }
+    } else {
+      int rightOp = calculationStack.get();
+      calculationStack.pop();
+      int leftOp = calculationStack.get();
+      calculationStack.pop();
+      calculationStack.push(performCalculation(leftOp,
+                                             rightOp,
+                                             postfixExpr[charPos]));
+    }
+  }
+  return calculationStack.get();
 }
