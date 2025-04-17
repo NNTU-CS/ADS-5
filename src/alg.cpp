@@ -12,7 +12,7 @@ int priority(char sym) {
       case '*': return 3;
       case '/': return 3;
       default : return -1;
-  };
+  }
 }
 
 std::string infx2pstfx(const std::string& inf) {
@@ -40,13 +40,13 @@ std::string infx2pstfx(const std::string& inf) {
               transStack.pop();
           }
       } else if (cur == '+' || cur == '-' || cur == '*' || cur == '/') {
-          while (!transStack.isEmpty() && priority(cur) <= priority(transStack.get())) {
+          while (!transStack.isEmpty() 
+            && priority(cur) <= priority(transStack.get())) {
               postfix += transStack.pop();
               postfix += " ";
           }
           transStack.push(cur);
-      }
-      else if (cur == ' ') {
+      } else if (cur == ' ') {
           continue;
       }
   }
@@ -61,7 +61,7 @@ std::string infx2pstfx(const std::string& inf) {
 }
 
 int eval(const std::string& post) {
-  TStack<int, 100> countStack; 
+  TStack<int, 100> countStack;
   std::string currentNumber;
   for (int i = 0; i < post.length(); ++i) {
       char curSym = post[i];
@@ -72,7 +72,8 @@ int eval(const std::string& post) {
               countStack.push(stoi(currentNumber));
               currentNumber.clear();
           }
-      } else if (curSym == '+' || curSym == '-' || curSym == '*' || curSym == '/') {
+      } else if (curSym == '+' || curSym == '-' 
+        || curSym == '*' || curSym == '/') {
           if (countStack.isEmpty()) {
               return 0; 
           }
