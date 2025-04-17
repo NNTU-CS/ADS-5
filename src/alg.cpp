@@ -61,12 +61,12 @@ std::string infx2pstfx(const std::string& inf) {
 
 int eval(const std::string& pref) {
   TStack<int, 100> NumberStack;
-  for (int i = 0; i < post.length(); i++) {
-    char temp = post[i];
+  for (int i = 0; i < pref.length(); i++) {
+    char temp = pref[i];
     if (isdigit(temp)) {
       std::string number;
-      while (i < post.length() && isdigit(post[i])) {
-        number += post[i];
+      while (i < pref.length() && isdigit(pref[i])) {
+        number += pref[i];
         i++;
       }
       i--;
