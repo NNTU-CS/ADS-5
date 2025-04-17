@@ -63,13 +63,13 @@ int eval(const std::string& post) {
     } else if (operacia(post[i])) {
       int a = stack.pop();
       int b = stack.pop();
-      stack.push(primt(a, b, post[i]));
+      stack.push(primer(a, b, post[i]));
     }
   }
   return stack.pop();
 }
 
-int primt(int a, int b, char op) {
+int primer(int a, int b, char op) {
   switch (op) {
     case '+': return a + b;
     case '-': return a - b;
