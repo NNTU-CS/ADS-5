@@ -10,7 +10,6 @@ class TStack {
   int top = -1;
 
  public:
-
   TStack() : top(-1) {}
   bool isEmpty() const { return top == -1; }
   bool isFull() const { return top == size - 1; }
