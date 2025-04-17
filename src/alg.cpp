@@ -3,7 +3,7 @@
 #include <string>
 #include <cctype>
 #include <sstream>
-using namespace std;
+#include <map>
 
 int prioritet(char op) {
     if (op == '+' || op == '-') return 1;
@@ -11,15 +11,15 @@ int prioritet(char op) {
     return 0;
 }
 
-string infx2pstfx(const string& inf) {
+std::string infx2pstfx(const std::string& inf) {
     TStack<char, 100> op_stack;
-    string output;
+    std::string output;
     size_t i = 0;
     while (i < inf.size()) {
         char c = inf[i];
-        if (isdigit(c)) {
-            string number;
-            while (i < inf.size() && isdigit(inf[i])) {
+        if (std::isdigit(c)) {
+            std::string number;
+            while (i < inf.size() && std::isdigit(inf[i])) {
                 number += inf[i];
                 i++;
             }
@@ -37,7 +37,7 @@ string infx2pstfx(const string& inf) {
             i++;
         }
         else if (c == '+' || c == '-' || c == '*' || c == '/') {
-            while (!op_stack.IsEmpty() && op_stack.Top() != '(' && prioritet(c) <= prioritet(op_stack.Top())) {
+            while (!op_stack.IsEmpty() && op_stack.Top() != '(' && priotitet(c) <= prioritet(op_stack.Top())) {
                 output += op_stack.Pop() + " ";
             }
             op_stack.Push(c);
@@ -56,7 +56,26 @@ string infx2pstfx(const string& inf) {
     return output;
 }
 
-int eval(const std::string& pref) {
-  // добавьте код
-  return 0;
+int eval(const std::string& post) {
+    TStack<int, 100> stack; //?
+    std::istringstream iss(post);
+    std::string token;
+    while (iss >> token) {
+        if (token == "+" || token == "-" || token == "*" || token == "/") {
+            int b = stack.Pop();
+            int a = stack.Pop();
+            if (token == "+") {
+                stack.Push(a + b);
+            } else if (token == "-") {
+                stack.Push(a - b);
+            } else if (token == "*") {
+                stack.Push(a * b);
+            } else {
+                stack.Push(a / b);
+            }
+        } else {
+            stack.Push(std::stoi(token));
+        }
+    }
+    return stack.Pop();
 }
