@@ -1,60 +1,73 @@
 // Copyright 2025 NNTU-CS
-#include "alg.h"
-#include "tstack.h"
 #include <string>
 #include <cctype>
 #include <sstream>
 #include <map>
+#include "tstack.h"
+
+bool operIS(char c) {
+    return c == '+' || c == '-' || c == '*' || c == '/';
+}
 
 int prioritet(char op) {
     if (op == '+' || op == '-') return 1;
     if (op == '*' || op == '/') return 2;
     return 0;
 }
+int operOPER(int a, int b, char op) {
+    switch (op) {
+        case '+': return a + b;
+        case '-': return a - b;
+        case '*': return a * b;
+        case '/': return a / b;
+        default: return 0;
+    }
+}
 
 std::string infx2pstfx(const std::string& inf) {
-    TStack<char, 100> op_stack;
-    std::string output;
-    size_t i = 0;
+    TStack<char, 100> stack;
+    std::string postfix;
 
-    while (i < inf.size()) {
+    for (size_t i = 0; i < inf.size(); ++i) {
         char c = inf[i];
 
+        if (std::isspace(c)) continue;
+
         if (std::isdigit(c)) {
-            std::string number;
+            std::string num;
             while (i < inf.size() && std::isdigit(inf[i])) {
-                number += inf[i];
-                i++;
+                num += inf[i];
+                ++i;
             }
-            output += number + " ";
+            --i;
+            postfix += num + ' ';
         } else if (c == '(') {
-            op_stack.Push(c);
-            i++;
+            stack.Push(c);
         } else if (c == ')') {
-            while (!op_stack.IsEmpty() && op_stack.Top() != '(') {
-                output += op_stack.Pop() + " ";
+            while (!stack.IsEmpty() && stack.Top() != '(') {
+                postfix += stack.Pop();
+                postfix += ' ';
             }
-            op_stack.Pop();
-            i++;
-        } else if (c == '+' || c == '-' || c == '*' || c == '/') {
-            while (!op_stack.IsEmpty() && op_stack.Top() != '(' && prioritet(c) <= prioritet(op_stack.Top())) {
-                output += op_stack.Pop() + " ";
+            stack.Pop();
+        } else if (operIS(c)) {
+            while (!stack.IsEmpty() && prioritet(stack.Top()) >= prioritet(c)) {
+                postfix += stack.Pop();
+                postfix += ' ';
             }
-            op_stack.Push(c);
-            i++;
-        } else {
-            i++;
+            stack.Push(c);
         }
     }
 
-    while (!op_stack.IsEmpty()) {
-        output += op_stack.Pop() + " ";
+    while (!stack.IsEmpty()) {
+        postfix += stack.Pop();
+        postfix += ' ';
     }
 
-    if (!output.empty()) {
-        output.pop_back();
+    if (!postfix.empty() && postfix.back() == ' ') {
+        postfix.pop_back();
     }
-    return output;
+
+    return postfix;
 }
 
 int eval(const std::string& post) {
@@ -63,20 +76,12 @@ int eval(const std::string& post) {
     std::string token;
 
     while (iss >> token) {
-        if (token == "+" || token == "-" || token == "*" || token == "/") {
+        if (std::isdigit(token[0])) {
+            stack.Push(std::stoi(token));
+        } else {
             int b = stack.Pop();
             int a = stack.Pop();
-            if (token == "+") {
-                stack.Push(a + b);
-            } else if (token == "-") {
-                stack.Push(a - b);
-            } else if (token == "*") {
-                stack.Push(a * b);
-            } else {
-                stack.Push(a / b);
-            }
-        } else {
-            stack.Push(std::stoi(token));
+            stack.Push(operOPER(a, b, token[0]));
         }
     }
 
