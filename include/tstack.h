@@ -6,8 +6,8 @@
 template<typename T, int size>
 class TStack {
  private:
-    T arr[size] = { 100 };
-    int top = -1;
+  T arr[size] = { 100 };
+  int top = -1;
  public:
   bool isEmpty() const { return top == -1; }
   bool isFull() const { return top == size - 1; }
