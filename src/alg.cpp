@@ -3,12 +3,34 @@
 #include <map>
 #include "tstack.h"
 
-std::string infx2pstfx(const std::string& inf) {
-  // добавьте код
-  return std::string("");
-}
-
-int eval(const std::string& pref) {
-  // добавьте код
-  return 0;
-}
+template <typename T, int Size>
+class TStack {
+ private:
+  T arr[Size];
+  int top;
+ public:
+  TStack() : top(-1) { }
+  void push(const T& val) {
+    if (top < Size - 1) {
+      arr[++top] = val;
+    }
+  }
+  T pop() {
+    if (top >= 0) {
+      return arr[top--];
+    }
+    return T();
+  }
+  T peek() const {
+    if (top >= 0) {
+      return arr[top];
+    }
+    return T();
+  }
+  bool isEmpty() const {
+    return top == -1;
+  }
+  bool isFull() const {
+    return top == Size - 1;
+  }
+};
