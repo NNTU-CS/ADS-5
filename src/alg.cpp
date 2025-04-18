@@ -1,11 +1,23 @@
 // Copyright 2025 NNTU-CS
-#include <iostream>
 #include <string>
-#include <sstream>
 #include <cctype>
-#include <stdexcept>
 #include "tstack.h"
 
+bool isOperator(char c) { return c == '+' || c == '-' ||
+c == '*' || c == '/'; }
+int Oper(int a, int b, char op) {
+switch (op) {
+case '+':
+return a + b;
+case '-':
+return a - b;
+case '*':
+return a * b;
+case '/':
+return a / b;
+}
+return 0;
+}
 static int priority(char op) {
 if (op == '+' || op == '-') return 1;
 if (op == '*' || op == '/') return 2;
@@ -52,45 +64,15 @@ return res.str();
 
 int eval(const std::string& post) {
 TStack<int, 100> stack;
-std::stringstream ss(post);
-int number;
-char op;
-while (ss >> number) {
-stack.push(number);
-if (ss.eof() || ss.peek() == ' ') {
-continue;
-}
-if (ss.peek() == '+' || ss.peek() == '-' ||
-ss.peek() == '*' || ss.peek() == '/') {
-ss >> op;
-if (stack.isEmpty()) {
-throw std::runtime_error("Not enough operands" + std::string(1, op));
-}
-int right = stack.pop();
-if (stack.isEmpty()) {
-throw std::runtime_error("Not enough operands " + std::string(1, op));
-}
-int left = stack.pop();
-switch (op) {
-case '+': stack.push(left + right); break;
-case '-': stack.push(left - right); break;
-case '*': stack.push(left * right); break;
-case '/':
-if (right == 0) throw std::runtime_error("Div by zero");
-stack.push(left / right);
-break;
-default: throw std::runtime_error("Invalid operator" + std::string(1, op));
-}
-} else {
-throw std::runtime_error("Invalid character");
+for (size_t i = 0; i < post.length(); i++) {
+if (isspace(post[i])) continue;
+if (isdigit(post[i])) {
+stack.push(post[i] - '0');
+} else if (isOperator(post[i])) {
+int b = stack.pop();
+int a = stack.pop();
+stack.push(Oper(a, b, post[i]));
 }
 }
-if (stack.isEmpty()) {
-throw std::runtime_error("Empty stack");
-}
-int result = stack.pop();
-if (!stack.isEmpty()) {
-throw std::runtime_error("Too many operands");
-}
-return result;
+return stack.pop();
 }
