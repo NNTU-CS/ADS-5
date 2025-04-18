@@ -4,7 +4,7 @@
 
 #include <stdexcept>
 
-constexpr int k = 100;
+constexpr int size = 100;
 
 template <typename T, int size = k>
 class TStack {
