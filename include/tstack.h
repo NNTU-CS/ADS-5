@@ -1,11 +1,13 @@
 // Copyright 2021 NNTU-CS
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
+#include <string>
 
 template<typename T, int size>
 class TStack {
  private:
-  T arr[size];
+  static constexpr int arrSize = size;
+  T arr[arrSize];
   int top;
  public:
   Tstack():top(-1) {}
@@ -16,19 +18,19 @@ class TStack {
     return top == size - 1;
   }
   T get() const {
-    if(!isEmpty())
+    if (!isEmpty())
       return arr[top];
     else
       throw std::string("Empty");
   }
   void push(const T&item) {
-    if(!isFull())
+    if (!isFull())
       arr[++top] = item;
     else
       throw std::string("Full");
   }
   void pop() {
-    if(!isEmpty())
+    if (!isEmpty())
       top--;
     else
       throw std::string("Empty");
