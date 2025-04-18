@@ -9,6 +9,7 @@ class TStack {
   static constexpr int arrSize = size;
   T arr[arrSize];
   int top;
+
  public:
   Tstack():top(-1) {}
   bool isEmpty() const {
