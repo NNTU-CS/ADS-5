@@ -1,43 +1,41 @@
-// Copyright 2021 NNTU-CS
-#ifndef INCLUDE_TSTACK_H_
-#define INCLUDE_TSTACK_H_
-#include <string>
+// Modified stack implementation
+#ifndef MODIFIED_STACK_H
+#define MODIFIED_STACK_H
 
 template<typename DataType, int MaxSize>
 class TStack {
  private:
-    DataType elementsStorage[100];
-    int stackPointer;
+    DataType elements[MaxSize];
+    int currentTop;
 
  public:
-    TStack() : stackPointer(-1) {}
+    TStack() : currentTop(-1) {}
 
-    void push(DataType valueToAdd) {
-      if (isFull()) {
-        throw std::string("Stack is full!");
-      } else {
-        elementsStorage[++stackPointer] = valueToAdd;
-      }
+    void push(const DataType& value) {
+        if (isFull()) {
+            throw std::string("Stack overflow");
+        }
+        elements[++currentTop] = value;
     }
 
-    const DataType& pop() {
-      if (isEmpty()) {
-        throw std::string("Stack is empty!");
-      } else {
-        return elementsStorage[stackPointer--];
-      }
+    DataType pop() {
+        if (isEmpty()) {
+            throw std::string("Stack underflow");
+        }
+        return elements[currentTop--];
     }
 
     bool isEmpty() const {
-      return stackPointer == -1;
+        return currentTop == -1;
     }
 
     bool isFull() const {
-      return stackPointer == MaxSize - 1;
+        return currentTop == MaxSize - 1;
     }
 
     const DataType& get() const {
-      return elementsStorage[stackPointer];
+        return elements[currentTop];
     }
 };
-#endif  // INCLUDE_TSTACK_H_
+
+#endif
