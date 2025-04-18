@@ -71,32 +71,32 @@ std::string infx2pstfx(const std::string& inf) {
 
 
 int eval(const std::string& pref) {
-    TStack<int, 100> cntStack;
+    TStack<int, 100> stack;
     std::istringstream iss(pref);
-    std::string token;
-    while (iss >> token) {
-        if (std::isdigit(token[0])) {
-            int cnt = std::stoi(token);
-            cntStack.push(cnt);
-        } else if (token.length() == 1 &&
-                   (token[0] == '+' || token[0] == '-' ||
-                    token[0] == '*' || token[0] == '/')) {
-            if (cntStack.empty()) {
+    std::string tok;
+    while (iss >> tok) {
+        if (std::isdigit(tok[0])) {
+            int cnt = std::stoi(tok);
+            stack.push(cnt);
+        } else if (tok.length() == 1 &&
+                   (tok[0] == '+' || tok[0] == '-' ||
+                    tok[0] == '*' || tok[0] == '/')) {
+            if (stack.isEmpty()) {
                 throw std::runtime_error("Err");
             }
 
-            int operand2 = cntStack.top();
-            cntStack.pop();
+            int operand2 = stack.top();
+            stack.pop();
 
-            if (cntStack.empty()) {
+            if (stack.isEmpty()) {
                 throw std::runtime_error("Err");
             }
 
             int operand1 = cntStack.top();
-            cntStack.pop();
+            stack.pop();
             int result = 0;
 
-            switch (token[0]) {
+            switch (tok[0]) {
                 case '+': result = operand1 + operand2; break;
                 case '-': result = operand1 - operand2; break;
                 case '*': result = operand1 * operand2; break;
@@ -109,20 +109,20 @@ int eval(const std::string& pref) {
                 default:
                     throw std::runtime_error("Err");
             }
-            cntStack.push(result);
+            stack.push(result);
         } else {
             throw std::runtime_error("Err");
         }
     }
 
-    if (cntStack.empty()) {
+    if (stack.isEmpty()) {
         throw std::runtime_error("Empty");
     }
 
-    int res = cntStack.top();
-    cntStack.pop();
+    int res = stack.top();
+    stack.pop();
 
-    if (!cntStack.empty()) {
+    if (!stack.isEmpty()) {
         throw std::runtime_error("erroneously");
     }
 
