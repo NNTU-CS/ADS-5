@@ -6,8 +6,6 @@
 
 #include "tstack.h"
 
-constexpr int k = 100;
-
 int precedence(char op) {
   if (op == '+' || op == '-') return 1;
   if (op == '*' || op == '/') return 2;
@@ -20,7 +18,7 @@ bool isOperator(char ch) {
 
 std::string infx2pstfx(const std::string& inf) {
   std::ostringstream output;
-  TStack<char, k> stack;
+  TStack<char> stack;
 
   for (size_t i = 0; i < inf.length(); ++i) {
     if (std::isdigit(inf[i])) {
@@ -68,7 +66,7 @@ int applyOp(int a, int b, char op) {
 }
 
 int eval(const std::string& post) {
-  TStack<int, k> stack;
+  TStack<int> stack;
   std::istringstream input(post);
   std::string token;
 
