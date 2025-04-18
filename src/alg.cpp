@@ -59,7 +59,7 @@ std::string infx2pstfx(const std::string& inf) {
       postfix += stack.pop();
       postfix += ' ';
     }
-    
+
     if (!postfix.empty() && postfix.back() == ' ')
       postfix.pop_back();
   return postfix;
