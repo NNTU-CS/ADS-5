@@ -1,11 +1,13 @@
-// Copyright 2025 NNTU-CS
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
+
+const int kMaxStackSize = 1000;
 
 template<typename T, int size>
 class TStack {
  private:
-    T elementStorage[size];
+    static_assert(size <= kMaxStackSize, "Stack size exceeds allowed maximum.");
+    T elementStorage[kMaxStackSize];
     int stackPointer;
 
  public:
