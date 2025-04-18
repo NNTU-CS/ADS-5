@@ -2,6 +2,7 @@
 #include <map>
 #include <iostream>
 #include <string>
+#include <sstream>
 #include "tstack.h"
 
 int priority(const char c) {
