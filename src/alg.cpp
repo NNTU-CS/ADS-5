@@ -31,7 +31,8 @@ std::string infx2pstfx(const std::string& inf) {
       }
       stack.pop();
     } else {
-      while (!stack.isEmpty() && getPriority(stack.getTop()) >= getPriority(ch)) {
+      while (!stack.isEmpty() &&
+        getPriority(stack.getTop()) >= getPriority(ch)) {
         top2postfix(stack, postfix);
       }
       stack.push(ch);
@@ -64,7 +65,8 @@ int eval(const std::string& postfix) {
   return stack.top();
 }
 
-void top2postfix(TStack<char, 100>& stack, std::string& postfix) {
+void top2postfix(TStack<char, 100>& stack,
+std::string& postfix) {
   postfix += stack.getTop();
   stack.pop();
 }
