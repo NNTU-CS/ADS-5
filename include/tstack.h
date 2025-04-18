@@ -3,39 +3,36 @@
 #define INCLUDE_TSTACK_H_
 #include <vector>
 
-template<typename T, int MSSize>
+template<typename T, int size>
 class TStack {
  private:
-std::vector<T> arr;
+T data[size];
 int top;
+
  public:
-TStack() : top(-1), arr(MSSize) {}
-T get() const {
-if (top >= 0) {
-return arr[top];
-} else {
-throw std::out_of_range("Stack is empty");
-}
-}
-bool isFull() const {
-return top == MSSize - 1;
-}
+TStack() : top(-1) {}
 bool isEmpty() const {
 return top == -1;
 }
-void push(const T& item) {
-if (top < MSSize - 1) {
-arr[++top] = item;
-} else {
-throw std::overflow_error("Stack overflow");
+bool isFull() const {
+return top == size - 1;
+}
+void push(T value) {
+if (!isFull()) {
+data[++top] = value;
 }
 }
-void pop() {
-if (top >= 0) {
-top--;
-} else {
-throw std::underflow_error("Stack underflow");
+T pop() {
+if (!isEmpty()) {
+return data[top--];
 }
+return T();
+}
+T peek() const {
+if (!isEmpty()) {
+return data[top];
+}
+return T();
 }
 };
 #endif  // INCLUDE_TSTACK_H_
