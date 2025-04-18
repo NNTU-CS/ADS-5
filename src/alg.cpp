@@ -1,5 +1,7 @@
 // Copyright 2025 NNTU-CS
 #include <map>
+#include <iostream>
+#include <string>
 #include "tstack.h"
 
 int priority(const char c) {
@@ -67,14 +69,12 @@ for (size_t i = 0; i < post.length(); i++) {
 char c = post[i];
 if (isdigit(c)) {
 number += c;
-}
-else if (c == ' ') {
+} else if (c == ' ') {
 if (!number.empty()) {
 stack.push(std::stoi(number));
 number = "";
 }
-}
-else if (priority(c) >= 2) {
+} else if (priority(c) >= 2) {
 if (!stack.isEmpty()) {
 int b = stack.get();
 stack.pop();
