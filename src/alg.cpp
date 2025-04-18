@@ -72,7 +72,7 @@ int eval(const std::string& pref) {
   for (size_t i = 0; i < post.length(); i++) {
       if (isspace(post[i])) continue;
 
-      if (isdigit(post[i])){
+      if (isdigit(post[i])) {
         stack.push(post[i] - '0');
       } else if (isOperator(post[i])) {
         int b = stack.pop();
