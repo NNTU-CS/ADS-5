@@ -1,5 +1,7 @@
 // Copyright 2025 NNTU-CS
 #include <string>
+#include <stack>
+#include <cctype>
 #include <map>
 #include "tstack.h"
 
@@ -19,7 +21,7 @@ void top2postfix(TStack<char>& stack, std::string& postfix) {
 }
 
 std::string infx2pstfx(const std::string& inf) {
-  TStack<char> stack;
+  TStack<char, 100> stack;
   std::string postfix;
   for (char ch : inf) {
     if (isalnum(ch)) {
