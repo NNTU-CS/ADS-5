@@ -1,84 +1,130 @@
 // Copyright 2025 NNTU-CS
+#include <iostream>
 #include <string>
-#include <map>
+#include <sstream>
 #include "tstack.h"
-//#include <string>
-//#include <cctype>
 
-bool isOperator(char c) {
-  return c == '+' || c == '-' || c == '*' || c == '/';
-}
-
-int priorityOfOper(char op) {
-  if (op == '+' || op == '-') return 1;
-  if (op == '*' || op == '/') return 2;
-  return 0;
-}
-
-int operationAB(int a, int b, char oper) {
-  switch (oper) {
+int priority(char oper) {
+    switch (oper) {
     case '+':
-      return a + b;
-    case '-':
-      return a - b;
+    case '-': return 1;
     case '*':
-      return a * b;
-    case '/':
-      return a / b;
-  }
-  return 0;
+    case '/': return 2;
+    default: return 0;
+    }
 }
 
 std::string infx2pstfx(const std::string& inf) {
+  std::string outS;
   TStack<char, 100> stack;
-  std::string postfix;
-
-  for (size_t i = 0; i < inf.length(); i++) {
-    if (isspace(inf[i]))
-      continue;
-    if (isdigit(inf[i])) {
-      postfix += inf[i];
-      postfix += ' ';
-    } else if (inf[i] == '(') {
-      stack.push(inf[i]);
-    } else if (inf[i] == ')') {
-       while (!stack.isEmpty() && stack.get() != '(') {
-        postfix += stack.pop();
-        postfix += ' ';
-       }
-      if (!stack.isEmpty()) stack.pop();
-    } else if (isOperator(inf[i])) {
-      while (!stack.isEmpty() && priority(stack.get()) >= priority(inf[i])) {
-        postfix += stack.pop();
-        postfix += ' ';
-      }
-      stack.push(inf[i]);
+  for (size_t j = 0; j < inf.length(); j++) {
+    char symb = inf[j];
+    if (symb == ' ') {
+        continue;
     }
 
-    while (!stack.isEmpty()) {
-      postfix += stack.pop();
-      postfix += ' ';
+    if (std::isdigit(symb)) {
+        while (j < inf.length() && std::isdigit(inf[j])) {
+            outS.push_back(inf[j]);
+            j++;
+        }
+        j--;
+        outS.push_back(' ');
+    } else if (symb == '(') {
+        stack.push(symb);
+    } else if (symb == ')') {
+        while (!stack.isEmpty() && stack.top() != '(') {
+            outS.push_back(stack.top());
+            outS.push_back(' ');
+            stack.pop();
+        }
+        if (!stack.isEmpty() && stack.top() == '(') {
+            stack.pop();
+        } else {
+            throw std::runtime_error("Err");
+        }
+    } else if (symb == '+' || symb == '-' || symb == '*' || symb == '/') {
+        while (!stack.isEmpty() && priority(stack.top()) >=
+            priority(symb)) {
+            outS.push_back(stack.top());
+            outS.push_back(' ');
+            stack.pop();
+        }
+        stack.push(symb);
+    } else {
+        throw std::runtime_error(std::string("Err") + symb);
     }
-
-    if (!postfix.empty() && postfix.back() == ' ')
-      postfix.pop_back();
-  return postfix;
   }
+  while (!stack.isEmpty()) {
+    if (stack.top() == '(' || stack.top() == ')') {
+        throw std::runtime_error("Err");
+    }
+    outS.push_back(Stack.top());
+    outS.push_back(' ');
+    stack.pop();
+  }
+  if (!outS.empty() && outS.back() == ' ') {
+    outS.pop_back();
+  }
+  return outS;
 }
 
+
 int eval(const std::string& pref) {
-  TStack<int, 100> stack;
+    TStack<int, 100> cntStack;
+    std::istringstream iss(pref);
+    std::string token;
+    while (iss >> token) {
+        if (std::isdigit(token[0])) {
+            int cnt = std::stoi(token);
+            cntStack.push(cnt);
+        } else if (token.length() == 1 &&
+                   (token[0] == '+' || token[0] == '-' ||
+                    token[0] == '*' || token[0] == '/')) {
+            if (cntStack.empty()) {
+                throw std::runtime_error("Err");
+            }
 
-  for (size_t i = 0; i < post.length(); i++) {
-      if (isspace(post[i])) continue;
+            int operand2 = cntStack.top();
+            cntStack.pop();
 
-      if (isdigit(post[i])) {
-        stack.push(post[i] - '0');
-      } else if (isOperator(post[i])) {
-        int b = stack.pop();
-        int a = stack.pop();
-        stack.push(operationAB(a, b, post[i]));
-      }
+            if (cntStack.empty()) {
+                throw std::runtime_error("Err");
+            }
+
+            int operand1 = cntStack.top();
+            cntStack.pop();
+            int result = 0;
+
+            switch (token[0]) {
+                case '+': result = operand1 + operand2; break;
+                case '-': result = operand1 - operand2; break;
+                case '*': result = operand1 * operand2; break;
+                case '/':
+                    if (operand2 == 0) {
+                        throw std::runtime_error("Err");
+                    }
+                    result = operand1 / operand2;
+                    break;
+                default:
+                    throw std::runtime_error("Err");
+            }
+            cntStack.push(result);
+        } else {
+            throw std::runtime_error("Err");
+        }
     }
-    return stack.pop();
+
+    if (cntStack.empty()) {
+        throw std::runtime_error("Empty");
+    }
+
+    int res = cntStack.top();
+    cntStack.pop();
+
+    if (!cntStack.empty()) {
+        throw std::runtime_error("erroneously");
+    }
+
+    return res;
 }
