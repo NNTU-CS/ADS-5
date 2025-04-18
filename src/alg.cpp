@@ -55,7 +55,7 @@ std::stringstream ss(post);
 int number;
 while (ss >> number) {
 stack.push(number);
-if (ss.peek()=='+' || ss.peek()=='-' || ss.peek()=='*' || ss.peek()=='/') {
+if(ss.peek() == '+' || ss.peek() == '-' || ss.peek() == '*' || ss.peek() == '/'){
 char op;
 ss >> op;
 int right = stack.pop();
