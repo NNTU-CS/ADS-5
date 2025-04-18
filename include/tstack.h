@@ -2,7 +2,7 @@
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 #include <vector>
-#include <stdexept>
+
 template<typename T, int kStackSize>
 class TStack {
  private:
