@@ -1,118 +1,105 @@
-// Copyright 2021 NNTU-CS
+// Modified algorithm implementation
 #include <string>
-#include <map>
+#include <cctype>
 #include "tstack.h"
 
-int getOpPriority(char operationSign) {
-  std::pair<char, int> priorityTable[6];
-  switch (operationSign) {
-    case '(': priorityTable[0] = {'(', 0}; break;
-    case ')': priorityTable[1] = {')', 1}; break;
-    case '+': priorityTable[2] = {'+', 2}; break;
-    case '-': priorityTable[3] = {'-', 2}; break;
-    case '*': priorityTable[4] = {'*', 3}; break;
-    case '/': priorityTable[5] = {'/', 3}; break;
-  }
-  int foundPriority = -1;
-  for (int tableIdx = 0; tableIdx < 6; ++tableIdx) {
-    if (operationSign == priorityTable[tableIdx].first) {
-      foundPriority = priorityTable[tableIdx].second;
-      break;
+namespace {
+    int determineOpPrecedence(char operation) {
+        const std::pair<char, int> operators[] = {
+            {'(', 0}, {')', 1}, {'+', 2}, 
+            {'-', 2}, {'*', 3}, {'/', 3}
+        };
+        for (const auto& op : operators) {
+            if (op.first == operation) {
+                return op.second;
+            }
+        }
+        return -1;
     }
-  }
-  return foundPriority;
-}
 
-std::string formatExpression(const std::string& inputExpr) {
-  if (inputExpr.length() <= 2) return inputExpr;
-  int startPos = 2 - inputExpr.length() % 2;
-  std::string resultStr(inputExpr, 0, startPos);
-  for (auto symbol = inputExpr.begin() + startPos; 
-       symbol != inputExpr.end();) {
-    resultStr += ' ';
-    resultStr += *symbol++;
-  }
-  return resultStr;
+    std::string formatOutputString(const std::string& str) {
+        if (str.length() < 3) return str;
+        int start = 2 - str.length() % 2;
+        std::string result(str, 0, start);
+        for (auto it = str.begin() + start; it != str.end(); ++it) {
+            result += ' ';
+            result += *it;
+        }
+        return result;
+    }
+
+    int performOperation(int a, int b, char op) {
+        switch (op) {
+            case '+': return a + b;
+            case '-': return a - b;
+            case '*': return a * b;
+            case '/': return a / b;
+            default: return 0;
+        }
+    }
 }
 
 std::string infx2pstfx(std::string inputExpr) {
-  std::string outputResult;
-  TStack<char, 100> operationsStack;
-  
-  for (auto& currentChar : inputExpr) {
-    int charPriority = getOpPriority(currentChar);
-    if (charPriority == -1) {
-      outputResult += currentChar;
-    } else {
-      if (operationsStack.get() < charPriority || 
-          charPriority == 0 || 
-          operationsStack.isEmpty()) {
-        operationsStack.push(currentChar);
-      } else if (currentChar == ')') {
-        char stackTop = operationsStack.get();
-        while (getOpPriority(stackTop) >= charPriority) {
-          outputResult += stackTop;
-          operationsStack.pop();
-          stackTop = operationsStack.get();
+    std::string output;
+    TStack<char, 100> opStack;
+    
+    for (char ch : inputExpr) {
+        int precedence = determineOpPrecedence(ch);
+        if (precedence == -1) {
+            output += ch;
+        } else {
+            if (opStack.isEmpty() || precedence == 0 || 
+                determineOpPrecedence(opStack.get()) < precedence) {
+                opStack.push(ch);
+            } else if (ch == ')') {
+                while (!opStack.isEmpty() && 
+                       determineOpPrecedence(opStack.get()) >= 1) {
+                    output += opStack.get();
+                    opStack.pop();
+                }
+                opStack.pop();
+            } else {
+                while (!opStack.isEmpty() && 
+                       determineOpPrecedence(opStack.get()) >= precedence) {
+                    output += opStack.get();
+                    opStack.pop();
+                }
+                opStack.push(ch);
+            }
         }
-        operationsStack.pop();
-      } else {
-        char stackTop = operationsStack.get();
-        while (getOpPriority(stackTop) >= charPriority) {
-          outputResult += stackTop;
-          operationsStack.pop();
-          stackTop = operationsStack.get();
-        }
-        operationsStack.push(currentChar);
-      }
     }
-  }
-  
-  while (!operationsStack.isEmpty()) {
-    outputResult += operationsStack.get();
-    operationsStack.pop();
-  }
-  
-  return formatExpression(outputResult);
+    
+    while (!opStack.isEmpty()) {
+        output += opStack.get();
+        opStack.pop();
+    }
+    
+    return formatOutputString(output);
 }
 
-int performCalculation(const int& firstOperand,
-                      const int& secondOperand,
-                      const int& operationType) {
-  switch (operationType) {
-    case '+': return firstOperand + secondOperand;
-    case '-': return firstOperand - secondOperand;
-    case '*': return firstOperand * secondOperand;
-    case '/': return firstOperand / secondOperand;
-    default: return 0;
-  }
-}
-
-int eval(std::string postfixExpr) {
-  TStack<int, 100> calculationStack;
-  std::string currentNumber = "";
-  
-  for (size_t charPos = 0; charPos < postfixExpr.size(); charPos++) {
-    if (getOpPriority(postfixExpr[charPos]) == -1) {
-      if (postfixExpr[charPos] == ' ') {
-        continue;
-      } else if (isdigit(postfixExpr[charPos + 1])) {
-        currentNumber += postfixExpr[charPos];
-        continue;
-      } else {
-        currentNumber += postfixExpr[charPos];
-        calculationStack.push(atoi(currentNumber.c_str()));
-        currentNumber = "";
-      }
-    } else {
-      int rightOp = calculationStack.get();
-      calculationStack.pop();
-      int leftOp = calculationStack.get();
-      calculationStack.pop();
-      calculationStack.push(performCalculation(leftOp,
-                                             rightOp,
-                                             postfixExpr[charPos]));
+int eval(const std::string& postfixExpr) {
+    TStack<int, 100> numStack;
+    std::string currentNum;
+    
+    for (size_t i = 0; i < postfixExpr.size(); ++i) {
+        char c = postfixExpr[i];
+        if (determineOpPrecedence(c) == -1) {
+            if (c == ' ') {
+                if (!currentNum.empty()) {
+                    numStack.push(std::stoi(currentNum));
+                    currentNum.clear();
+                }
+            } else if (isdigit(c)) {
+                currentNum += c;
+            }
+        } else {
+            int b = numStack.get();
+            numStack.pop();
+            int a = numStack.get();
+            numStack.pop();
+            numStack.push(performOperation(a, b, c));
+        }
     }
-  }
-  return calculationStack.get();
+    
+    return numStack.get();
 }
