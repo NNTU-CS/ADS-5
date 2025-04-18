@@ -7,11 +7,11 @@
 #include <stdexcept>
 template <typename T, size_t MaxSize>
 class TStack {
-  private:
+ private:
     std::vector<T> data;
     size_t maxSize;
 
-  public:
+ public:
     TStack() : maxSize(MaxSize) {}
     void push(const T& value) {
         if (data.size() >= maxSize) {
@@ -97,7 +97,6 @@ std::string infx2pstfx(const std::string& inf) {
         output.push_back(stack.top());
         stack.pop();
     }
-    
     return output;
 }
 int eval(const std::string& pref) {
@@ -108,8 +107,7 @@ int eval(const std::string& pref) {
         if (isdigit(token[0])) {
             int number = std::stoi(token);
             stack.push(number);
-        }
-        else {
+        } else {
             if (stack.isEmpty())
                 throw std::runtime_error("Ошибка.");
             int b = stack.top();
@@ -123,10 +121,10 @@ int eval(const std::string& pref) {
                 case '+': result = a + b; break;
                 case '-': result = a - b; break;
                 case '*': result = a * b; break;
-                case '/': 
+                case '/':
                     if (b == 0)
                         throw std::runtime_error("Ошибка.");
-                    result = a / b; 
+                    result = a / b;
                     break;
                 default:
                     throw std::runtime_error("Ошибка.");
