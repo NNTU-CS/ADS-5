@@ -1,6 +1,9 @@
-template<typename T, int size>
+// Copyright 2021 NNTU-CS
+#ifndef INCLUDE_TSTACK_H_
+#define INCLUDE_TSTACK_H_
+
+template <typename T, int size>
 class TStack {
-  // добавьте код стека
  private:
   static constexpr int kStackSize = size;
   T data[kStackSize];
@@ -29,9 +32,7 @@ class TStack {
     return T();
   }
 
-  bool isEmpty() const {
-    return topIndex == -1;
-  }
+  bool isEmpty() const { return topIndex == -1; }
 };
 
 #endif  // INCLUDE_TSTACK_H_
