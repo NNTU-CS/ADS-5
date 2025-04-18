@@ -59,7 +59,7 @@ std::string infx2pstfx(const std::string& inf) {
     if (stack.top() == '(' || stack.top() == ')') {
         throw std::runtime_error("Err");
     }
-    outS.push_back(Stack.top());
+    outS.push_back(stack.top());
     outS.push_back(' ');
     stack.pop();
   }
@@ -92,7 +92,7 @@ int eval(const std::string& pref) {
                 throw std::runtime_error("Err");
             }
 
-            int operand1 = cntStack.top();
+            int operand1 = stack.top();
             stack.pop();
             int result = 0;
 
