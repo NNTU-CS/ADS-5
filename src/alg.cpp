@@ -1,4 +1,3 @@
-// Copyright 2025 NNTU-CS
 #include <string>
 #include <sstream>
 #include <cctype>
