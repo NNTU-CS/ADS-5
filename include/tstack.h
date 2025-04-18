@@ -6,18 +6,18 @@
 template<typename T, int kStackSize>
 class TStack {
  private:
-std::vector<T> data;
+T data[kMaxSize];
 int top;
 
  public:
-TStack() : top(-1), data(kStackSize) {}
+TStack() : top(-1) {}
 bool isEmpty() const {
 return top == -1;
 }
 bool isFull() const {
-return top == kStackSize - 1;
+return top == kMaxSize - 1;
 }
-void push(const T& value) {
+void push(T value) {
 if (!isFull()) {
 data[++top] = value;
 }
