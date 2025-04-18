@@ -6,7 +6,7 @@
 template<typename T, int size>
 class TStack {
  private:
-  static constexpr int arrSize = size;
+  static constexpr size_t arrSize = size;
   T arr[arrSize];
   int top;
 
