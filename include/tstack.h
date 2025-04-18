@@ -5,11 +5,11 @@
 
 template<typename T, int MSSize>
 class TStack {
-private:
+ private:
 T data_[MSSize];
 size_t size_ = 0;
 
-public:
+ public:
 bool empty() const { return size_ == 0; }
 size_t size() const { return size_; }
 
