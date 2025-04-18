@@ -7,6 +7,9 @@
 
 void top2postfix(TStack<char, 100>& stack,
 std::string& postfix) {
+  if (!postfix.empty() && postfix.back() != ' ') {
+    postfix += ' ';
+  }
   postfix += stack.getTop();
   stack.pop();
 }
@@ -24,8 +27,13 @@ int getPriority(char op) {
 std::string infx2pstfx(const std::string& inf) {
   TStack<char, 100> stack;
   std::string postfix;
+  bool needSpace = false;
   for (char ch : inf) {
-    if (isalnum(ch)) {
+    if (isdigit(ch)) {
+      if (needSpace) {
+        postfix += ' ';
+        needSpace = false;
+      }
       postfix += ch;
     } else if (ch == '(') {
       stack.push(ch);
@@ -36,12 +44,13 @@ std::string infx2pstfx(const std::string& inf) {
       if (!stack.isEmpty()) {
         stack.pop();
       }
-    } else {
+    } else if (getPriority(ch) > 1) {
       while (!stack.isEmpty() &&
         getPriority(stack.getTop()) >= getPriority(ch)) {
         top2postfix(stack, postfix);
       }
       stack.push(ch);
+      needSpace = true;
     }
   }
   while (!stack.isEmpty()) {
@@ -52,10 +61,22 @@ std::string infx2pstfx(const std::string& inf) {
 
 int eval(const std::string& postfix) {
   std::stack<int> stack;
+  std::string token;
   for (char ch : postfix) {
+    if (ch == ' ') {
+      if (!token.empty()) {
+        stack.push(std::stoi(token));
+        token.clear();
+      }
+      continue;
+    }
     if (isdigit(ch)) {
-      stack.push(ch - '0');
+      token += ch;
     } else {
+      if (!token.empty()) {
+        stack.push(std::stoi(token));
+        token.clear();
+      }
       int b = stack.top();
       stack.pop();
       int a = stack.top();
