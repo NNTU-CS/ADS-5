@@ -52,7 +52,7 @@ return res.str();
 int eval(const std::string& post) {
 TStack<int, 100> stack;
 std::stringstream ss(post);
-std::string token;
+std::string token="";
 
 while (ss >> token) {
 if (isdigit(token[0])) {
