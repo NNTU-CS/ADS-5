@@ -6,7 +6,7 @@
 
 constexpr int size = 100;
 
-template <typename T, int size = k>
+template <typename T, int size>
 class TStack {
  private:
   T data[size];
