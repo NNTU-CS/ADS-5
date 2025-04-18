@@ -1,41 +1,52 @@
-// Modified stack implementation
-#ifndef MODIFIED_STACK_H
-#define MODIFIED_STACK_H
+// Copyright 2025 NNTU-CS
+#ifndef MODIFIED_STACK_HEADER
+#define MODIFIED_STACK_HEADER
+#include <stdexcept>
 
-template<typename DataType, int MaxSize>
+template<typename T, int S>
 class TStack {
  private:
-    DataType elements[MaxSize];
-    int currentTop;
+    T stackElements[S];
+    int currentPosition;
 
  public:
-    TStack() : currentTop(-1) {}
+    TStack() : currentPosition(-1) {}
 
-    void push(const DataType& value) {
-        if (isFull()) {
-            throw std::string("Stack overflow");
+    void removeLast() {
+        if (isEmpty()) {
+            throw std::runtime_error("Container underflow");
         }
-        elements[++currentTop] = value;
+        --currentPosition;
     }
 
-    DataType pop() {
-        if (isEmpty()) {
-            throw std::string("Stack underflow");
+    void insertElement(const T& newItem) {
+        if (isComplete()) {
+            throw std::runtime_error("Container overflow");
         }
-        return elements[currentTop--];
+        stackElements[++currentPosition] = newItem;
+    }
+
+    bool isComplete() const {
+        return currentPosition >= S - 1;
     }
 
     bool isEmpty() const {
-        return currentTop == -1;
+        return currentPosition < 0;
     }
 
-    bool isFull() const {
-        return currentTop == MaxSize - 1;
+    const T& peekTop() const {
+        if (isEmpty()) {
+            throw std::runtime_error("No elements inside");
+        }
+        return stackElements[currentPosition];
     }
 
-    const DataType& get() const {
-        return elements[currentTop];
+    T& accessTop() {
+        if (isEmpty()) {
+            throw std::runtime_error("No elements inside");
+        }
+        return stackElements[currentPosition];
     }
 };
-
 #endif
+// INCLUDE_TSTACK_H_
