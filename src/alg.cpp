@@ -3,6 +3,7 @@
 #include <string>
 #include <sstream>
 #include <cctype>
+#include <stdexcept>
 #include "tstack.h"
 
 static int priority(char op) {
@@ -52,21 +53,43 @@ return res.str();
 int eval(const std::string& post) {
 TStack<int, 100> stack;
 std::stringstream ss(post);
-std::string token="";
-
-while (ss >> token) {
-if (isdigit(token[0])) {
-stack.push(std::stoi(token));
+int number;
+char op;
+while (true) {
+if (ss >> number) {
+stack.push(number);
 } else {
+ss.clear();
+if (ss >> op) {
+if (stack.isEmpty()) {
+throw std::runtime_error("Invalid postfix expression: Not enough operands for " + std::string(1, op));
+}
 int right = stack.pop();
+if (stack.isEmpty()) {
+throw std::runtime_error("Invalid postfix expression: Not enough operands for " + std::string(1, op));
+}
 int left = stack.pop();
-switch (token[0]) {
+switch (op) {
 case '+': stack.push(left + right); break;
 case '-': stack.push(left - right); break;
 case '*': stack.push(left * right); break;
-case '/': stack.push(left / right); break;
+case '/':
+if (right == 0) throw std::runtime_error("Division by zero");
+stack.push(left / right);
+break;
+default: throw std::runtime_error("Invalid operator: " + std::string(1, op));
+}
+} else {
+break;
 }
 }
 }
-return stack.pop();
+if (stack.isEmpty()) {
+throw std::runtime_error("Invalid postfix expression: Empty stack");
+}
+int result = stack.pop();
+if (!stack.isEmpty()) {
+throw std::runtime_error("Invalid postfix expression: Too many operands");
+}
+return result;
 }
