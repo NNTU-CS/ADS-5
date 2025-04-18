@@ -1,6 +1,7 @@
 // Copyright 2025 NNTU-CS
 #include "tstack.h"
 #include <string>
+#include <stack>
 #include <sstream>
 #include <cctype>
 #include <stdexcept>
