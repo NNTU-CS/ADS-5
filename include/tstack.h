@@ -1,12 +1,11 @@
 // Copyright 2021 NNTU-CS
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
-#include <vector>
 
 template<typename T, int kStackSize>
 class TStack {
  private:
-T data[kMaxSize];
+T data[kStackSize];
 int top;
 
  public:
@@ -15,7 +14,7 @@ bool isEmpty() const {
 return top == -1;
 }
 bool isFull() const {
-return top == kMaxSize - 1;
+return top == kStackSize - 1;
 }
 void push(T value) {
 if (!isFull()) {
