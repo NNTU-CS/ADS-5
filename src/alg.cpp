@@ -12,8 +12,10 @@ int priority(char op) {
 std::string infx2pstfx(const std::string& inf) {
   TStack<char, 100> stack;
   std::string postfix;
+
   for (size_t i = 0; i < inf.length(); i++) {
     if (isspace(inf[i])) continue;
+
     if (isdigit(inf[i])) {
       postfix += inf[i];
       postfix += ' ';
@@ -27,38 +29,41 @@ std::string infx2pstfx(const std::string& inf) {
       if (!stack.isEmpty()) stack.pop();
     } else if (isOperator(inf[i])) {
       while (!stack.isEmpty() && priority(stack.top()) >= priority(inf[i])) {
-        while (!stack.isEmpty() && priority(stack.top()) >= priority(inf[i])) {
-          postfix += stack.pop();
-          postfix += ' ';
-        }
-        stack.push(inf[i]);
+        postfix += stack.pop();
+        postfix += ' ';
       }
+      stack.push(inf[i]);
     }
-    while (!stack.isEmpty()) {
-      postfix += stack.pop();
-      postfix += ' ';
-    }
-    if (!postfix.empty() && postfix.back() == ' ') postfix.pop_back();
-    return postfix;
   }
-  int Op(int a, int b, char op)
-  {
-    switch (op) {
-      case '+':
-        return a + b;
-      case '-':
-        return a - b;
-      case '*':
-        return a * b;
-      case '/':
-        return a / b;
-    }
-    return 0;
+
+  while (!stack.isEmpty()) {
+    postfix += stack.pop();
+    postfix += ' ';
   }
+
+  if (!postfix.empty() && postfix.back() == ' ') postfix.pop_back();
+
+  return postfix;
+}
+  int Op(int a, int b, char op) {
+  switch (op) {
+    case '+':
+      return a + b;
+    case '-':
+      return a - b;
+    case '*':
+      return a * b;
+    case '/':
+      return a / b;
+  }
+  return 0;
+}
   int eval(const std::string& post) {
     TStack<int, 100> stack;
+
     for (size_t i = 0; i < post.length(); i++) {
       if (isspace(post[i])) continue;
+
       if (isdigit(post[i])) {
         stack.push(post[i] - '0');
       } else if (isOperator(post[i])) {
@@ -67,5 +72,6 @@ std::string infx2pstfx(const std::string& inf) {
         stack.push(Op(a, b, post[i]));
       }
     }
+
     return stack.pop();
   }
