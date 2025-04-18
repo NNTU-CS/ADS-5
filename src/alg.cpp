@@ -15,11 +15,6 @@ int getPriority(char op) {
   }
 }
 
-void top2postfix(TStack<char>& stack, std::string& postfix) {
-  postfix += stack.top();
-  stack.pop();
-}
-
 std::string infx2pstfx(const std::string& inf) {
   TStack<char, 100> stack;
   std::string postfix;
@@ -65,4 +60,9 @@ int eval(const std::string& pref) {
     }
   }
   return stack.top();
+}
+
+void top2postfix(TStack<char, 100>& stack, std::string& postfix) {
+  postfix += stack.top();
+  stack.pop();
 }
