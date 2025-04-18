@@ -1,113 +1,71 @@
 // Copyright 2025 NNTU-CS
 #include <cctype>
 #include <string>
-
 #include "tstack.h"
 
-class ExpressionConverter {
- private:
-  static bool isMathChar(char ch) {
-    const char ops[] = {'+', '-', '*', '/'};
-    for (char op : ops) {
-      if (ch == op) return true;
-    }
-    return false;
-  }
-
-  static int getOpWeight(char op) {
-    const int LOW = 1, HIGH = 2;
-    return (op == '+' || op == '-') ? LOW : (op == '*' || op == '/') ? HIGH : 0;
-  }
-
-  static int compute(int first, int second, char operation) {
-    switch (operation) {
-      case '+':
-        return first + second;
-      case '-':
-        return first - second;
-      case '*':
-        return first * second;
-      case '/':
-        return first / second;
-      default:
-        return 0;
-    }
-  }
-
- public:
-  static std::string convertInfix(const std::string& expr) {
-    TStack<char, 100> opStack;
-    std::string output;
-    bool needsSpace = false;
-
-    for (char ch : expr) {
-      if (isspace(ch)) continue;
-
-      if (isdigit(ch)) {
-        output += ch;
-        needsSpace = true;
-      } else {
-        if (needsSpace) {
-          output += ' ';
-          needsSpace = false;
-        }
-
-        if (ch == '(') {
-          opStack.push(ch);
-        } else if (ch == ')') {
-          while (!opStack.isEmpty() && opStack.peek() != '(') {
-            output += opStack.pop();
-            output += ' ';
-          }
-          opStack.pop();
-        } else if (isMathChar(ch)) {
-          while (!opStack.isEmpty() &&
-                 getOpWeight(opStack.peek()) >= getOpWeight(ch)) {
-            output += opStack.pop();
-            output += ' ';
-          }
-          opStack.push(ch);
-        }
-      }
-    }
-
-    if (needsSpace) output += ' ';
-
-    while (!opStack.isEmpty()) {
-      output += opStack.pop();
-      output += ' ';
-    }
-
-    if (!output.empty() && output.back() == ' ') {
-      output.pop_back();
-    }
-
-    return output;
-  }
-
-  static int evaluate(const std::string& expr) {
-    TStack<int, 100> numStack;
-
-    for (char ch : expr) {
-      if (isspace(ch)) continue;
-
-      if (isdigit(ch)) {
-        numStack.push(ch - '0');
-      } else if (isMathChar(ch)) {
-        int b = numStack.pop();
-        int a = numStack.pop();
-        numStack.push(compute(a, b, ch));
-      }
-    }
-
-    return numStack.pop();
-  }
-};
-
+bool isOperator(char c) { return c == '+' || c == '-' || c == '*' || c == '/'; }
+int priority(char op) {
+  if (op == '+' || op == '-') return 1;
+  if (op == '*' || op == '/') return 2;
+  return 0;
+}
 std::string infx2pstfx(const std::string& inf) {
-  return ExpressionConverter::convertInfix(inf);
-}
-
-int eval(const std::string& post) {
-  return ExpressionConverter::evaluate(post);
-}
+  TStack<char, 100> stack;
+  std::string postfix;
+  for (size_t i = 0; i < inf.length(); i++) {
+    if (isspace(inf[i])) continue;
+    if (isdigit(inf[i])) {
+      postfix += inf[i];
+      postfix += ' ';
+    } else if (inf[i] == '(') {
+      stack.push(inf[i]);
+    } else if (inf[i] == ')') {
+      while (!stack.isEmpty() && stack.top() != '(') {
+        postfix += stack.pop();
+        postfix += ' ';
+      }
+      if (!stack.isEmpty()) stack.pop();
+    } else if (isOperator(inf[i])) {
+      while (!stack.isEmpty() && priority(stack.top()) >= priority(inf[i])) {
+        while (!stack.isEmpty() && priority(stack.top()) >= priority(inf[i])) {
+          postfix += stack.pop();
+          postfix += ' ';
+        }
+        stack.push(inf[i]);
+      }
+    }
+    while (!stack.isEmpty()) {
+      postfix += stack.pop();
+      postfix += ' ';
+    }
+    if (!postfix.empty() && postfix.back() == ' ') postfix.pop_back();
+    return postfix;
+  }
+  int Op(int a, int b, char op)
+  {
+    switch (op) {
+      case '+':
+        return a + b;
+      case '-':
+        return a - b;
+      case '*':
+        return a * b;
+      case '/':
+        return a / b;
+    }
+    return 0;
+  }
+  int eval(const std::string& post) {
+    TStack<int, 100> stack;
+    for (size_t i = 0; i < post.length(); i++) {
+      if (isspace(post[i])) continue;
+      if (isdigit(post[i])) {
+        stack.push(post[i] - '0');
+      } else if (isOperator(post[i])) {
+        int b = stack.pop();
+        int a = stack.pop();
+        stack.push(Op(a, b, post[i]));
+      }
+    }
+    return stack.pop();
+  }
