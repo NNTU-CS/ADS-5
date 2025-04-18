@@ -55,18 +55,20 @@ TStack<int, 100> stack;
 std::stringstream ss(post);
 int number;
 char op;
-while (true) {
-if (ss >> number) {
+while (ss >> number) {
 stack.push(number);
-} else {
-ss.clear();
-if (ss >> op) {
+if (ss.eof() || ss.peek() == ' ') {
+continue;
+}
+if (ss.peek() == '+' || ss.peek() == '-' ||
+ss.peek() == '*' || ss.peek() == '/') {
+ss >> op;
 if (stack.isEmpty()) {
-throw std::runtime_error("Invalid postfix expression: Not enough operands for " + std::string(1, op));
+throw std::runtime_error("Not enough operands" + std::string(1, op));
 }
 int right = stack.pop();
 if (stack.isEmpty()) {
-throw std::runtime_error("Invalid postfix expression: Not enough operands for " + std::string(1, op));
+throw std::runtime_error("Not enough operands " + std::string(1, op));
 }
 int left = stack.pop();
 switch (op) {
@@ -74,22 +76,21 @@ case '+': stack.push(left + right); break;
 case '-': stack.push(left - right); break;
 case '*': stack.push(left * right); break;
 case '/':
-if (right == 0) throw std::runtime_error("Division by zero");
+if (right == 0) throw std::runtime_error("Div by zero");
 stack.push(left / right);
 break;
-default: throw std::runtime_error("Invalid operator: " + std::string(1, op));
+default: throw std::runtime_error("Invalid operator" + std::string(1, op));
 }
 } else {
-break;
-}
+throw std::runtime_error("Invalid character");
 }
 }
 if (stack.isEmpty()) {
-throw std::runtime_error("Invalid postfix expression: Empty stack");
+throw std::runtime_error("Empty stack");
 }
 int result = stack.pop();
 if (!stack.isEmpty()) {
-throw std::runtime_error("Invalid postfix expression: Too many operands");
+throw std::runtime_error("Too many operands");
 }
 return result;
 }
