@@ -69,12 +69,12 @@ std::string infx2pstfx(const std::string& inf) {
 int eval(const std::string& pref) {
   TStack<int, 100> stack;
 
-  for (size_t i = 0; i < post.length(); i++){
+  for (size_t i = 0; i < post.length(); i++) {
       if (isspace(post[i])) continue;
 
-      if(isdigit(post[i])){
+      if (isdigit(post[i])){
         stack.push(post[i] - '0');
-      } else if(isOperator(post[i])){
+      } else if (isOperator(post[i])) {
         int b = stack.pop();
         int a = stack.pop();
         stack.push(operationAB(a, b, post[i]));
