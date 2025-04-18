@@ -6,39 +6,39 @@ template<typename T, int K>
 class TStack {
  private:
     T data[K];
-    int top;
+    int topInd;
 
  public:
-    TStack() : top(-1) {}
+    TStack() : topInd(-1) {}
     bool isEmpty() const {
-        return top < 0;
+        return topInd < 0;
     }
     bool isFull() const {
-        return top >= K - 1;
+        return topInd >= K - 1;
     }
     void push(const T& item) {
         if (isFull()) {
             throw std::runtime_error("Full");
         }
-        data[++top] = item;
+        data[++topInd] = item;
     }
     void pop() {
         if (isEmpty()) {
             throw std::runtime_error("Empty");
         }
-        --top;
+        --topInd;
     }
     T& top() {
         if (isEmpty()) {
             throw std::runtime_error("Empty");
     }
-        return data[top];
+        return data[topInd];
     }
     const T& top() const {
         if (isEmpty()) {
             throw std::runtime_error("Empty");
         }
-        return data[top];
+        return data[topInd];
     }
 };
 #endif  // INCLUDE_TSTACK_H_
