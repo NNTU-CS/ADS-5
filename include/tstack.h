@@ -10,6 +10,15 @@ T data_[MSSize];
 size_t size_ = 0;
 
  public:
+T get(size_t index) const {
+if (index < size_) {
+return data_[index];
+} else {
+throw std::out_of_range("Index out of range");
+}
+}
+};
+
 bool empty() const { return size_ == 0; }
 size_t size() const { return size_; }
 
