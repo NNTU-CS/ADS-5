@@ -34,6 +34,5 @@ return data[top];
 }
 return T();
 }
-throw std::out_of_range("Stack is empty");
 };
 #endif  // INCLUDE_TSTACK_H_
