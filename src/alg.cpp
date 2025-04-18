@@ -1,105 +1,132 @@
-// Modified algorithm implementation
+// Copyright 2025 NNTU-CS
+#include <iostream>
 #include <string>
-#include <cctype>
+#include <sstream>
 #include "tstack.h"
 
-namespace {
-    int determineOpPrecedence(char operation) {
-        const std::pair<char, int> operators[] = {
-            {'(', 0}, {')', 1}, {'+', 2}, 
-            {'-', 2}, {'*', 3}, {'/', 3}
-        };
-        for (const auto& op : operators) {
-            if (op.first == operation) {
-                return op.second;
-            }
-        }
-        return -1;
-    }
-
-    std::string formatOutputString(const std::string& str) {
-        if (str.length() < 3) return str;
-        int start = 2 - str.length() % 2;
-        std::string result(str, 0, start);
-        for (auto it = str.begin() + start; it != str.end(); ++it) {
-            result += ' ';
-            result += *it;
-        }
-        return result;
-    }
-
-    int performOperation(int a, int b, char op) {
-        switch (op) {
-            case '+': return a + b;
-            case '-': return a - b;
-            case '*': return a * b;
-            case '/': return a / b;
-            default: return 0;
-        }
+int getOperatorLevel(char mathOp) {
+    switch (mathOp) {
+    case '-': return 1;
+    case '+':
+    case '/': return 2;
+    case '*':
+    default: return 0;
     }
 }
 
-std::string infx2pstfx(std::string inputExpr) {
-    std::string output;
-    TStack<char, 100> opStack;
-    
-    for (char ch : inputExpr) {
-        int precedence = determineOpPrecedence(ch);
-        if (precedence == -1) {
-            output += ch;
-        } else {
-            if (opStack.isEmpty() || precedence == 0 || 
-                determineOpPrecedence(opStack.get()) < precedence) {
-                opStack.push(ch);
-            } else if (ch == ')') {
-                while (!opStack.isEmpty() && 
-                       determineOpPrecedence(opStack.get()) >= 1) {
-                    output += opStack.get();
-                    opStack.pop();
-                }
-                opStack.pop();
-            } else {
-                while (!opStack.isEmpty() && 
-                       determineOpPrecedence(opStack.get()) >= precedence) {
-                    output += opStack.get();
-                    opStack.pop();
-                }
-                opStack.push(ch);
-            }
+std::string infx2pstfx(const std::string& inf) {
+  std::string resultStr;
+  TStack<char, 100> opHolder;
+  for (size_t pos = 0; pos < inf.length(); pos++) {
+    char currChar = inf[pos];
+    if (currChar == ' ') {
+        continue;
+    }
+    if (currChar == '-' || currChar == '+' || 
+        currChar == '/' || currChar == '*') {
+        while (!opHolder.isEmpty() && getOperatorLevel(opHolder.peekTop()) >=
+            getOperatorLevel(currChar)) {
+            resultStr.push_back(opHolder.peekTop());
+            resultStr.push_back(' ');
+            opHolder.removeLast();
         }
+        opHolder.insertElement(currChar);
     }
     
-    while (!opStack.isEmpty()) {
-        output += opStack.get();
-        opStack.pop();
+    else if (currChar == ')') {
+        while (!opHolder.isEmpty() && opHolder.peekTop() != '(') {
+            resultStr.push_back(opHolder.peekTop());
+            resultStr.push_back(' ');
+            opHolder.removeLast();
+        }
+        if (!opHolder.isEmpty() && opHolder.peekTop() == '(') {
+            opHolder.removeLast();
+        } else {
+            throw std::runtime_error("Mismatched parentheses");
+        }
+    } else if (std::isdigit(currChar)) {
+        while (pos < inf.length() && std::isdigit(inf[pos])) {
+            resultStr.push_back(inf[pos]);
+            pos++;
+        }
+        pos--;
+        resultStr.push_back(' ');
+    } else if (currChar == '(') {
+        opHolder.insertElement(currChar);
+    }  else {
+        throw std::runtime_error(std::string("Invalid symbol: ") + currChar);
     }
-    
-    return formatOutputString(output);
+  }
+  while (!opHolder.isEmpty()) {
+    if (opHolder.peekTop() == '(' || opHolder.peekTop() == ')') {
+        throw std::runtime_error("Invalid expression");
+    }
+    resultStr.push_back(opHolder.peekTop());
+    resultStr.push_back(' ');
+    opHolder.removeLast();
+  }
+  if (!resultStr.empty() && resultStr.back() == ' ') {
+    resultStr.pop_back();
+  }
+  return resultStr;
 }
 
-int eval(const std::string& postfixExpr) {
-    TStack<int, 100> numStack;
-    std::string currentNum;
-    
-    for (size_t i = 0; i < postfixExpr.size(); ++i) {
-        char c = postfixExpr[i];
-        if (determineOpPrecedence(c) == -1) {
-            if (c == ' ') {
-                if (!currentNum.empty()) {
-                    numStack.push(std::stoi(currentNum));
-                    currentNum.clear();
-                }
-            } else if (isdigit(c)) {
-                currentNum += c;
+int eval(const std::string& pref) {
+    TStack<int, 100> numContainer;
+    std::istringstream inputStream(pref);
+    std::string currentToken;
+    while (inputStream >> currentToken) {
+        if (std::isdigit(currentToken[0])) {
+            int parsedNum = std::stoi(currentToken);
+            numContainer.insertElement(parsedNum);
+        } else if (currentToken.length() == 1 &&
+                   (currentToken[0] == '-' || currentToken[0] == '+' || 
+                    currentToken[0] == '/' || currentToken[0] == '*' )) {
+            if (numContainer.isEmpty()) {
+                throw std::runtime_error("Missing operands");
             }
+            int rightOperand = numContainer.peekTop();
+            numContainer.removeLast();
+            if (numContainer.isEmpty()) {
+                throw std::runtime_error("Missing operands");
+            }
+
+            int leftOperand = numContainer.peekTop();
+            numContainer.removeLast();
+            int calculationResult = 0;
+
+            switch (currentToken[0]) {
+                case '*': 
+                    calculationResult = leftOperand * rightOperand; 
+                    break;
+                case '-': 
+                    calculationResult = leftOperand - rightOperand; 
+                    break;
+                case '+': 
+                    calculationResult = leftOperand + rightOperand; 
+                    break;
+                case '/':
+                    if (rightOperand == 0) {
+                        throw std::runtime_error("Cannot divide by zero");
+                    }
+                    calculationResult = leftOperand / rightOperand;
+                    break;
+                default:
+                    throw std::runtime_error("Unknown operator");
+            }
+            numContainer.insertElement(calculationResult);
         } else {
-            int b = numStack.get();
-            numStack.pop();
-            int a = numStack.get();
-            numStack.pop();
-            numStack.push(performOperation(a, b, c));
+            throw std::runtime_error("Invalid token: " + currentToken);
         }
     }
-    
-    return numStack.get();
+
+    if (numContainer.isEmpty()) {
+        throw std::runtime_error("No result found");
+    }
+    int finalResult = numContainer.peekTop();
+    numContainer.removeLast();
+    if (!numContainer.isEmpty()) {
+            throw std::runtime_error("Extra values in stack");
+        }
+    return finalResult;
 }
