@@ -1,10 +1,44 @@
 // Copyright 2025 NNTU-CS
-#include "tstack.h"
 #include <string>
 #include <stack>
 #include <sstream>
 #include <cctype>
 #include <stdexcept>
+template <typename T, int Size>
+class TStack {
+private:
+    T data[Size];
+    int topIndex;
+public:
+    TStack() : topIndex(-1) {}
+    void push(const T& value) {
+        if (topIndex < Size - 1) {
+            topIndex++;
+            data[topIndex] = value;
+        } else {
+            throw std::overflow_error("Stack overflow");
+        }
+    }
+    T pop() {
+        if (!isEmpty()) {
+            T value = data[topIndex];
+            topIndex--;
+            return value;
+        } else {
+            throw std::underflow_error("Stack underflow");
+        }
+    }
+    T top() const {
+        if (!isEmpty()) {
+            return data[topIndex];
+        } else {
+            throw std::underflow_error("Stack is empty");
+        }
+    }
+    bool isEmpty() const {
+        return topIndex == -1;
+    }
+};
 int precedence(char op) {
     switch (op) {
         case '+': 
