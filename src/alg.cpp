@@ -1,75 +1,103 @@
 // Copyright 2025 NNTU-CS
-#include <iostream>
+#include "tstack.h"
 #include <string>
-#include <stack>
 #include <sstream>
 #include <cctype>
-#include <map>
-#include "tstack.h"
+#include <stdexcept>
 int precedence(char op) {
-    if (op == '+' || op == '-') return 1;
-    if (op == '*' || op == '/') return 2;
-    return 0;
+    switch (op) {
+        case '+': 
+        case '-': return 1;
+        case '*': 
+        case '/': return 2;
+        default:  return 0;
+    }
 }
 std::string infx2pstfx(const std::string& inf) {
-    std::stack<char> stack;
-    std::string result;
-    std::istringstream iss(inf);
-    std::string token;
-    while (iss >> token) {
-        if (isdigit(token[0])) {
-            result += token + " ";
-        } else if (token[0] == '(') {
-            stack.push('(');
-        } else if (token[0] == ')') {
-            while (!stack.empty() && stack.top() != '(') {
-                result += stack.top();
-                result += " ";
+    std::string output;
+    TStack<char, 100> stack;
+    for (size_t i = 0; i < inf.size(); ++i) {
+        char c = inf[i];
+        if (isspace(c)) 
+            continue;
+        if (isdigit(c)) {
+            std::string number;
+            while (i < inf.size() && isdigit(inf[i])) {
+                number.push_back(inf[i]);
+                i++;
+            }
+            i--;
+            if (!output.empty()) 
+                output.push_back(' ');
+            output += number;
+        } 
+        else if (c == '(') {
+            stack.push(c);
+        } 
+        else if (c == ')') {
+            while (!stack.isEmpty() && stack.top() != '(') {
+                output.push_back(' ');
+                output.push_back(stack.top());
                 stack.pop();
             }
-            stack.pop();
-        } else {
-            while (!stack.empty() && precedence(stack.top()) >= precedence(token[0])) {
-                result += stack.top();
-                result += " ";
+            if (!stack.isEmpty() && stack.top() == '(') {
                 stack.pop();
             }
-            stack.push(token[0]);
+        } 
+        else {
+            while (!stack.isEmpty() && stack.top() != '(' &&
+                   precedence(stack.top()) >= precedence(c)) {
+                output.push_back(' ');
+                output.push_back(stack.top());
+                stack.pop();
+            }
+            stack.push(c);
         }
     }
-    while (!stack.empty()) {
-        result += stack.top();
-        result += " ";
+    while (!stack.isEmpty()) {
+        output.push_back(' ');
+        output.push_back(stack.top());
         stack.pop();
     }
-
-    return result;
+    
+    return output;
 }
 int eval(const std::string& pref) {
-    std::stack<int> stack;
-    std::istringstream iss(pref);
+    TStack<int, 100> stack;
+    std::istringstream iss(post);
     std::string token;
     while (iss >> token) {
         if (isdigit(token[0])) {
-            stack.push(std::stoi(token));
-        } else {
-            int right = stack.top(); stack.pop();
-            int left = stack.top(); stack.pop();
+            int number = std::stoi(token);
+            stack.push(number);
+        }
+        else {
+            if (stack.isEmpty())
+                throw std::runtime_error("Ошибка.");
+            int b = stack.top();
+            stack.pop();
+            
+            if (stack.isEmpty())
+                throw std::runtime_error("Ошибка.");
+            int a = stack.top();
+            stack.pop();
+            int result = 0;
             switch (token[0]) {
-                case '+':
-                    stack.push(left + right);
+                case '+': result = a + b; break;
+                case '-': result = a - b; break;
+                case '*': result = a * b; break;
+                case '/': 
+                    if (b == 0)
+                        throw std::runtime_error("Ошибка.");
+                    result = a / b; 
                     break;
-                case '-':
-                    stack.push(left - right);
-                    break;
-                case '*':
-                    stack.push(left * right);
-                    break;
-                case '/':
-                    stack.push(left / right);
-                    break;
+                default:
+                    throw std::runtime_error("Ошибка.");
             }
+            stack.push(result);
         }
     }
+    if (stack.isEmpty())
+        throw std::runtime_error("Ошибка.");
     return stack.top();
 }
