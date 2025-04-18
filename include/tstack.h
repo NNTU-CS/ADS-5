@@ -11,7 +11,7 @@ class TStack {
   int top;
 
  public:
-  Tstack():top(-1) {}
+  Tstack() : top(-1) {}
   bool isEmpty() const {
     return top == -1;
   }
@@ -24,7 +24,7 @@ class TStack {
     else
       throw std::string("Empty");
   }
-  void push(const T&item) {
+  void push(const T& item) {
     if (!isFull())
       data[++top] = item;
     else
