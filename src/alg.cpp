@@ -18,7 +18,7 @@ bool isOperator(char ch) {
 
 std::string infx2pstfx(const std::string& inf) {
   std::ostringstream output;
-  TStack<char, 100> stack;
+  TStack<char, k> stack;
 
   for (size_t i = 0; i < inf.length(); ++i) {
     if (std::isdigit(inf[i])) {
@@ -66,7 +66,7 @@ int applyOp(int a, int b, char op) {
 }
 
 int eval(const std::string& post) {
-  TStack<int, 100> stack;
+  TStack<int, k> stack;
   std::istringstream input(post);
   std::string token;
 
