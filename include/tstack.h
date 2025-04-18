@@ -6,8 +6,8 @@
 template<typename T, int size>
 class TStack {
  private:
-  static constexpr int arrSize = size;
-  T data[arrSize];
+  static constexpr int dataSize = size;
+  T data[dataSize];
   int top;
 
  public:
@@ -32,7 +32,7 @@ class TStack {
   }
   void pop() {
     if (!isEmpty())
-      top--;
+      return data[top--];
     else
       throw std::string("Empty");
   }
