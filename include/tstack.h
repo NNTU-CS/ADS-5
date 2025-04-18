@@ -26,7 +26,7 @@ class TStack {
 
   void push(const T& value) {
     if (!isFull()) {
-      return arr[++top] = value;
+      arr[++top] = value;
     }
   }
 
