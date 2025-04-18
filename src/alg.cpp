@@ -2,8 +2,8 @@
 #include <string>
 #include <map>
 #include "tstack.h"
-#include <string>
-#include <cctype>
+//#include <string>
+//#include <cctype>
 
 bool isOperator(char c) {
   return c == '+' || c == '-' || c == '*' || c == '/';
