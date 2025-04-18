@@ -9,15 +9,13 @@ std::string infx2pstfx(const std::string& inf) {
     std::string result;
 TStack<char, 100> opStack;
 std::stringstream ss(inf);
-while( ss >> token) {
-std::string token;
-}
 std::map<char, int> precedence;
 precedence['+'] = 1;
 precedence['-'] = 1;
 precedence['*'] = 2;
 precedence['/'] = 2;
 while (ss >> token) {
+std::string token;  
 if (isdigit(token[0])) {
 result += token + " ";
 } else if (token == "(") {
