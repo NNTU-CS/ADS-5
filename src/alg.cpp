@@ -5,6 +5,8 @@
 #include <map>
 #include "tstack.h"
 
+void top2postfix(TStack<char, 100>& stack, std::string& postfix);
+
 int getPriority(char op) {
   switch (op) {
     case '(': return 0;
@@ -24,12 +26,12 @@ std::string infx2pstfx(const std::string& inf) {
     } else if (getPriority(ch) == 0) {
       stack.push(ch);
     } else if (getPriority(ch) == 1) {
-      while (!stack.isEmpty() && getPriority(stack.top()) != 0) {
+      while (!stack.isEmpty() && getPriority(stack.getTop()) != 0) {
         top2postfix(stack, postfix);
       }
       stack.pop();
     } else {
-      while (!stack.isEmpty() && getPriority(stack.top()) >= getPriority(ch)) {
+      while (!stack.isEmpty() && getPriority(stack.getTop()) >= getPriority(ch)) {
         top2postfix(stack, postfix);
       }
       stack.push(ch);
@@ -41,7 +43,7 @@ std::string infx2pstfx(const std::string& inf) {
   return postfix;
 }
 
-int eval(const std::string& pref) {
+int eval(const std::string& postfix) {
   std::stack<int> stack;
   for (char ch : postfix) {
     if (isdigit(ch)) {
@@ -63,6 +65,6 @@ int eval(const std::string& pref) {
 }
 
 void top2postfix(TStack<char, 100>& stack, std::string& postfix) {
-  postfix += stack.top();
+  postfix += stack.getTop();
   stack.pop();
 }
