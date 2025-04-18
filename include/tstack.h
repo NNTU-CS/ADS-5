@@ -1,52 +1,43 @@
 // Copyright 2025 NNTU-CS
-#ifndef MODIFIED_STACK_HEADER
-#define MODIFIED_STACK_HEADER
-#include <stdexcept>
+#ifndef INCLUDE_TSTACK_H_
+#define INCLUDE_TSTACK_H_
 
-template<typename T, int S>
+template<typename T, int size>
 class TStack {
  private:
-    T stackElements[S];
-    int currentPosition;
+    T elementStorage[size];
+    int stackPointer;
 
  public:
-    TStack() : currentPosition(-1) {}
-
-    void removeLast() {
-        if (isEmpty()) {
-            throw std::runtime_error("Container underflow");
-        }
-        --currentPosition;
-    }
+    TStack() : stackPointer(-1) {}
 
     void insertElement(const T& newItem) {
         if (isComplete()) {
-            throw std::runtime_error("Container overflow");
+            throw std::runtime_error("Stack overflow");
         }
-        stackElements[++currentPosition] = newItem;
+        elementStorage[++stackPointer] = newItem;
+    }
+
+    T removeLast() {
+        if (isEmpty()) {
+            throw std::runtime_error("Stack underflow");
+        }
+        return elementStorage[stackPointer--];
     }
 
     bool isComplete() const {
-        return currentPosition >= S - 1;
+        return stackPointer >= size - 1;
     }
 
     bool isEmpty() const {
-        return currentPosition < 0;
+        return stackPointer < 0;
     }
 
     const T& peekTop() const {
         if (isEmpty()) {
-            throw std::runtime_error("No elements inside");
+            throw std::runtime_error("Stack is empty");
         }
-        return stackElements[currentPosition];
-    }
-
-    T& accessTop() {
-        if (isEmpty()) {
-            throw std::runtime_error("No elements inside");
-        }
-        return stackElements[currentPosition];
+        return elementStorage[stackPointer];
     }
 };
-#endif
-// INCLUDE_TSTACK_H_
+#endif  // INCLUDE_TSTACK_H_
