@@ -80,6 +80,5 @@ int eval(const std::string& pref) {
         stack.push(operationAB(a, b, post[i]));
       }
     }
-
     return 0;
 }
