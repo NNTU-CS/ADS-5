@@ -5,7 +5,7 @@
 #include <string>
 #include <cctype>
 
-bool isOperator(char c) { 
+bool isOperator(char c) {
   return c == '+' || c == '-' || c == '*' || c == '/';
 }
 
