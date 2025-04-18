@@ -3,10 +3,10 @@
 #define INCLUDE_TSTACK_H_
 #include <vector>
 
-template<typename T, int size>
+template<typename T, int MSSize>
 class TStack {
  private:
-T data[size];
+std::vector<T> data;
 int top;
 
  public:
@@ -15,9 +15,9 @@ bool isEmpty() const {
 return top == -1;
 }
 bool isFull() const {
-return top == size - 1;
+return top == MSSize - 1;
 }
-void push(T value) {
+void push(const T& value) {
 if (!isFull()) {
 data[++top] = value;
 }
