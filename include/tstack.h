@@ -4,7 +4,9 @@
 
 #include <stdexcept>
 
-template <typename T, int size>
+constexpr int k = 100;
+
+template <typename T, int size = k>
 class TStack {
  private:
   T data[size];
