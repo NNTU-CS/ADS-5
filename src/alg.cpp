@@ -1,3 +1,4 @@
+// Copyright 2025 NNTU-CS
 #include <string>
 #include <sstream>
 #include <cctype>
@@ -39,8 +40,8 @@ std::string infx2pstfx(const std::string& inf) {
             }
             operatorStack.removeLast();
         } else {
-            while (!operatorStack.isEmpty() && 
-                   getOperatorPriority(operatorStack.peekTop()) >= 
+            while (!operatorStack.isEmpty() &&
+                   getOperatorPriority(operatorStack.peekTop()) >=
                    getOperatorPriority(c)) {
                 output += operatorStack.peekTop();
                 output += ' ';
@@ -87,7 +88,7 @@ int eval(const std::string& pref) {
                 case '+': numberStack.insertElement(a + b); break;
                 case '-': numberStack.insertElement(a - b); break;
                 case '*': numberStack.insertElement(a * b); break;
-                case '/': 
+                case '/':
                     if (b == 0) throw std::runtime_error("Division by zero");
                     numberStack.insertElement(a / b);
                     break;
