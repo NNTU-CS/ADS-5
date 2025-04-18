@@ -2,97 +2,70 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <cctype>
 #include "tstack.h"
 
-int priority(const char c) {
-switch (c) {
-case '+':
-case '-':
-return 1;
-case '*':
-case '/':
-return 2;
-default:
+static int priority(char op) {
+if (op == '+' || op == '-') return 1;
+if (op == '*' || op == '/') return 2;
 return 0;
-}
 }
 
 std::string infx2pstfx(const std::string& inf) {
-std::string post;
 TStack<char, 100> stack;
-bool needSpace = false;
-for (int i = 0; i < inf.size(); i++) {
-char current = inf[i];
-int currentPrior = priority(current);
-if (currentPrior == -1) {
-if (needSpace) {
-post += ' ';
+std::stringstream res;
+bool first = true;
+for (size_t i = 0; i < inf.size(); ++i) {
+char c = inf[i];
+if (isspace(c)) {
+continue;
 }
-post += current;
-needSpace = false;
-} else if (current == '(') {
-stack.push(current);
-needSpace = false;
-} else if (current == ')') {
-while (!stack.isEmpty() && stack.get() != '(') {
-post += ' ';
-post += stack.get();
-stack.pop();
+if (isdigit(c)) {
+if (!first) {
+res << ' ';
 }
-stack.pop();
-needSpace = true;
+res << c;
+first = false;
 } else {
-while (!stack.isEmpty() &&
-priority(stack.get()) >= currentPrior &&
-stack.get() != '(') {
-post += ' ';
-post += stack.get();
-stack.pop();
+if (c == '(') {
+stack.push(c);
+} else if (c == ')') {
+while (!stack.isEmpty() && stack.peek() != '(') {
+res << ' ' << stack.pop();
 }
-post += ' ';
-stack.push(current);
-needSpace = false;
+stack.pop();
+} else {
+while (!stack.isEmpty() && stack.peek() != '(' &&
+priority(stack.peek()) >= priority(c)) {
+res << ' ' << stack.pop();
+}
+stack.push(c);
+}
 }
 }
 while (!stack.isEmpty()) {
-post += ' ';
-post += stack.get();
-stack.pop();
+res << ' ' << stack.pop();
 }
-return post;
+return res.str();
 }
 
 int eval(const std::string& post) {
 TStack<int, 100> stack;
-std::string number = "";
-for (size_t i = 0; i < post.length(); i++) {
-char c = post[i];
-if (isdigit(c)) {
-number += c;
-} else if (c == ' ') {
-if (!number.empty()) {
-stack.push(std::stoi(number));
-number = "";
-}
-} else if (priority(c) >= 2) {
-if (!stack.isEmpty()) {
-int b = stack.get();
-stack.pop();
-if (!stack.isEmpty()) {
-int a = stack.get();
-stack.pop();
-switch (c) {
-case '+': stack.push(a + b); break;
-case '-': stack.push(a - b); break;
-case '*': stack.push(a * b); break;
-case '/': stack.push(a / b); break;
+std::stringstream ss(post);
+std::string token;
+while (ss >> token) {
+if (isdigit(token[0])) {
+stack.push(std::stoi(token));
+} else {
+int right = stack.pop();
+int left = stack.pop();
+switch (token[0]) {
+case '+': stack.push(left + right); break;
+case '-': stack.push(left - right); break;
+case '*': stack.push(left * right); break;
+case '/': stack.push(left / right); break;
 }
 }
 }
-}
-}
-if (!number.empty()) {
-stack.push(std::stoi(number));
-}
-return stack.get();
+return stack.pop();
 }
