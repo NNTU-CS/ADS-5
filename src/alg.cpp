@@ -7,10 +7,11 @@
 #include <stdexcept>
 template <typename T, size_t MaxSize>
 class TStack {
-private:
+  private:
     std::vector<T> data;
     size_t maxSize;
-public:
+
+  public:
     TStack() : maxSize(MaxSize) {}
     void push(const T& value) {
         if (data.size() >= maxSize) {
@@ -46,9 +47,9 @@ public:
 };
 int precedence(char op) {
     switch (op) {
-        case '+': 
+        case '+':
         case '-': return 1;
-        case '*': 
+        case '*':
         case '/': return 2;
         default:  return 0;
     }
@@ -58,7 +59,7 @@ std::string infx2pstfx(const std::string& inf) {
     TStack<char, 100> stack;
     for (size_t i = 0; i < inf.size(); ++i) {
         char c = inf[i];
-        if (isspace(c)) 
+        if (isspace(c))
             continue;
         if (isdigit(c)) {
             std::string number;
@@ -67,14 +68,12 @@ std::string infx2pstfx(const std::string& inf) {
                 i++;
             }
             i--;
-            if (!output.empty()) 
+            if (!output.empty())
                 output.push_back(' ');
             output += number;
-        } 
-        else if (c == '(') {
+        } else if (c == '(') {
             stack.push(c);
-        } 
-        else if (c == ')') {
+        } else if (c == ')') {
             while (!stack.isEmpty() && stack.top() != '(') {
                 output.push_back(' ');
                 output.push_back(stack.top());
@@ -83,8 +82,7 @@ std::string infx2pstfx(const std::string& inf) {
             if (!stack.isEmpty() && stack.top() == '(') {
                 stack.pop();
             }
-        } 
-        else {
+        } else {
             while (!stack.isEmpty() && stack.top() != '(' &&
                    precedence(stack.top()) >= precedence(c)) {
                 output.push_back(' ');
