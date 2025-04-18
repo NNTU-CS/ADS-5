@@ -33,21 +33,21 @@ std::string infx2pstfx(const std::string& inf) {
   TStack<char, 100> stack;
   std::string postfix;
 
-  for(size_t i = 0; i < inf.length(); i++) {
-    if(isspace(inf[i]))
+  for (size_t i = 0; i < inf.length(); i++) {
+    if (isspace(inf[i]))
       continue;
-    if(isdigit(inf[i])) {
+    if (isdigit(inf[i])) {
       postfix += inf[i];
       postfix += ' ';
-    } else if(inf[i] == '('){
+    } else if (inf[i] == '(') {
       stack.push(inf[i]);
-    } else if(inf[i] == ')'){
-       while (!stack.isEmpty() && stack.get() != '('){
+    } else if (inf[i] == ')') {
+       while (!stack.isEmpty() && stack.get() != '(') {
         postfix += stack.pop();
         postfix += ' ';
        }
       if (!stack.isEmpty()) stack.pop();
-    } else if(isOperator(inf[i])){
+    } else if (isOperator(inf[i])) {
       while (!stack.isEmpty() && priority(stack.get()) >= priority(inf[i])) {
         postfix += stack.pop();
         postfix += ' ';
@@ -55,7 +55,7 @@ std::string infx2pstfx(const std::string& inf) {
       stack.push(inf[i]);
     }
 
-    while (!stack.isEmpty()){
+    while (!stack.isEmpty()) {
       postfix += stack.pop();
       postfix += ' ';
     }
