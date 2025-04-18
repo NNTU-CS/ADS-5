@@ -1,42 +1,47 @@
 // Copyright 2025 NNTU-CS
+#include <vector>
 #include <string>
 #include <stack>
 #include <sstream>
 #include <cctype>
 #include <stdexcept>
-template <typename T, int Size>
+template <typename T, size_t MaxSize>
 class TStack {
 private:
-    T data[Size];
-    int topIndex;
+    std::vector<T> data;
+    size_t maxSize;
 public:
-    TStack() : topIndex(-1) {}
+    TStack() : maxSize(MaxSize) {}
     void push(const T& value) {
-        if (topIndex < Size - 1) {
-            topIndex++;
-            data[topIndex] = value;
-        } else {
-            throw std::overflow_error("Stack overflow");
+        if (data.size() >= maxSize) {
+            throw std::overflow_error("Стек переполнен");
         }
+        data.push_back(value);
     }
-    T pop() {
-        if (!isEmpty()) {
-            T value = data[topIndex];
-            topIndex--;
-            return value;
-        } else {
-            throw std::underflow_error("Stack underflow");
+    void pop() {
+        if (isEmpty()) {
+            throw std::underflow_error("Стек пуст");
         }
+        data.pop_back();
     }
-    T top() const {
-        if (!isEmpty()) {
-            return data[topIndex];
-        } else {
-            throw std::underflow_error("Stack is empty");
+    T& top() {
+        if (isEmpty()) {
+            throw std::underflow_error("Стек пуст");
         }
+        return data.back();
+    }
+
+    const T& top() const {
+        if (isEmpty()) {
+            throw std::underflow_error("Стек пуст");
+        }
+        return data.back();
     }
     bool isEmpty() const {
-        return topIndex == -1;
+        return data.empty();
+    }
+    size_t size() const {
+        return data.size();
     }
 };
 int precedence(char op) {
@@ -99,7 +104,7 @@ std::string infx2pstfx(const std::string& inf) {
 }
 int eval(const std::string& pref) {
     TStack<int, 100> stack;
-    std::istringstream iss(post);
+    std::istringstream iss(pref);
     std::string token;
     while (iss >> token) {
         if (isdigit(token[0])) {
@@ -111,7 +116,6 @@ int eval(const std::string& pref) {
                 throw std::runtime_error("Ошибка.");
             int b = stack.top();
             stack.pop();
-            
             if (stack.isEmpty())
                 throw std::runtime_error("Ошибка.");
             int a = stack.top();
