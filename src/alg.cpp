@@ -52,22 +52,19 @@ return res.str();
 int eval(const std::string& post) {
 TStack<int, 100> stack;
 std::stringstream ss(post);
-int number;
-while (ss >> number) {
-stack.push(number);
-if(ss.peek() == '+' || ss.peek() == '-' ||
-ss.peek() == '*' || ss.peek() == '/') {
-char op;
-ss >> op;
+std::string token;
+
+while (ss >> token) {
+if (isdigit(token[0])) {
+stack.push(std::stoi(token));
+} else {
 int right = stack.pop();
 int left = stack.pop();
-switch (op) {
+switch (token[0]) {
 case '+': stack.push(left + right); break;
 case '-': stack.push(left - right); break;
 case '*': stack.push(left * right); break;
-case '/':
-if (right == 0) throw std::runtime_error("Division by zero");
-stack.push(left / right); break;
+case '/': stack.push(left / right); break;
 }
 }
 }
