@@ -5,7 +5,11 @@
 #include <map>
 #include "tstack.h"
 
-void top2postfix(TStack<char, 100>& stack, std::string& postfix);
+void top2postfix(TStack<char, 100>& stack,
+std::string& postfix) {
+  postfix += stack.getTop();
+  stack.pop();
+}
 
 int getPriority(char op) {
   switch (op) {
@@ -23,13 +27,15 @@ std::string infx2pstfx(const std::string& inf) {
   for (char ch : inf) {
     if (isalnum(ch)) {
       postfix += ch;
-    } else if (getPriority(ch) == 0) {
+    } else if (ch == '(') {
       stack.push(ch);
-    } else if (getPriority(ch) == 1) {
-      while (!stack.isEmpty() && getPriority(stack.getTop()) != 0) {
+    } else if (ch == ')') {
+      while (!stack.isEmpty() && stack.getTop() != '(') {
         top2postfix(stack, postfix);
       }
-      stack.pop();
+      if (!stack.isEmpty()) {
+        stack.pop();
+      }
     } else {
       while (!stack.isEmpty() &&
         getPriority(stack.getTop()) >= getPriority(ch)) {
@@ -63,10 +69,4 @@ int eval(const std::string& postfix) {
     }
   }
   return stack.top();
-}
-
-void top2postfix(TStack<char, 100>& stack,
-std::string& postfix) {
-  postfix += stack.getTop();
-  stack.pop();
 }
