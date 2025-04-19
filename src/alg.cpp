@@ -22,7 +22,7 @@ int getPrecedence(char op) {
 }
 
 bool isOperator(char ch) {
-  return ch == '+'  ch == '-'  ch == '*' || ch == '/';
+  return ch == '+' || ch == '-' || ch == '*' || ch == '/';
 }
 
 }  // namespace
@@ -37,7 +37,8 @@ std::string infx2pstfx(const std::string& expr) {
     if (std::isspace(static_cast<unsigned char>(current))) continue;
 
     if (std::isdigit(static_cast<unsigned char>(current))) {
-      while (i < expr.length() && std::isdigit(static_cast<unsigned char>(expr[i]))) {
+      while (i < expr.length() && 
+        std::isdigit(static_cast<unsigned char>(expr[i]))) {
         result += expr[i++];
       }
       result += ' ';
