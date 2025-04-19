@@ -15,7 +15,7 @@ class TStack {
   int headIndex;
 
  public:
-  Stack() : headIndex(-1) {}
+  TStack() : headIndex(-1) {}
 
   void push(const T& item) {
     if (isFull()) {
@@ -45,7 +45,7 @@ class TStack {
     return items[headIndex];
   }
 
-  size_t size() const { return headIndex + 1; }
+  int size() const { return headIndex + 1; }
   bool isEmpty() const { return headIndex < 0; }
   bool isFull() const { return headIndex == kMaxStackSize - 1; }
 };
