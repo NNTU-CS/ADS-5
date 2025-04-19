@@ -1,8 +1,8 @@
 // Copyright 2025 NNTU-CS
 #include <string>
 #include <map>
-#include <cctype>
 #include "tstack.h"
+#include <cctype>
 
 std::string infx2pstfx(const std::string& inf) {
   TStack<char, 100> temp;
@@ -26,8 +26,7 @@ std::string infx2pstfx(const std::string& inf) {
       if (!temp.isEmpty() && temp.get() == '(') {
         temp.pop();
       }
-    }
-    else if (priority.find(c) != priority.end()) {
+    } else if (priority.find(c) != priority.end()) {
       while (!temp.isEmpty()) {
         char top = temp.get();
         if (top == '(') break;
@@ -40,8 +39,7 @@ std::string infx2pstfx(const std::string& inf) {
         }
       }
       temp.push(c);
-    }
-    else if (isdigit(c)) {
+    } else if (isdigit(c)) {
       while (i < inf.size() && isdigit(inf[i])) {
         res.push_back(inf[i]);
         ++i;
