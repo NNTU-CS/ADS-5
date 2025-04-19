@@ -8,7 +8,7 @@
 template <typename T, int size>
 class TStack {
  private:
-  static_assert(StackSize > 0, "Stack size must be a positive value");
+  static_assert(size > 0, "Stack size must be a positive value");
   static constexpr int kMaxStackSize = size;
 
   std::array<T, kMaxStackSize> items;
