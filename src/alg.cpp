@@ -25,10 +25,14 @@ std::string infx2pstfx(const std::string& s) {
   std::string res;
   TStack<char, 100> st;
 
-  for (char c : s) {
+  for (size_t i = 0; i < s.size(); ++i) {
+    char c = s[i];
     if (isdigit(c)) {
-      res += c;
+      while (i < s.size() && isdigit(s[i])) {
+        res += s[i++];
+      }
       res += ' ';
+      --i;
     } else if (c == '(') {
       st.push(c);
     } else if (c == ')') {
@@ -36,7 +40,7 @@ std::string infx2pstfx(const std::string& s) {
         res += st.pop();
         res += ' ';
       }
-      st.pop();
+      if (!st.isEmpty()) st.pop();
     } else if (c == '+' || c == '-' || c == '*' || c == '/') {
       while (!st.isEmpty() && priority(st.topElem()) >= priority(c)) {
         res += st.pop();
