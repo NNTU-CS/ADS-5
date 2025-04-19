@@ -4,8 +4,6 @@
 
 template<typename T, int size>
 class TStack {
-template<typename T, int size>
-class TStack {
  private:
   T data[size] = {};
   int top = -1;
@@ -32,7 +30,7 @@ class TStack {
   }
 
   bool isEmpty() const { 
-    return top == -1; 
+    return top == -1;
   }
 };
 
