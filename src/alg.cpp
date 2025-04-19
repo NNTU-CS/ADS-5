@@ -18,33 +18,29 @@ std::string infx2pstfx(const std::string& inf) {
   while (i < inf.size()) {
     char c = inf[i];
 
-    if (isdigit(c) || (c == '-' && (i == 0 || inf[i - 1] == '(' || inf[i - 1] == ' '))) {
-      while (i < inf.size() && (isdigit(inf[i]) || inf[i] == '.')) {
+    if (isdigit(c)) {
+      while (i < inf.size() && isdigit(inf[i])) {
         res += inf[i++];
       }
       res += ' ';
-    } 
-    else if (c == '(') {
+    } else if (c == '(') {
       st.push(c);
       i++;
-    } 
-    else if (c == ')') {
+    } else if (c == ')') {
       while (!st.isEmpty() && st.topElem() != '(') {
         res += st.pop();
         res += ' ';
       }
       if (!st.isEmpty()) st.pop();
       i++;
-    }
-    else if (c == '+' || c == '-' || c == '*' || c == '/') {
+    } else if (c == '+' || c == '-' || c == '*' || c == '/') {
       while (!st.isEmpty() && priority(st.topElem()) >= priority(c)) {
         res += st.pop();
         res += ' ';
       }
       st.push(c);
       i++;
-    } 
-    else {
+    } else {
       i++;
     }
   }
@@ -63,18 +59,15 @@ int eval(const std::string& post) {
   std::string token;
 
   while (iss >> token) {
-    if (isdigit(token[0]) || (token[0] == '-' && token.size() > 1 && isdigit(token[1]))) {
+    if (isdigit(token[0])) {
       st.push(std::stoi(token));
     } else {
       int b = st.pop();
       int a = st.pop();
       if (token == "+") st.push(a + b);
-      if (token == "-") st.push(a - b);
-      if (token == "*") st.push(a * b);
-      if (token == "/") {
-        if (b == 0) throw std::invalid_argument("Division by zero");
-        st.push(a / b);
-      }
+      else if (token == "-") st.push(a - b);
+      else if (token == "*") st.push(a * b);
+      else if (token == "/") st.push(a / b);
     }
   }
 
