@@ -4,11 +4,11 @@
 
 template<typename T, int size>
 class TStack {
-private:
+ private:
 T* array;
 int top;
 
-public:
+ public:
 TStack(): array(new T[size]), top(-1) {}
 ~TStack() {
   delete[] array;
