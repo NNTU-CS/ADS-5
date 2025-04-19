@@ -17,7 +17,7 @@ std::string infx2pstfx(const std::string& inf) {
 
   while (i < inf.size()) {
     char c = inf[i];
-    
+
     if (isdigit(c)) {
       while (i < inf.size() && isdigit(inf[i])) {
         res += inf[i++];
