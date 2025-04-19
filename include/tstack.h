@@ -9,10 +9,10 @@ template <typename DataType, int StackSize>
 class Stack {
  private:
   static_assert(StackSize > 0, "Stack size must be a positive value");
-  static constexpr int kMaxStackSize = StackSize; 
+  static constexpr int kMaxStackSize = StackSize;
 
-  std::array<DataType, kMaxStackSize> items;  
-  int headIndex;                              
+  std::array<DataType, kMaxStackSize> items;
+  int headIndex;
 
  public:
   Stack() : headIndex(-1) {}
