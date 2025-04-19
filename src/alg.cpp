@@ -18,8 +18,8 @@ std::string infx2pstfx(const std::string& inf) {
   while (i < inf.size()) {
     char c = inf[i];
 
-    if (isdigit(c)) {
-      while (i < inf.size() && isdigit(inf[i])) {
+    if (isdigit(c) || (c == '-' && (i == 0 || inf[i - 1] == '(' || inf[i - 1] == ' '))) {
+      while (i < inf.size() && (isdigit(inf[i]) || inf[i] == '.')) {
         res += inf[i++];
       }
       res += ' ';
@@ -63,7 +63,7 @@ int eval(const std::string& post) {
   std::string token;
 
   while (iss >> token) {
-    if (isdigit(token[0])) {
+    if (isdigit(token[0]) || (token[0] == '-' && token.size() > 1 && isdigit(token[1]))) {
       st.push(std::stoi(token));
     } else {
       int b = st.pop();
@@ -71,7 +71,10 @@ int eval(const std::string& post) {
       if (token == "+") st.push(a + b);
       if (token == "-") st.push(a - b);
       if (token == "*") st.push(a * b);
-      if (token == "/") st.push(a / b);
+      if (token == "/") {
+        if (b == 0) throw std::invalid_argument("Division by zero");
+        st.push(a / b);
+      }
     }
   }
 
