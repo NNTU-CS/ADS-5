@@ -1,8 +1,8 @@
 // Copyright 2025 NNTU-CS
+#include <cctype>
 #include <string>
 #include <map>
 #include "tstack.h"
-#include <cctype>
 
 std::string infx2pstfx(const std::string& inf) {
   TStack<char, 100> temp;
