@@ -9,23 +9,26 @@ std::string infx2pstfx(const std::string& inf) {
     std::map<char, int> precedence = {
         {'*', 3}, {'/', 3}, {'+', 2}, {'-', 2}, {'(', 1}};
 
-    for (char c : inf) {
+    for (size_t i = 0; i < inf.size(); ++i) {
+        char c = inf[i];
         if (isdigit(c)) {
-            result += c;
+            // Собираем многозначные числа
+            while (i < inf.size() && isdigit(inf[i])) {
+                result += inf[i++];
+            }
+            result += ' ';
+            i--; // Возвращаемся на один символ назад
         } else if (c == '(') {
             stack.push(c);
         } else if (c == ')') {
             while (!stack.isEmpty() && stack.top() != '(') {
-                result += ' ';
                 result += stack.pop();
-            }
-            stack.pop();
-        } else {
-            if (!result.empty() && isdigit(result.back())) {
                 result += ' ';
             }
-            while (!stack.isEmpty() &&
-                precedence[stack.top()] >=precedence[c]) {
+            stack.pop(); // Удаляем '(' из стека
+        } else if (precedence.count(c)) {
+            while (!stack.isEmpty() && stack.top() != '(' &&
+                   precedence[stack.top()] >= precedence[c]) {
                 result += stack.pop();
                 result += ' ';
             }
@@ -34,8 +37,12 @@ std::string infx2pstfx(const std::string& inf) {
     }
 
     while (!stack.isEmpty()) {
-        result += ' ';
         result += stack.pop();
+        result += ' ';
+    }
+
+    if (!result.empty()) {
+        result.pop_back(); // Удаляем последний пробел
     }
 
     return result;
