@@ -3,7 +3,6 @@
 #include <map>
 #include "tstack.h"
 
-using namespace std;
 bool is_digit(char c) {
   return c >= '0' && c <= '9';
 }
@@ -13,17 +12,17 @@ bool is_math_operator(char c) {
 }
 
 int operation_priority(char op) {
-  switch(op) {
+  switch (op) {
   case '+': case '-': return 1;
   case '*': case '/': return 2;
   default: return 0;
   }
 }
 
-string infx2pstfx(const string& inf) {
+std::string infx2pstfx(const std::string& inf) {
   TStack<char, 100> operators;
-  string result = "";
-  string digit_buffer = "";
+  std::string result = "";
+  std::string digit_buffer = "";
   for (int i = 0; i < inf.length(); i++) {
     char current = inf[i];
     if (is_digit(current)) {
@@ -34,19 +33,20 @@ string infx2pstfx(const string& inf) {
       result += digit_buffer + " ";
       digit_buffer = "";
     }
-    if (current == '(') 
+    if (current == '(') {
       operators.push(current);
-    else if (current == ')') {
+    } else if (current == ')') {
       while (!operators.is_empty() && operators.peek() != '(') {
         result += operators.peek();
         result += " ";
         operators.pop();
       }
-      if (!operators.is_empty()) 
+      if (!operators.is_empty()) {
         operators.pop();
-    } 
-    else if (is_math_operator(current)) {
-      while (!operators.is_empty() && operators.peek() != '(' && operation_priority(operators.peek()) >= operation_priority(current)) {
+      }
+    } else if (is_math_operator(current)) {
+      while (!operators.is_empty() && operators.peek() != '(' &&
+        operation_priority(operators.peek()) >= operation_priority(current)) {
         result += operators.peek();
         result += " ";
         operators.pop();
@@ -54,8 +54,9 @@ string infx2pstfx(const string& inf) {
       operators.push(current);
     }
   }
-  if (!digit_buffer.empty()) 
+  if (!digit_buffer.empty()) {
     result += digit_buffer + " ";
+  }
   while (!operators.is_empty()) {
     if (operators.peek() != '(') {
       result += operators.peek();
@@ -63,14 +64,15 @@ string infx2pstfx(const string& inf) {
     }
     operators.pop();
   }
-  if (!result.empty() && result.back() == ' ') 
+  if (!result.empty() && result.back() == ' ') {
     result.pop_back();
+  }
   return result;
 }
 
-int eval(const string& pstfx) {
+int eval(const std::string& pstfx) {
   TStack<int, 100> values;
-  string number = "";
+  std::string number = "";
   for (int i = 0; i < pstfx.length(); i++) {
     char current = pstfx[i];
     if (is_digit(current)) {
@@ -79,8 +81,9 @@ int eval(const string& pstfx) {
     else if (current == ' ') {
       if (!number.empty()) {
         int value = 0;
-        for (int j = 0; j < number.length(); j++)
+        for (int j = 0; j < number.length(); j++) {
           value = value * 10 + (number[j] - '0');
+        }
         values.push(value);
         number = "";
       }
@@ -98,8 +101,9 @@ int eval(const string& pstfx) {
       case '-': result = operand1 - operand2; break;
       case '*': result = operand1 * operand2; break;
        case '/': 
-        if (operand2 != 0) 
+        if (operand2 != 0) {
           result = operand1 / operand2;
+        }
         break;
       }
       values.push(result);
