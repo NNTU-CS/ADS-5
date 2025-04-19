@@ -30,7 +30,7 @@ std::string infx2pstfx(const std::string& inf) {
         out += ' ';
         opStack.pop();
       }
-      if (!opStack.empty()) opStack.pop(); 
+      if (!opStack.empty()) opStack.pop();
     } else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
       while (!opStack.empty() && getPriority(opStack.top()) >= getPriority(ch)) {
         out += opStack.top();
@@ -47,6 +47,10 @@ std::string infx2pstfx(const std::string& inf) {
     opStack.pop();
   }
 
+  if (!out.empty() && out.back() == ' ') {
+    out.pop_back();
+  }
+
   return out;
 }
 
@@ -54,9 +58,7 @@ int eval(const std::string& post) {
   std::stack<int> valStack;
 
   for (size_t i = 0; i < post.length(); ++i) {
-    char ch = post[i];
-
-    if (std::isdigit(ch)) {
+    if (std::isdigit(post[i])) {
       int num = 0;
       while (i < post.length() && std::isdigit(post[i])) {
         num = num * 10 + (post[i] - '0');
@@ -64,13 +66,13 @@ int eval(const std::string& post) {
       }
       valStack.push(num);
       --i;
-    } else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
+    } else if (post[i] == '+' || post[i] == '-' || post[i] == '*' || post[i] == '/') {
       if (valStack.size() < 2) throw std::runtime_error("Недостаточно операндов");
 
       int b = valStack.top(); valStack.pop();
       int a = valStack.top(); valStack.pop();
 
-      switch (ch) {
+      switch (post[i]) {
         case '+': valStack.push(a + b); break;
         case '-': valStack.push(a - b); break;
         case '*': valStack.push(a * b); break;
