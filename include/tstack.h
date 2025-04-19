@@ -5,19 +5,19 @@
 #include <array>
 #include <stdexcept>
 
-template <typename DataType, int StackSize>
-class Stack {
+template <typename T, int size>
+class TStack {
  private:
   static_assert(StackSize > 0, "Stack size must be a positive value");
-  static constexpr int kMaxStackSize = StackSize;
+  static constexpr int kMaxStackSize = size;
 
-  std::array<DataType, kMaxStackSize> items;
+  std::array<T, kMaxStackSize> items;
   int headIndex;
 
  public:
   Stack() : headIndex(-1) {}
 
-  void push(const DataType& item) {
+  void push(const T& item) {
     if (isFull()) {
       throw std::overflow_error("Stack is full: overflow");
     }
@@ -31,14 +31,14 @@ class Stack {
     --headIndex;
   }
 
-  DataType& peek() {
+  T& peek() {
     if (isEmpty()) {
       throw std::underflow_error("Stack is empty");
     }
     return items[headIndex];
   }
 
-  const DataType& peek() const {
+  const T& peek() const {
     if (isEmpty()) {
       throw std::underflow_error("Stack is empty");
     }
