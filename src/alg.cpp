@@ -1,3 +1,5 @@
+// Copyright 2025 Your Name
+
 #include <string>
 #include <stack>
 #include <cctype>
@@ -32,7 +34,8 @@ std::string infx2pstfx(const std::string& inf) {
       }
       if (!opStack.empty()) opStack.pop();
     } else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
-      while (!opStack.empty() && getPriority(opStack.top()) >= getPriority(ch)) {
+      while (!opStack.empty() &&
+             getPriority(opStack.top()) >= getPriority(ch)) {
         out += opStack.top();
         out += ' ';
         opStack.pop();
@@ -66,11 +69,15 @@ int eval(const std::string& post) {
       }
       valStack.push(num);
       --i;
-    } else if (post[i] == '+' || post[i] == '-' || post[i] == '*' || post[i] == '/') {
-      if (valStack.size() < 2) throw std::runtime_error("Недостаточно операндов");
+    } else if (post[i] == '+' || post[i] == '-' ||
+               post[i] == '*' || post[i] == '/') {
+      if (valStack.size() < 2)
+        throw std::runtime_error("Недостаточно операндов");
 
-      int b = valStack.top(); valStack.pop();
-      int a = valStack.top(); valStack.pop();
+      int b = valStack.top();
+      valStack.pop();
+      int a = valStack.top();
+      valStack.pop();
 
       switch (post[i]) {
         case '+': valStack.push(a + b); break;
@@ -81,6 +88,9 @@ int eval(const std::string& post) {
     }
   }
 
-  if (valStack.size() != 1) throw std::runtime_error("Некорректное выражение");
+  if (valStack.size() != 1)
+    throw std::runtime_error("Некорректное выражение");
+
   return valStack.top();
 }
+
