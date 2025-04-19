@@ -1,19 +1,8 @@
 // Copyright 2025 NNTU-CS
 #include <string>
 #include <cctype>
-
-template <typename T, int size>
-class TStack {
- private:
-  T data[size] = {};
-  int top = -1;
-
- public:
-  void push(const T& val) { data[++top] = val; }
-  T pop() { return data[top--]; }
-  T topElem() const { return data[top]; }
-  bool isEmpty() const { return top == -1; }
-};
+#include <sstream>
+#include "tstack.h"
 
 int priority(char op) {
   if (op == '+' || op == '-') return 1;
@@ -21,17 +10,17 @@ int priority(char op) {
   return 0;
 }
 
-std::string infx2pstfx(const std::string& s) {
+std::string infx2pstfx(const std::string& inf) {
   std::string res;
   TStack<char, 100> st;
   size_t i = 0;
 
-  while (i < s.size()) {
-    char c = s[i];
+  while (i < inf.size()) {
+    char c = inf[i];
     
     if (isdigit(c)) {
-      while (i < s.size() && isdigit(s[i])) {
-        res += s[i++];
+      while (i < inf.size() && isdigit(inf[i])) {
+        res += inf[i++];
       }
       res += ' ';
     } 
@@ -68,46 +57,21 @@ std::string infx2pstfx(const std::string& s) {
   return res;
 }
 
-int eval(const std::string& s) {
+int eval(const std::string& post) {
   TStack<int, 100> st;
-  std::string num;
+  std::istringstream iss(post);
+  std::string token;
 
-  for (char c : s) {
-    if (isdigit(c)) {
-      num += c;
-    } else if (c == ' ' && !num.empty()) {
-      st.push(std::stoi(num));
-      num.clear();
-    } else if (c == '+' || c == '-' || c == '*' || c == '/') {
-      int b = st.pop(), a = st.pop();
-      if (c == '+') st.push(a + b);
-      if (c == '-') st.push(a - b);
-      if (c == '*') st.push(a * b);
-      if (c == '/') st.push(a / b);
-    }
-  }
-
-  return st.pop();
-}
-
-}
-
-int eval(const std::string& s) {
-  TStack<int, 100> st;
-  std::string num;
-
-  for (char c : s) {
-    if (isdigit(c)) {
-      num += c;
-    } else if (c == ' ' && !num.empty()) {
-      st.push(std::stoi(num));
-      num.clear();
-    } else if (c == '+' || c == '-' || c == '*' || c == '/') {
-      int b = st.pop(), a = st.pop();
-      if (c == '+') st.push(a + b);
-      if (c == '-') st.push(a - b);
-      if (c == '*') st.push(a * b);
-      if (c == '/') st.push(a / b);
+  while (iss >> token) {
+    if (isdigit(token[0])) {
+      st.push(std::stoi(token));
+    } else {
+      int b = st.pop();
+      int a = st.pop();
+      if (token == "+") st.push(a + b);
+      if (token == "-") st.push(a - b);
+      if (token == "*") st.push(a * b);
+      if (token == "/") st.push(a / b);
     }
   }
 
