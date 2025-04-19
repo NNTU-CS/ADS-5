@@ -1,17 +1,18 @@
 // Copyright 2021 NNTU-CS
-#ifndef GUARD_TSTACK_H
-#define GUARD_TSTACK_H
+#ifndef INCLUDE_TSTACK_H_
+#define INCLUDE_TSTACK_H_
 
-template <typename T, int max_depth>
+template <typename T, int size>
 class TStack {
-private:
-  T elements[max_depth];
+ private:
+  T elements[size];
   int head_pos;
-public:
+
+ public:
   TStack() : head_pos(-1) {}
 
   void push(const T& item) {
-    if (head_pos >= max_depth - 1) throw std::overflow_error("Stack full");
+    if (head_pos >= size - 1) throw std::overflow_error("Stack full");
     elements[++head_pos] = item;
   }
 
@@ -30,4 +31,4 @@ public:
   }
 };
 
-#endif  // GUARD_TSTACK_H
+#endif  // INCLUDE_TSTACK_H_
