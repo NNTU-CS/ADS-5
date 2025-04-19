@@ -2,17 +2,17 @@
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 
-template <typename T, int size>
+template <typename T, int Size>
 class TStack {
  private:
-  T elements[size];
+  T elements[Size];
   int head_pos;
 
  public:
   TStack() : head_pos(-1) {}
 
   void push(const T& item) {
-    if (head_pos >= size - 1) throw std::overflow_error("Stack full");
+    if (head_pos >= Size - 1) throw std::overflow_error("Stack full");
     elements[++head_pos] = item;
   }
 
