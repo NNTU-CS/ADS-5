@@ -1,44 +1,59 @@
-// Copyright 2025 NNTU-CS
+// Copyright 2021 NNTU-CS
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 
-template<typename T, int kSize>
+#include <array>
+#include <stdexcept>
+
+template <typename T, int N>
 class TStack {
+  static_assert(N > 0, "Stack size must be greater than 0");
+
  private:
-  T data[kSize];
-  int topIndex;
+  std::array<T, N> buffer_;
+  int index_;
 
  public:
-  TStack() : topIndex(-1) {}
+  TStack() : index_(-1) {}
 
-  void push(const T& value) {
-    if (topIndex >= kSize - 1)
-      throw std::overflow_error("Stack overflow");
-    data[++topIndex] = value;
+  void push(const T& item) {
+    if (isFull()) {
+      throw std::overflow_error("Cannot push: stack is full");
+    }
+    buffer_[++index_] = item;
   }
 
-  T pop() {
-    if (isEmpty())
-      throw std::underflow_error("Stack underflow");
-    return data[topIndex--];
+  void pop() {
+    if (isEmpty()) {
+      throw std::underflow_error("Cannot pop: stack is empty");
+    }
+    --index_;
   }
 
-  T top() const {
-    if (isEmpty())
+  T& top() {
+    if (isEmpty()) {
       throw std::underflow_error("Stack is empty");
-    return data[topIndex];
+    }
+    return buffer_[index_];
+  }
+
+  const T& top() const {
+    if (isEmpty()) {
+      throw std::underflow_error("Stack is empty");
+    }
+    return buffer_[index_];
   }
 
   bool isEmpty() const {
-    return topIndex == -1;
+    return index_ < 0;
   }
 
   bool isFull() const {
-    return topIndex >= kSize - 1;
+    return index_ >= N - 1;
   }
 
-  void clear() {
-    topIndex = -1;
+  int size() const {
+    return index_ + 1;
   }
 };
 
