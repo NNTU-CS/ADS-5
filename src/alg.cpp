@@ -29,7 +29,7 @@ std::string infx2pstfx(const std::string& inf) {
         output += opStack.pop();
         output += ' ';
       }
-      if (!opStack.isEmpty()) opStack.pop(); // удаляем '('
+      if (!opStack.isEmpty()) opStack.pop();
     } else if (c == '+' || c == '-' || c == '*' || c == '/') {
       while (!opStack.isEmpty() && priority(opStack.top()) >= priority(c)) {
         output += opStack.pop();
