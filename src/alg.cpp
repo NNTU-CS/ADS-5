@@ -67,7 +67,11 @@ int eval(const std::string& post) {
       if (token == "+") st.push(a + b);
       else if (token == "-") st.push(a - b);
       else if (token == "*") st.push(a * b);
-      else if (token == "/") st.push(a / b);
+      else if (token == "/") {
+        if (b == 0)
+          throw std::runtime_error("Division by zero");
+        st.push(a / b);
+      }
     }
   }
 
