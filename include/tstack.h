@@ -2,31 +2,31 @@
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 
+#include <stdexcept>
+
 template<typename T, int size>
 class TStack {
  private:
-  T data[size] = {};  // Удалены лишние пробелы в конце строки
+  T data[size];
   int top = -1;
 
  public:
   void push(const T& val) {
-    if (top < size - 1) {
-      data[++top] = val;
-    }
+    if (top >= size - 1)
+      throw std::runtime_error("Stack overflow");
+    data[++top] = val;
   }
 
   T pop() {
-    if (top >= 0) {
-      return data[top--];
-    }
-    return T();
+    if (top < 0)
+      throw std::runtime_error("Stack underflow");
+    return data[top--];
   }
 
   T topElem() const {
-    if (top >= 0) {
-      return data[top];
-    }
-    return T();
+    if (top < 0)
+      throw std::runtime_error("Stack is empty");
+    return data[top];
   }
 
   bool isEmpty() const {
