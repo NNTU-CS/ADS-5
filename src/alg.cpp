@@ -2,6 +2,7 @@
 #include <string>
 #include <cctype>
 #include <sstream>
+#include <stdexcept>
 #include "tstack.h"
 
 int priority(char op) {
@@ -31,7 +32,9 @@ std::string infx2pstfx(const std::string& inf) {
         res += st.pop();
         res += ' ';
       }
-      if (!st.isEmpty()) st.pop();
+      if (!st.isEmpty()) {
+        st.pop();
+      }
       i++;
     } else if (c == '+' || c == '-' || c == '*' || c == '/') {
       while (!st.isEmpty() && priority(st.topElem()) >= priority(c)) {
@@ -64,12 +67,16 @@ int eval(const std::string& post) {
     } else {
       int b = st.pop();
       int a = st.pop();
-      if (token == "+") st.push(a + b);
-      else if (token == "-") st.push(a - b);
-      else if (token == "*") st.push(a * b);
-      else if (token == "/") {
-        if (b == 0)
+      if (token == "+") {
+        st.push(a + b);
+      } else if (token == "-") {
+        st.push(a - b);
+      } else if (token == "*") {
+        st.push(a * b);
+      } else if (token == "/") {
+        if (b == 0) {
           throw std::runtime_error("Division by zero");
+        }
         st.push(a / b);
       }
     }
