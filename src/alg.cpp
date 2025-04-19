@@ -24,7 +24,8 @@ std::string infx2pstfx(const std::string& inf) {
             if (!result.empty() && isdigit(result.back())) {
                 result += ' ';
             }
-            while (!stack.isEmpty() && precedence[stack.top()] >= precedence[c]) {
+            while (!stack.isEmpty() &&
+                precedence[stack.top()] >=precedence[c]) {
                 result += stack.pop();
                 result += ' ';
             }
