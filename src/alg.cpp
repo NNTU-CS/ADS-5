@@ -4,7 +4,7 @@
 #include "tstack.h"
 
 bool isDigit(char ch) {
-  return ch >= '0' && ch <= '9';
+  return ch >= '0' && ch <= '9'; 
 }
 
 bool isOperator(char ch) {
@@ -13,11 +13,12 @@ bool isOperator(char ch) {
 
 int toInt(const std::string& s) {
   int result = 0;
-  for (size_t i = 0; i < s.length(); ++i) {
-    result = result * 10 + (s[i] - '0');
+  for (char ch : s) {
+    result = result * 10 + (ch - '0');
   }
   return result;
 }
+
 
 std::string infx2pstfx(const std::string& inf) {
   std::map<char, int> precedence;
@@ -29,10 +30,11 @@ std::string infx2pstfx(const std::string& inf) {
     char ch = inf[i];
     if (ch == ' ') continue;
     if (isDigit(ch)) {
+      std::string num;
       while (i < inf.length() && isDigit(inf[i])) {
-        output += inf[i++];
+        num += inf[i++];
       }
-      output += ' ';
+      output += num + ' ';
       --i;
     } else if (ch == '(') {
       stack.push(ch);
@@ -42,8 +44,9 @@ std::string infx2pstfx(const std::string& inf) {
         output += ' ';
       }
       if (!stack.isEmpty()) stack.pop();
-    } else if (isOperator(ch)) {
-      while (!stack.isEmpty() && stack.peek() != '(' && precedence[ch] <= precedence[stack.peek()]) {
+        } else if (isOperator(ch)) {
+      while (!stack.isEmpty() && stack.peek() != '(' &&
+        precedence[ch] <= precedence[stack.peek()]) {
         output += stack.pop();
         output += ' ';
       }
@@ -68,14 +71,22 @@ int eval(const std::string& pref) {
         num.clear();
       }
     } else if (isDigit(ch)) {
-        num += ch;
+      num += ch;
     } else if (isOperator(ch)) {
+      if (stack.isEmpty()) throw "Invalid postfix expression";
       int b = stack.pop();
+      if (stack.isEmpty()) throw "Invalid postfix expression";
       int a = stack.pop();
       switch (ch) {
-        case '+': stack.push(a + b); break;
-        case '-': stack.push(a - b); break;
-        case '*': stack.push(a * b); break;
+        case '+':
+          stack.push(a + b);
+          break;
+        case '-':
+          stack.push(a - b);
+          break;
+        case '*':
+          stack.push(a * b);
+          break;
         case '/':
           if (b == 0) throw "Division by zero";
           stack.push(a / b);
@@ -83,5 +94,10 @@ int eval(const std::string& pref) {
       }
     }
   }
-  return stack.pop();
+  if (stack.isEmpty()) throw "Invalid postfix expression";
+  int result = stack.pop();
+  if (!stack.isEmpty()) {
+    throw "Invalid postfix expression";
+  }
+  return result;
 }
