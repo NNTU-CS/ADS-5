@@ -6,8 +6,10 @@
 
 int getPriority(char op) {
     switch (op) {
-        case '+': case '-': return 1;
-        case '*': case '/': return 2;
+        case '+': 
+        case '-': return 1;
+        case '*': 
+        case '/': return 2;
         default: return 0;
     }
 }
@@ -82,10 +84,14 @@ int eval(const std::string& postfix) {
                    (token[0] == '+' || token[0] == '-' ||
                     token[0] == '*' || token[0] == '/')) {
 
-            if (valStack.isEmpty()) throw std::runtime_error("Not enough operands");
+            if (valStack.isEmpty()) {
+                throw std::runtime_error("Not enough operands");
+            }
 
             int right = valStack.top(); valStack.pop();
-            if (valStack.isEmpty()) throw std::runtime_error("Not enough operands");
+            if (valStack.isEmpty()) {
+                throw std::runtime_error("Not enough operands");
+            }
 
             int left = valStack.top(); valStack.pop();
             int outcome = 0;
@@ -95,7 +101,9 @@ int eval(const std::string& postfix) {
                 case '-': outcome = left - right; break;
                 case '*': outcome = left * right; break;
                 case '/':
-                    if (right == 0) throw std::runtime_error("Division by zero");
+                    if (right == 0) {
+                        throw std::runtime_error("Division by zero");
+                    }
                     outcome = left / right; break;
                 default:
                     throw std::runtime_error("Unknown operator");
@@ -107,7 +115,9 @@ int eval(const std::string& postfix) {
         }
     }
 
-    if (valStack.isEmpty()) throw std::runtime_error("No result found");
+    if (valStack.isEmpty()) {
+        throw std::runtime_error("No result found");
+    }
 
     int finalResult = valStack.top();
     valStack.pop();
