@@ -5,30 +5,14 @@
 template <typename T, int size>
 class TStack {
  private:
-  T arr[size];
-  int topIndex;
+  T data[size] = {};
+  int top = -1;
 
  public:
-  TStack() : topIndex(-1) {}
-
-  void push(const T& value) {
-    if (topIndex >= size - 1) throw "Stack overflow";
-    arr[++topIndex] = value;
-  }
-
-  T pop() {
-    if (topIndex < 0) throw "Stack underflow";
-    return arr[topIndex--];
-  }
-
-  T top() const {
-    if (topIndex < 0) throw "Stack is empty";
-    return arr[topIndex];
-  }
-
-  bool isEmpty() const {
-    return topIndex < 0;
-  }
+  void push(const T& val) { data[++top] = val; }
+  T pop() { return data[top--]; }
+  T topElem() const { return data[top]; }
+  bool isEmpty() const { return top == -1; }
 };
 
 int priority(char op) {
@@ -37,52 +21,57 @@ int priority(char op) {
   return 0;
 }
 
-std::string infx2pstfx(const std::string& infx) {
-  std::string output;
-  TStack<char, 100> opStack;
+std::string infx2pstfx(const std::string& s) {
+  std::string res;
+  TStack<char, 100> st;
 
-  for (char c : infx) {
+  for (char c : s) {
     if (isdigit(c)) {
-      output += c;
+      res += c;
+      res += ' ';
     } else if (c == '(') {
-      opStack.push(c);
+      st.push(c);
     } else if (c == ')') {
-      while (!opStack.isEmpty() && opStack.top() != '(') {
-        output += opStack.pop();
+      while (!st.isEmpty() && st.topElem() != '(') {
+        res += st.pop();
+        res += ' ';
       }
-      if (!opStack.isEmpty()) opStack.pop();  // Удаляем '('
-    } else {
-      while (!opStack.isEmpty() && priority(opStack.top()) >= priority(c)) {
-        output += opStack.pop();
+      st.pop();
+    } else if (c == '+' || c == '-' || c == '*' || c == '/') {
+      while (!st.isEmpty() && priority(st.topElem()) >= priority(c)) {
+        res += st.pop();
+        res += ' ';
       }
-      opStack.push(c);
+      st.push(c);
     }
   }
 
-  while (!opStack.isEmpty()) {
-    output += opStack.pop();
+  while (!st.isEmpty()) {
+    res += st.pop();
+    res += ' ';
   }
 
-  return output;
+  return res;
 }
 
-int eval(const std::string& pstfx) {
-  TStack<int, 100> valStack;
+int eval(const std::string& s) {
+  TStack<int, 100> st;
+  std::string num;
 
-  for (char c : pstfx) {
+  for (char c : s) {
     if (isdigit(c)) {
-      valStack.push(c - '0');
-    } else {
-      int b = valStack.pop();
-      int a = valStack.pop();
-      switch (c) {
-        case '+': valStack.push(a + b); break;
-        case '-': valStack.push(a - b); break;
-        case '*': valStack.push(a * b); break;
-        case '/': valStack.push(a / b); break;
-      }
+      num += c;
+    } else if (c == ' ' && !num.empty()) {
+      st.push(std::stoi(num));
+      num.clear();
+    } else if (c == '+' || c == '-' || c == '*' || c == '/') {
+      int b = st.pop(), a = st.pop();
+      if (c == '+') st.push(a + b);
+      if (c == '-') st.push(a - b);
+      if (c == '*') st.push(a * b);
+      if (c == '/') st.push(a / b);
     }
   }
 
-  return valStack.pop();
+  return st.pop();
 }
