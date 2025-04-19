@@ -6,7 +6,9 @@
 std::string infx2pstfx(const std::string& inf) {
     std::string result;
     TStack<char, 100> stack;
-    std::map<char, int> precedence = {{'*', 3}, {'/', 3}, {'+', 2}, {'-', 2}, {'(', 1}};
+    std::map<char, int> precedence = {
+        {'*', 3}, {'/', 3}, {'+', 2}, {'-', 2}, {'(', 1}};
+
     for (char c : inf) {
         if (isdigit(c)) {
             result += c;
@@ -29,17 +31,20 @@ std::string infx2pstfx(const std::string& inf) {
             stack.push(c);
         }
     }
+
     while (!stack.isEmpty()) {
         result += ' ';
         result += stack.pop();
     }
+
     return result;
 }
 
-int eval(const std::string& pref) {
+int eval(const std::string& post) {
     TStack<int, 100> stack;
     int num = 0;
     bool readingNum = false;
+
     for (char c : post) {
         if (isdigit(c)) {
             num = num * 10 + (c - '0');
@@ -61,5 +66,6 @@ int eval(const std::string& pref) {
             }
         }
     }
+
     return stack.top();
 }
