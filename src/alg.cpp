@@ -41,7 +41,7 @@ std::string infx2pstfx(const std::string& input) {
                 throw std::runtime_error("Err");
             }
         } else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
-            while (!opStack.isEmpty() && 
+            while (!opStack.isEmpty() &&
                    getPriority(opStack.top()) >= getPriority(ch)) {
                 result += opStack.top();
                 result += ' ';
@@ -78,10 +78,9 @@ int eval(const std::string& postfix) {
     while (stream >> token) {
         if (isdigit(token[0])) {
             valStack.push(std::stoi(token));
-        } else if (token.length() == 1 && 
-                   (token[0] == '+' || token[0] == '-' || 
+        } else if (token.length() == 1 &&
+                   (token[0] == '+' || token[0] == '-' ||
                     token[0] == '*' || token[0] == '/')) {
-
             if (valStack.isEmpty()) throw std::runtime_error("Err");
 
             int right = valStack.top(); valStack.pop();
