@@ -98,7 +98,7 @@ int eval(const std::string& pstfx) {
       case '+': result = operand1 + operand2; break;
       case '-': result = operand1 - operand2; break;
       case '*': result = operand1 * operand2; break;
-       case '/': 
+       case '/':
         if (operand2 != 0) {
         result = operand1 / operand2;
         }
