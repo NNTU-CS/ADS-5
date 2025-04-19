@@ -77,8 +77,7 @@ int eval(const std::string& pstfx) {
     char current = pstfx[i];
     if (is_digit(current)) {
       number += current;
-    } 
-    else if (current == ' ') {
+    } else if (current == ' ') {
       if (!number.empty()) {
         int value = 0;
         for (int j = 0; j < number.length(); j++) {
@@ -87,8 +86,7 @@ int eval(const std::string& pstfx) {
         values.push(value);
         number = "";
       }
-    } 
-    else if (is_math_operator(current)) {
+    } else if (is_math_operator(current)) {
       if (values.is_empty()) continue;
       int operand2 = values.peek();
       values.pop();
@@ -102,7 +100,7 @@ int eval(const std::string& pstfx) {
       case '*': result = operand1 * operand2; break;
        case '/': 
         if (operand2 != 0) {
-          result = operand1 / operand2;
+        result = operand1 / operand2;
         }
         break;
       }
