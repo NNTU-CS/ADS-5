@@ -38,7 +38,7 @@ std::string infx2pstfx(const std::string& input) {
             if (!opStack.isEmpty() && opStack.top() == '(') {
                 opStack.pop();
             } else {
-                throw std::runtime_error("Mismatched parenthesis");
+                throw std::runtime_error("Err");
             }
         } else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
             while (!opStack.isEmpty() && 
@@ -49,14 +49,14 @@ std::string infx2pstfx(const std::string& input) {
             }
             opStack.push(ch);
         } else {
-            throw std::runtime_error("Invalid character: " + std::string(1, ch));
+            throw std::runtime_error("Err");
         }
     }
 
     while (!opStack.isEmpty()) {
         char topOp = opStack.top();
         if (topOp == '(' || topOp == ')') {
-            throw std::runtime_error("Mismatched parentheses in expression");
+            throw std::runtime_error("Err");
         }
         result += topOp;
         result += ' ';
@@ -82,10 +82,10 @@ int eval(const std::string& postfix) {
                    (token[0] == '+' || token[0] == '-' || 
                     token[0] == '*' || token[0] == '/')) {
 
-            if (valStack.isEmpty()) throw std::runtime_error("Not enough operands");
+            if (valStack.isEmpty()) throw std::runtime_error("Err");
 
             int right = valStack.top(); valStack.pop();
-            if (valStack.isEmpty()) throw std::runtime_error("Not enough operands");
+            if (valStack.isEmpty()) throw std::runtime_error("Err");
 
             int left = valStack.top(); valStack.pop();
             int outcome = 0;
@@ -95,25 +95,25 @@ int eval(const std::string& postfix) {
                 case '-': outcome = left - right; break;
                 case '*': outcome = left * right; break;
                 case '/':
-                    if (right == 0) throw std::runtime_error("Division by zero");
+                    if (right == 0) throw std::runtime_error("Err");
                     outcome = left / right; break;
                 default:
-                    throw std::runtime_error("Unknown operator");
+                    throw std::runtime_error("Err");
             }
 
             valStack.push(outcome);
         } else {
-            throw std::runtime_error("Unexpected token: " + token);
+            throw std::runtime_error("Err");
         }
     }
 
-    if (valStack.isEmpty()) throw std::runtime_error("No result found");
+    if (valStack.isEmpty()) throw std::runtime_error("Empty");
 
     int finalResult = valStack.top();
     valStack.pop();
 
     if (!valStack.isEmpty()) {
-        throw std::runtime_error("Too many operands left on the stack");
+        throw std::runtime_error("erroneously");
     }
 
     return finalResult;
