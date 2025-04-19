@@ -39,7 +39,7 @@ std::string infx2pstfx(const std::string& expression) {
       }
       if (op_stack.hasElements()) op_stack.remove();
     } else if (checkIfOperator(current)) {
-      while (op_stack.hasElements() 
+      while (op_stack.hasElements()
         && priority(op_stack.check()) >= priority(current)) {
         result += op_stack.remove();
         result += ' ';
