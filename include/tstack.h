@@ -4,34 +4,50 @@
 
 #include <stdexcept>
 
-template<typename T, int size>
+template<typename T, int kCapacity>
 class TStack {
  private:
-  T data[size];
-  int top = -1;
+    T stackData[kCapacity];
+    int currentIndex;
 
  public:
-  void push(const T& val) {
-    if (top >= size - 1)
-      throw std::runtime_error("Stack overflow");
-    data[++top] = val;
-  }
+    TStack() : currentIndex(-1) {}
 
-  T pop() {
-    if (top < 0)
-      throw std::runtime_error("Stack underflow");
-    return data[top--];
-  }
+    bool isEmpty() const {
+        return currentIndex == -1;
+    }
 
-  T topElem() const {
-    if (top < 0)
-      throw std::runtime_error("Stack is empty");
-    return data[top];
-  }
+    bool isFull() const {
+        return currentIndex == kCapacity - 1;
+    }
 
-  bool isEmpty() const {
-    return top == -1;
-  }
+    void push(const T& value) {
+        if (isFull()) {
+            throw std::overflow_error("Stack overflow: push to full stack");
+        }
+        stackData[++currentIndex] = value;
+    }
+
+    void pop() {
+        if (isEmpty()) {
+            throw std::underflow_error("Stack underflow: pop from empty stack");
+        }
+        --currentIndex;
+    }
+
+    const T& top() const {
+        if (isEmpty()) {
+            throw std::runtime_error("Accessing top of empty stack");
+        }
+        return stackData[currentIndex];
+    }
+
+    T& top() {
+        if (isEmpty()) {
+            throw std::runtime_error("Accessing top of empty stack");
+        }
+        return stackData[currentIndex];
+    }
 };
 
 #endif  // INCLUDE_TSTACK_H_
