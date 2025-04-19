@@ -24,29 +24,39 @@ int priority(char op) {
 std::string infx2pstfx(const std::string& s) {
   std::string res;
   TStack<char, 100> st;
+  size_t i = 0;
 
-  for (size_t i = 0; i < s.size(); ++i) {
+  while (i < s.size()) {
     char c = s[i];
+    
     if (isdigit(c)) {
       while (i < s.size() && isdigit(s[i])) {
         res += s[i++];
       }
       res += ' ';
-      --i;
-    } else if (c == '(') {
+    } 
+    else if (c == '(') {
       st.push(c);
-    } else if (c == ')') {
+      i++;
+    } 
+    else if (c == ')') {
       while (!st.isEmpty() && st.topElem() != '(') {
         res += st.pop();
         res += ' ';
       }
       if (!st.isEmpty()) st.pop();
-    } else if (c == '+' || c == '-' || c == '*' || c == '/') {
+      i++;
+    }
+    else if (c == '+' || c == '-' || c == '*' || c == '/') {
       while (!st.isEmpty() && priority(st.topElem()) >= priority(c)) {
         res += st.pop();
         res += ' ';
       }
       st.push(c);
+      i++;
+    } 
+    else {
+      i++;
     }
   }
 
@@ -56,6 +66,30 @@ std::string infx2pstfx(const std::string& s) {
   }
 
   return res;
+}
+
+int eval(const std::string& s) {
+  TStack<int, 100> st;
+  std::string num;
+
+  for (char c : s) {
+    if (isdigit(c)) {
+      num += c;
+    } else if (c == ' ' && !num.empty()) {
+      st.push(std::stoi(num));
+      num.clear();
+    } else if (c == '+' || c == '-' || c == '*' || c == '/') {
+      int b = st.pop(), a = st.pop();
+      if (c == '+') st.push(a + b);
+      if (c == '-') st.push(a - b);
+      if (c == '*') st.push(a * b);
+      if (c == '/') st.push(a / b);
+    }
+  }
+
+  return st.pop();
+}
+
 }
 
 int eval(const std::string& s) {
