@@ -1,92 +1,112 @@
 // Copyright 2025 NNTU-CS
-#include <string>
-#include <map>
 #include <cctype>
 #include <sstream>
 #include <stdexcept>
+#include <string>
+
 #include "tstack.h"
 
-int priority(char op) {
-    if (op == '+' || op == '-') return 1;
-    if (op == '*' || op == '/') return 2;
-    return 0;
+namespace {
+
+int getPrecedence(char op) {
+  switch (op) {
+    case '+':
+    case '-':
+      return 1;
+    case '*':
+    case '/':
+      return 2;
+    default:
+      return 0;
+  }
 }
 
-std::string infx2pstfx(const std::string& inf) {
-    TStack<char, 100> opStack;
-    std::string result;
-    int i = 0;
-    while (i < inf.size()) {
-        if (isdigit(inf[i])) {
-            while (i < inf.size() && isdigit(inf[i])) {
-                result += inf[i];
-                i++;
-            }
-            result += ' ';
-        }
-        else if (inf[i] == '(') {
-            opStack.push('(');
-            i++;
-        }
-        else if (inf[i] == ')') {
-            while (!opStack.isEmpty() &&
-                opStack.top() != '(') {
-                result += opStack.pop();
-                result += ' ';
-            }
-            opStack.pop();
-            i++;
-        }
-        else if (inf[i] == '+' || inf[i] == '-' || inf[i] == '*' || 
-            inf[i] == '/') {
-            while (!opStack.isEmpty() && priority(opStack.top()) >= 
-                priority(inf[i])) {
-                result += opStack.pop();
-                result += ' ';
-            }
-            opStack.push(inf[i]);
-            i++;
-        }
-        else {
-            i++;
-        }
-    }
+bool isOperator(char ch) {
+  return ch == '+'  ch == '-'  ch == '*' || ch == '/';
+}
 
-    while (!opStack.isEmpty()) {
-        result += opStack.pop();
+}  // namespace
+
+std::string infx2pstfx(const std::string& expr) {
+  TStack<char, 128> opStack;
+  std::string result;
+
+  for (size_t i = 0; i < expr.length(); ++i) {
+    char current = expr[i];
+
+    if (std::isspace(static_cast<unsigned char>(current))) continue;
+
+    if (std::isdigit(static_cast<unsigned char>(current))) {
+      while (i < expr.length() && std::isdigit(static_cast<unsigned char>(expr[i]))) {
+        result += expr[i++];
+      }
+      result += ' ';
+      --i;
+    } else if (current == '(') {
+      opStack.push(current);
+    } else if (current == ')') {
+      while (!opStack.isEmpty() && opStack.top() != '(') {
+        result += opStack.top();
         result += ' ';
+        opStack.pop();
+      }
+      if (!opStack.isEmpty()) opStack.pop();  // Remove '('
+    } else if (isOperator(current)) {
+      while (!opStack.isEmpty() && isOperator(opStack.top()) &&
+             getPrecedence(opStack.top()) >= getPrecedence(current)) {
+        result += opStack.top();
+        result += ' ';
+        opStack.pop();
+      }
+      opStack.push(current);
     }
+  }
 
-    return result;
+  while (!opStack.isEmpty()) {
+    result += opStack.top();
+    result += ' ';
+    opStack.pop();
+  }
+
+  if (!result.empty() && result.back() == ' ') result.pop_back();
+  return result;
 }
 
-int eval(const std::string& post) {
-    TStack<int, 100> valStack;
-    std::stringstream ss(post);
-    std::string token;
+int eval(const std::string& postfix) {
+  std::stringstream stream(postfix);
+  std::string part;
+  TStack<int, 128> values;
 
-    while (ss >> token) {
-        if (isdigit(token[0]) || (token[0] == '-' && token.size() > 1)) {
-            valStack.push(std::stoi(token));
-        }
-        else if (token.size() == 1 && std::string("+-*/").find(token[0]) != 
-            std::string::npos) {
-            int b = valStack.pop();
-            int a = valStack.pop();
-            int result = 0;
-            switch (token[0]) {
-            case '+': result = a + b; break;
-            case '-': result = a - b; break;
-            case '*': result = a * b; break;
-            case '/':
-                if (b == 0)
-                    throw std::runtime_error("division by zero");
-                result = a / b;
-                break;
-            }
-            valStack.push(result);
-        }
+  while (stream >> part) {
+    if (part.length() == 1 && isOperator(part[0])) {
+      if (values.size() < 2) {
+        throw std::runtime_error("Invalid postfix expression");
+      }
+      int b = values.top(); values.pop();
+      int a = values.top(); values.pop();
+
+      switch (part[0]) {
+        case '+':
+          values.push(a + b);
+          break;
+        case '-':
+          values.push(a - b);
+          break;
+        case '*':
+          values.push(a * b);
+          break;
+        case '/':
+          values.push(a / b);
+          break;
+      }
+    } else {
+      values.push(std::stoi(part));
     }
+  }
 
-    return valStack.pop();
+  if (values.size() != 1) {
+    throw std::runtime_error("Invalid postfix expression");
+  }
+
+  return values.top();
 }
