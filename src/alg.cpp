@@ -15,14 +15,14 @@ int priority(char op) {
         case '^':
             return 3;
         default:
-            return 0;}
+            return 0;}}
 
 std::string infx2pstfx(const std::string& inf) {
   std::string postfix = "";
   TStack<char, 100> stack1;
 
     for (int i = 0; i < inf.length(); ++i) {
-        char ln = inf[i]; 
+        char ln = inf[i];
         if (isspace(ln)) continue;
         if (isalnum(ln)) {
           std::string num;
@@ -33,10 +33,8 @@ std::string infx2pstfx(const std::string& inf) {
               pos++;
               i++;
           }
-  }
-    }     
-  postfix += num + " ";
-} else if (ln == '(') {
+        postfix += num + " ";
+        } else if (ln == '(') {
       stack1.Push(ln);
         } else if (ln == ')') {
       while (!stack1.IsEmpty() && stack1.peek() != '(') {
@@ -61,8 +59,8 @@ std::string infx2pstfx(const std::string& inf) {
   if (!postfix.empty() && postfix.back() == ' ') {
       postfix.pop_back();
   }
-
   return postfix;
+    }
 }
 
 
@@ -95,4 +93,4 @@ int eval(const std::string& pref) {
         } else {
             return 0;
         }
-}
+
