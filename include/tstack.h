@@ -7,11 +7,11 @@
 
 template <typename T, int kStackSize>
 class TStack {
-private:
+private: 
   T stackArray[kStackSize];
   int topIndex;
 
-public:
+public: 
   TStack() : topIndex(-1) {}
   void push(const T& value) {
     if (topIndex >= kStackSize - 1) {
@@ -35,4 +35,5 @@ public:
     return topIndex == -1;
   }
 };
+
 #endif // INCLUDE_TSTACK_H_
