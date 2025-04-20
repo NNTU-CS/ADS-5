@@ -21,7 +21,7 @@ class TStack {
     T get()const {
       if (!isEmpty() )
         return arr[top];
-     else
+      else
         throw "Empty_get";
     }
     void push(T item) {
