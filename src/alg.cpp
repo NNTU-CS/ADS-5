@@ -1,7 +1,19 @@
 // Copyright 2025 NNTU-CS
 #include <string>
 #include <map>
+#include <stdexcept>
+#include <cctype>
 #include "tstack.h"
+
+int checkpriority(char sign) {
+  switch (sign) {
+  case '(': return 0; 
+  case ')': return 1;
+  case '+': case '-': return 2;
+  case '*': case '/': return 3;
+  default: return -1; 
+  }
+}
 
 std::string infx2pstfx(const std::string& inf) {
   std::string postfix;
