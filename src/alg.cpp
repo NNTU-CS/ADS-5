@@ -52,13 +52,13 @@ std::string infx2pstfx(const std::string& inf) {
                 stack.pop();
             }
         } else if (isOperator(inf[i])) {
-            char c=stack.peekLast();
+            char c = stack.peekLast();
             while (!stack.isEmpty() && (Prioritet(inf[i]) <= Prioritet(c))) {
                 pstfx += stack.pop();
                 pstfx += ' ';
             }
             stack.Push(inf[i]);
-        }  
+        }
     }
     while (!stack.isEmpty()) {
         pstfx += stack.pop();
@@ -70,12 +70,11 @@ std::string infx2pstfx(const std::string& inf) {
 
 int eval(const std::string& pref) {
     TStack<int, 50>stack;
-    for (int i = 0;i < pref.length();i++) {
+    for (int i = 0; i < pref.length(); i++) {
         if (isdigit(pref[i])) {
             std::string value;
             value += pref[i];
-            while (isDigit(pref[++i]))
-            {
+            while (isDigit(pref[++i])) {
                 value += pref[i];
             }
             stack.Push(std::stoi(value));
