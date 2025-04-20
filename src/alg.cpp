@@ -27,7 +27,7 @@ std::string infx2pstfx(const std::string& inf) {
     if (std::isspace(ch)) continue;
 
     if (std::isdigit(ch)) {
-      while (i < infix.size() && std::isdigit(infix[n])) {
+      while (n < infix.size() && std::isdigit(infix[n])) {
         postfix += infix[n++];
       }
       postfix += ' ';
