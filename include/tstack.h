@@ -2,15 +2,15 @@
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 
-template<typename T, int size>
+template<typename T, int kSize>
 class TStack {
  private:
-    T data[size];
+    T data[kSize];
     int top;
  public:
     TStack() : top(-1) {}
     void push(const T& value) {
-        if (top >= size - 1) throw "Stack overflow";
+        if (top >= kSize - 1) throw "Stack overflow";
         data[++top] = value;
     }
     T pop() {
