@@ -1,6 +1,8 @@
 // Copyright 2025 NNTU-CS
 #include <string>
 #include <map>
+#include <cctype>
+#include <stack>
 #include "tstack.h"
 int priority(char op) {
     switch (op) {
@@ -20,6 +22,8 @@ std::string infx2pstfx(const std::string& inf) {
   TStack<char, 100> stack;
 
   for (char ln: inf){
+    if (isspace(ln)) continue;
+      
     if (isalnum(ln)){
       std::string num;
       num += ln;
@@ -84,3 +88,10 @@ int eval(const std::string& pref) {
             stack.push(result);
   }
   }
+    if (!stack.isEmpty()) {
+            return stack.pop();
+        }
+         else{
+            return 0;
+        }
+}
