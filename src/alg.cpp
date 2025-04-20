@@ -19,9 +19,9 @@ int priority(char op) {
 
 std::string infx2pstfx(const std::string& inf) {
   std::string postfix = "";
-  TStack<char, 100> stack;
+  TStack<char, 100> stack1;
 
-  for (char ln: inf) {
+  for (char ln : inf) {
        ln = inf[i];
         if (isspace(ln)) continue;
         if (isalnum(ln)) {
@@ -35,24 +35,24 @@ std::string infx2pstfx(const std::string& inf) {
   }
   postfix += num + " ";
 } else if (ln == '(') {
-      stack.Push(ln);}
+      stack1.Push(ln);}
 } else if (ln == ')') {
-      while (!stack.IsEmpty() && stack.peek() != '(') {
-          postfix += stack.Pop();
+      while (!stack1.IsEmpty() && stack1.peek() != '(') {
+          postfix += stack1.Pop();
           postfix += " ";
       }
-      if (!stack.IsEmpty() && stack.peek() == '(') {
-          stack.Pop();
+      if (!stack1.IsEmpty() && stack1.peek() == '(') {
+          stack1.Pop();
 } else {
-         while (!stack.IsEmpty() && priority(ln) <= priority(stack.peek())) {
-            postfix += stack.Pop();
+         while (!stack1.IsEmpty() && priority(ln) <= priority(stack1.peek())) {
+            postfix += stack1.Pop();
             postfix += " ";
         }
-        stack.Push(ln);
+        stack1.Push(ln);
       }
   }
-  while (!stack.IsEmpty()) {
-          postfix += stack.Pop();
+  while (!stack1.IsEmpty()) {
+          postfix += stack1.Pop();
           postfix += " ";
       }
 
@@ -63,18 +63,18 @@ std::string infx2pstfx(const std::string& inf) {
   return postfix;
 
 int eval(const std::string& pref) {
-  TStack<int, 100> stack;
+  TStack<int, 100> stack2;
   std::string num;
   for (char ln : post) {
       if (isdigit(ln)) {
           num += ln;
       } else if (isspace(ln)) {
           if (num.empty()) continue;
-          stack.Push(std::stoi(num));
+          stack2.Push(std::stoi(num));
           num = "";
         } else if (ln == '+' || ln == '-' || ln == '*' || ln == '/') {
-            int operand2 = stack.Pop();
-            int operand1 = stack.Pop();
+            int operand2 = stack2.Pop();
+            int operand1 = stack2.Pop();
             int result;}
         switch (c) {
                 case '+': result = operand1 + operand2; break;
@@ -83,11 +83,11 @@ int eval(const std::string& pref) {
                 case '/': result = operand1 / operand2; break;
                 default: return 0;
             }
-            stack.Push(result);
+            stack2.Push(result);
   }
   }
-    if (!stack.IsEmpty()) {
-            return stack.Pop();
+    if (!stack2.IsEmpty()) {
+            return stack2.Pop();
         } else {
             return 0;
         }
