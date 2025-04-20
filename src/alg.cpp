@@ -28,13 +28,12 @@ std::string infx2pstfx(const std::string& inf) {
     op += tek + ' ';
     } else if (current == '(') {
       stack.dob('(');
-    }
-    else if (current == ')') {
+    } else if (current == ')') {
       while (!stack.nepol() && stack.pe() != '(') {
         op += stack.dl();
         op += ' ';
       }
-      if (!stack.nepol()) stack.dl(); 
+      if (!stack.nepol()) stack.dl();
     } else {
       while (!stack.nepol() && precedence(stack.pe()) >= precedence(current)) {
         op += stack.dl();
