@@ -8,6 +8,7 @@ class TStack {
  private:
   T arr[size] = { 100 };
   int index;
+
  public:
   TStack() : index(-1) {}
   bool isEmpty() const {
@@ -34,7 +35,5 @@ class TStack {
     }
     return arr[index];
   }
-};
-
 };
 #endif  // INCLUDE_TSTACK_H_
