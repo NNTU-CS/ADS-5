@@ -10,8 +10,8 @@ private:
     std::size_t el;
 
 public:
-    TStack() : el(0) {}
 
+    TStack() : el(0) {}
     bool pol() const {
         return el >= N;
     }
