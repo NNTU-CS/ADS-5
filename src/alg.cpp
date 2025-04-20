@@ -35,24 +35,24 @@ std::string infx2pstfx(const std::string& inf) {
   }
   postfix += num + " ";
 } else if (ln == '(') {
-      stack.push(ln);}
+      stack.Push(ln);}
 } else if (ln == ')') {
-      while (!stack.isEmpty() && stack.peek() != '(') {
-          postfix += stack.pop();
+      while (!stack.IsEmpty() && stack.peek() != '(') {
+          postfix += stack.Pop();
           postfix += " ";
       }
-      if (!stack.isEmpty() && stack.peek() == '(') {
-          stack.pop();
+      if (!stack.IsEmpty() && stack.peek() == '(') {
+          stack.Pop();
 } else {
-         while (!stack.isEmpty() && priority(ln) <= priority(stack.peek())) {
-            postfix += stack.pop();
+         while (!stack.IsEmpty() && priority(ln) <= priority(stack.peek())) {
+            postfix += stack.Pop();
             postfix += " ";
         }
-        stack.push(ln);
+        stack.Push(ln);
       }
   }
-  while (!stack.isEmpty()) {
-          postfix += stack.pop();
+  while (!stack.IsEmpty()) {
+          postfix += stack.Pop();
           postfix += " ";
       }
 
@@ -69,12 +69,12 @@ int eval(const std::string& pref) {
       if (isdigit(ln)) {
           num += ln;
       } else if (isspace(ln)) {
-           if (num.empty()) continue;
-            stack.push(std::stoi(num));
-            num = "";
+          if (num.empty()) continue;
+          stack.Push(std::stoi(num));
+          num = "";
         } else if (ln == '+' || ln == '-' || ln == '*' || ln == '/') {
-            int operand2 = stack.pop();
-            int operand1 = stack.pop();
+            int operand2 = stack.Pop();
+            int operand1 = stack.Pop();
             int result;}
         switch (c) {
                 case '+': result = operand1 + operand2; break;
@@ -83,11 +83,11 @@ int eval(const std::string& pref) {
                 case '/': result = operand1 / operand2; break;
                 default: return 0;
             }
-            stack.push(result);
+            stack.Push(result);
   }
   }
-    if (!stack.isEmpty()) {
-            return stack.pop();
+    if (!stack.IsEmpty()) {
+            return stack.Pop();
         } else {
             return 0;
         }
