@@ -31,17 +31,16 @@ std::string infx2pstfx(const std::string& inf) {
     if (inf.length() == 0) {
         throw "Is empty";
     }
-    for (int i = 0;i < inf.length();i++) {
+    for (int i = 0; i < inf.length(); i++) {
         if (isDigit(inf[i])) {
             std::string value;
             value += inf[i];
-            while (isDigit(inf[++i]))
-            {
+            while (isDigit(inf[++i])) {
                 value += inf[i];
             }
             pstfx += value;
             pstfx += ' ';
-            i--;    
+            i--;
         } else if (inf[i] == '(') {
             stack.Push(inf[i]);
         } else if (inf[i] == ')') {
@@ -53,15 +52,15 @@ std::string infx2pstfx(const std::string& inf) {
                 stack.pop();
             }
         } else if (isOperator(inf[i])) {
-            while (!stack.isEmpty() && (Prioritet(inf[i]) <= Prioritet(stack.peekLast()))) {
+            char c=stack.peekLast();
+            while (!stack.isEmpty() && (Prioritet(inf[i]) <= Prioritet(c))) {
                 pstfx += stack.pop();
                 pstfx += ' ';
             }
             stack.Push(inf[i]);
-        }   
+        }  
     }
-    while (!stack.isEmpty())
-    {
+    while (!stack.isEmpty()) {
         pstfx += stack.pop();
         pstfx += ' ';
     }
@@ -80,14 +79,12 @@ int eval(const std::string& pref) {
                 value += pref[i];
             }
             stack.Push(std::stoi(value));
-        }
-        else if(isOperator(pref[i])) {
+        } else if (isOperator(pref[i])) {
             int r_num = stack.peekLast();
             stack.pop();
             int l_num = stack.peekLast();
             stack.pop();
-            switch (pref[i])
-            {
+            switch (pref[i]) {
             case '+':
                 stack.Push(l_num + r_num);
                 break;
