@@ -31,11 +31,9 @@ std::string infx2pstfx(const std::string& infixExpr) {
             --idx;
             postfixExpr += number;
             postfixExpr.push_back(' ');
-        }
-        else if (currentChar == '(') {
+        } else if (currentChar == '(') {
             operatorStack.push(currentChar);
-        }
-        else if (currentChar == ')') {
+        } else if (currentChar == ')') {
             while (!operatorStack.empty() &&
                    operatorStack.top() != '(') {
                 postfixExpr.push_back(operatorStack.top());
@@ -43,10 +41,9 @@ std::string infx2pstfx(const std::string& infixExpr) {
                 operatorStack.pop();
             }
             if (!operatorStack.empty()) {
-                operatorStack.pop(); // удалить '('
+                operatorStack.pop();  // удаляем '('
             }
-        }
-        else if (isMathOperator(currentChar)) {
+        } else if (isMathOperator(currentChar)) {
             while (!operatorStack.empty() &&
                    isMathOperator(operatorStack.top()) &&
                    getPrecedence(operatorStack.top()) >=
@@ -89,14 +86,18 @@ int eval(const std::string& postfixExpr) {
             char op = token[0];
             int result = 0;
 
-            if (op == '+') result = leftOperand + rightOperand;
-            else if (op == '-') result = leftOperand - rightOperand;
-            else if (op == '*') result = leftOperand * rightOperand;
-            else if (op == '/') result = leftOperand / rightOperand;
+            if (op == '+') {
+                result = leftOperand + rightOperand;
+            } else if (op == '-') {
+                result = leftOperand - rightOperand;
+            } else if (op == '*') {
+                result = leftOperand * rightOperand;
+            } else if (op == '/') {
+                result = leftOperand / rightOperand;
+            }
 
             valueStack.push(result);
-        }
-        else {
+        } else {
             valueStack.push(std::stoi(token));
         }
     }
