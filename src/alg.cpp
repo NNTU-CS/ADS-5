@@ -54,7 +54,7 @@ std::string infx2pstfx(const std::string& inf) {
 
 int eval(const std::string& pref) {
   TStack<int, 100> stack;
-  for (size_t i = 0; i < post.size(); i++) {
+  for (size_t i = 0; i < pref.size(); i++) {
     char c = pref[i];
     if (isdigit(c)) {
       int num = 0;
