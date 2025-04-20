@@ -11,13 +11,13 @@ class TStack {
  public:
   TStack() : top_index(-1) {}
 
-  void push(const T& value) {
+  void Push(const T& value) {
     if (top_index < kStackSize - 1) {
       data[++top_index] = value;
     }
   }
 
-  T pop() {
+  T Pop() {
     if (!IsEmpty()) {
       return data[top_index--];
     }
@@ -31,17 +31,16 @@ class TStack {
     return T();
 }
 
-  T top() const {
+  T Top() const {
     if (!IsEmpty()) {
       return data[top_index];
     }
     return T();
   }
 
-  bool isEmpty() const {
+  bool IsEmpty() const {
     return top_index == -1;
   }
 };
-
 
 #endif  // INCLUDE_TSTACK_H_
