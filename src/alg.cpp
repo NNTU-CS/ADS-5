@@ -60,11 +60,12 @@ int eval(const std::string& post) {
   TStack<int, 100> stack;
   for (size_t i = 0; i < post.length(); i++) {
     if (isspace(post[i])) continue;
-    if (isdigit(post[i])) stack.push(post[i] - '0');
-    else if (isOp(post[i])) {
-      int b = stack.pop();
-      int a = stack.pop();
-      stack.push(useOp(a, b, post[i]));
+    if (isdigit(post[i])) {
+        stack.push(post[i] - '0');
+    } else if (isOp(post[i])) {
+        int b = stack.pop();
+        int a = stack.pop();
+        stack.push(useOp(a, b, post[i]));
     }
   }
   return stack.pop();
