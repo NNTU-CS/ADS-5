@@ -1,93 +1,101 @@
 // Copyright 2025 NNTU-CS
 #include <string>
-#include <cctype>
 #include <map>
+#include <cctype>
+#include <stack>
 #include "tstack.h"
-
-int GetPriority(char ope) {
-  if (ope == '+' || ope == '-') return 1;
-  if (ope == '*' || ope == '/') return 2;
-  return 0;
-}
+int priority(char ope) {
+    switch (ope) {
+        case '+':
+        case '-':
+            return 1;
+        case '*':
+        case '/':
+            return 2;
+        case '^':
+            return 3;
+        default:
+            return 0;}}
 
 std::string infx2pstfx(const std::string& inf) {
-  TStack<char, 100> stack;
-  std::string reS;
-  std::string numm;
+    std::string postfix = "";
+    TStack<char, 100> stack12;
 
-  for (char c : inf) {
-    if (isdigit(c)) {
-      numm += c;
-    } else {
-      if (!numm.empty()) {
-        reS += numm + ' ';
-        numm.clear();
-      }
-
-      if (c == '(') {
-        stack.push(c);
-      } else if (c == ')') {
-        while (!stack.isEmpty() && stack.top() != '(') {
-          reS += stack.pop();
-          reS += ' ';
+    for (int i = 0; i < inf.length(); ++i) {
+        char ln1 = inf[i];
+        if (isspace(ln1)) continue;
+        if (isalnum(ln1)) {
+            std::string num;
+            num += ln1;
+            size_t pos = i + 1;
+            while (pos < inf.length() && isdigit(inf[pos])) {
+                num += inf[pos];
+                pos++;
+                i++;
+            }
+            postfix += num + " ";
+        } else if (ln1 == '(') {
+            stack12.Push(ln1);
+        } else if (ln1 == ')') {
+            while (!stack12.IsEmpty() && stack12.peek() != '(') {
+                postfix += stack12.Pop();
+                postfix += " ";
+            }
+            if (!stack12.IsEmpty() && stack12.peek() == '(') {
+                stack12.Pop();
+            }
+        } else {
+            while (!stack12.IsEmpty() &&
+                priority(ln) <= priority(stack12.peek())) {
+                postfix += stack12.Pop();
+                postfix += " ";
+            }
+            stack12.Push(ln);
         }
-        if (!stack.isEmpty()) {
-          stack.pop();
-        }
-      } else if (c == '+' || c == '-' || c == '*' || c == '/') {
-        while (!stack.isEmpty() && GetPriority(stack.top()) >= GetPriority(c)) {
-          reS += stack.pop();
-          reS += ' ';
-        }
-        stack.push(c);
-      }
     }
-  }
+    while (!stack12.IsEmpty()) {
+        postfix += stack12.Pop();
+        postfix += " ";
+    }
 
-  if (!numm.empty()) {
-    reS += numm + ' ';
-  }
-
-  while (!stack.isEmpty()) {
-    reS += stack.pop();
-    reS += ' ';
-  }
-
-  if (!reS.empty() && reS.back() == ' ') {
-    reS.pop_back();
-  }
-
-  return reS;
+    if (!postfix.empty() && postfix.back() == ' ') {
+        postfix.pop_back();
+    }
+    return postfix;
 }
 
-int eval(const std::string& post) {
-  TStack<int, 100> stack;
-  std::string numm;
+int eval(const std::string& pref) {
+    TStack<int, 100> stack2;
+    std::string num;
 
-  for (size_t i = 0; i < post.size(); ++i) {
-    char c = post[i];
-    if (isdigit(c)) {
-      numm += c;
-    } else if (c == ' ' && !numm.empty()) {
-      stack.push(std::stoi(numm));
-      numm.clear();
-    } else if (c == '+' || c == '-' || c == '*' || c == '/') {
-      int b = stack.pop();
-      int a = stack.pop();
-      int resu = 0;
-      switch (c) {
-        case '+': resu = a + b; break;
-        case '-': resu = a - b; break;
-        case '*': resu = a * b; break;
-        case '/': resu = a / b; break;
-      }
-      stack.push(resu);
+    for (char ln : pref) {
+        if (isdigit(ln1)) {
+            num += ln1;
+        } else if (isspace(ln1)) {
+            if (num.empty()) continue;
+            stack2.Push(std::stoi(num));
+            num = "";
+        } else if (ln1 == '+' || ln1 == '-' || ln1 == '*' || ln1 == '/') {
+            if (stack2.IsEmpty()) return 0;
+            int operan2 = stack2.Pop();
+             if (stack2.IsEmpty()) return 0;
+            int operan1 = stack2.Pop();
+            int result;
+
+            switch (ln1) {
+                case '+': result = operan1 + operan2; break;
+                case '-': result = operan1 - operan2; break;
+                case '*': result = operan1 * operan2; break;
+                case '/': result = operan1 / operan2; break;
+                default: return 0;
+            }
+            stack2.Push(result);
+        }
     }
-  }
 
-  if (!numm.empty()) {
-    stack.push(std::stoi(numm));
-  }
-
-  return stack.pop();
+    if (!stack2.IsEmpty()) {
+        return stack2.Pop();
+    } else {
+        return 0;
+    }
 }
