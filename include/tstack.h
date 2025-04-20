@@ -1,4 +1,5 @@
 // Copyright 2021 NNTU-CS
+#include <string>
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 template<typename T, int size>
@@ -9,11 +10,11 @@ class TStack {
  public:
   TStack() : top(-1) {}
   T get() const {
-   if (!isEmpty()) {
-    return arr[top];
-   } else {
-    throw std::string("Empty");
-   }
+    if (!isEmpty()) {
+      return arr[top];
+    } else {
+      throw std::string("Empty");
+    }
   }
   bool isEmpty() const {
     return top == -1;
