@@ -37,7 +37,7 @@ std::string infx2pstfx(const std::string& inf) {
                 output.push_back(' ');
                 st.pop();
             }
-            if (!st.empty()) st.pop(); 
+            if (!st.empty()) st.pop();
         } else if (isOperator(c)) {
             while (!st.empty() && isOperator(st.top()) &&
                 precedence(st.top()) >= precedence(c)) {
@@ -74,7 +74,7 @@ int eval(const std::string& post) {
             else if (op == '*') res = a * b;
             else if (op == '/') res = a / b;
             st.push(res);
-        }else {
+        } else {
             st.push(std::stoi(token));
         }
     }
