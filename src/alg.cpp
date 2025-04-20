@@ -25,21 +25,21 @@ std::string infx2pstfx(const std::string& inf) {
       }
 
       if (c == '(') {
-        stack.Push(c);
+        stack.push(c);
       } else if (c == ')') {
         while (!stack.IsEmpty() && stack.Top() != '(') {
-          reS += stack.Pop();
+          reS += stack.pop();
           reS += ' ';
         }
         if (!stack.IsEmpty()) {
-          stack.Pop();
+          stack.pop();
         }
       } else if (c == '+' || c == '-' || c == '*' || c == '/') {
         while (!stack.IsEmpty() && GetPriority(stack.Top()) >= GetPriority(c)) {
-          reS += stack.Pop();
+          reS += stack.pop();
           reS += ' ';
         }
-        stack.Push(c);
+        stack.push(c);
       }
     }
   }
@@ -49,7 +49,7 @@ std::string infx2pstfx(const std::string& inf) {
   }
 
   while (!stack.IsEmpty()) {
-    reS += stack.Pop();
+    reS += stack.pop();
     reS += ' ';
   }
 
@@ -69,11 +69,11 @@ int eval(const std::string& post) {
     if (isdigit(c)) {
       numm += c;
     } else if (c == ' ' && !numm.empty()) {
-      stack.Push(std::stoi(numm));
+      stack.push(std::stoi(numm));
       numm.clear();
     } else if (c == '+' || c == '-' || c == '*' || c == '/') {
-      int b = stack.Pop();
-      int a = stack.Pop();
+      int b = stack.pop();
+      int a = stack.pop();
       int resu = 0;
       switch (c) {
         case '+': resu = a + b; break;
@@ -81,13 +81,13 @@ int eval(const std::string& post) {
         case '*': resu = a * b; break;
         case '/': resu = a / b; break;
       }
-      stack.Push(resu);
+      stack.push(resu);
     }
   }
 
   if (!numm.empty()) {
-    stack.Push(std::stoi(numm));
+    stack.push(std::stoi(numm));
   }
 
-  return stack.Pop();
+  return stack.pop();
 }
