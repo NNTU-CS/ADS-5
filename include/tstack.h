@@ -25,7 +25,7 @@ public:
     if (isEmpty()) {
       throw std::runtime_error("Stack is empty");
     }
-    return data[top--];
+    return arr[top--];
   }
   void push(const T& item) {
     if (isFull()) {
