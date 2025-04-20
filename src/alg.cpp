@@ -32,26 +32,25 @@ std::string infx2pstfx(const std::string& inf) {
     if (isdigit(inf[i])) {
       postfix += inf[i];
       postfix += ' ';
-    }
-    else if (inf[i] == '(') stack.push(inf[i]);
-    else if (inf[i] == ')') {
-      while (!stack.isEmpty() && stack.top() != '(') {
-        postfix += stack.pop();
-        postfix += ' ';
-      }
-      if (!stack.isEmpty()) stack.pop();
-    }
-    else if (isOp(inf[i])) {
-      while (!stack.isEmpty() && priority(stack.top()) >= priority(inf[i])) {
-        postfix += stack.pop();
-        postfix += ' ';
-      }
-      stack.push(inf[i]);
+    } else if (inf[i] == '(') {
+        stack.push(inf[i]);
+    } else if (inf[i] == ')') {
+        while (!stack.isEmpty() && stack.top() != '(') {
+            postfix += stack.pop();
+            postfix += ' ';
+        }
+        if (!stack.isEmpty()) stack.pop();
+    } else if (isOp(inf[i])) {
+        while (!stack.isEmpty() && priority(stack.top()) >= priority(inf[i])) {
+            postfix += stack.pop();
+            postfix += ' ';
+        }
+        stack.push(inf[i]);
     }
   }
   while (!stack.isEmpty()) {
-    postfix += stack.pop();
-    postfix += ' ';
+      postfix += stack.pop();
+      postfix += ' ';
   }
   if (!postfix.empty() && postfix.back() == ' ') postfix.pop_back();
   return postfix;
