@@ -27,15 +27,15 @@ std::string infx2pstfx(const std::string& inf) {
       if (c == '(') {
         stack.push(c);
       } else if (c == ')') {
-        while (!stack.IsEmpty() && stack.Top() != '(') {
+        while (!stack.isEmpty() && stack.top() != '(') {
           reS += stack.pop();
           reS += ' ';
         }
-        if (!stack.IsEmpty()) {
+        if (!stack.isEmpty()) {
           stack.pop();
         }
       } else if (c == '+' || c == '-' || c == '*' || c == '/') {
-        while (!stack.IsEmpty() && GetPriority(stack.Top()) >= GetPriority(c)) {
+        while (!stack.isEmpty() && GetPriority(stack.top()) >= GetPriority(c)) {
           reS += stack.pop();
           reS += ' ';
         }
@@ -48,7 +48,7 @@ std::string infx2pstfx(const std::string& inf) {
     reS += numm + ' ';
   }
 
-  while (!stack.IsEmpty()) {
+  while (!stack.isEmpty()) {
     reS += stack.pop();
     reS += ' ';
   }
