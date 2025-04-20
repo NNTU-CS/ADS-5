@@ -14,59 +14,44 @@ int precedence(char op) {
 std::string infx2pstfx(const std::string& inf) {
     std::string postfix;
     TStack<char, 100> stack;
-    bool needsSpace = false;
 
     for (size_t i = 0; i < inf.length(); ++i) {
         if (isspace(inf[i])) continue;
 
         if (isdigit(inf[i])) {
-            if (needsSpace) {
+            if (!postfix.empty() && postfix.back() != ' ') {
                 postfix += ' ';
             }
-            needsSpace = false;
             while (i < inf.length() && isdigit(inf[i])) {
                 postfix += inf[i++];
             }
             i--;
-            needsSpace = true;
         } else if (inf[i] == '(') {
             stack.push(inf[i]);
         } else if (inf[i] == ')') {
             while (!stack.isEmpty() && stack.top() != '(') {
-                if (needsSpace) {
-                    postfix += ' ';
-                }
-                needsSpace = false;
+                postfix += ' ';
                 postfix += stack.top();
                 stack.pop();
-                needsSpace = true;
             }
             if (!stack.isEmpty() && stack.top() == '(') {
                 stack.pop();
             }
         } else {
-            while (!stack.isEmpty() && stack.top() != '(' && 
+            while (!stack.isEmpty() && stack.top() != '(' &&
                    precedence(inf[i]) <= precedence(stack.top())) {
-                if (needsSpace) {
-                    postfix += ' ';
-                }
-                needsSpace = false;
+                postfix += ' ';
                 postfix += stack.top();
                 stack.pop();
-                needsSpace = true;
             }
             stack.push(inf[i]);
         }
     }
 
     while (!stack.isEmpty()) {
-        if (needsSpace) {
-            postfix += ' ';
-        }
-        needsSpace = false;
+        postfix += ' ';
         postfix += stack.top();
         stack.pop();
-        needsSpace = true;
     }
 
     if (!postfix.empty() && postfix.back() == ' ') {
@@ -94,9 +79,9 @@ int eval(const std::string& post) {
                 case '+': stack.push(left + right); break;
                 case '-': stack.push(left - right); break;
                 case '*': stack.push(left * right); break;
-                case '/': 
+                case '/':
                     if (right == 0) return 0;
-                    stack.push(left / right); 
+                    stack.push(left / right);
                     break;
                 default: return 0;
             }
