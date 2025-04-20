@@ -44,15 +44,16 @@ std::string infx2pstfx(const std::string& inf) {
             if (!stack1.IsEmpty() && stack1.peek() == '(') {
                 stack1.Pop();
             }
-       }  else if ( !isalnum(ln) && ln != '(' && ln != ')') {
-            while (!stack1.IsEmpty() && priority(ln) <= priority(stack1.peek())) {
+        } else {
+            while (!stack1.IsEmpty() &&
+                priority(ln) <= priority(stack1.peek())) {
                 postfix += stack1.Pop();
                 postfix += " ";
             }
             stack1.Push(ln);
         }
     }
-     while (!stack1.IsEmpty()) {
+    while (!stack1.IsEmpty()) {
         postfix += stack1.Pop();
         postfix += " ";
     }
@@ -92,7 +93,7 @@ int eval(const std::string& pref) {
         }
     }
 
-    if (!stack1.IsEmpty()) {
+    if (!stack2.IsEmpty()) {
         return stack2.Pop();
     } else {
         return 0;
