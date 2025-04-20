@@ -5,56 +5,30 @@
 template<typename T, int size>
 class TStack {
  private:
-    T data[size];
-    int topIndex;
-    bool errorFlag;
+  T el[size];
+  int index;
 
  public:
-    TStack() : topIndex(-1), errorFlag(false) {}
+  TStack() : index(-1) {}
 
-    bool push(const T& value) {
-        if (topIndex >= size - 1) {
-            errorFlag = true;
-            return false;
-        }
-        data[++topIndex] = value;
-        errorFlag = false;
-        return true;
-    }
+  void push(const T& value) {
+    if (index >= size - 1) throw std::overflow_error("Stack full");
+    el[++index] = value;
+  }
 
-    bool pop(T& out) {
-        if (isEmpty()) {
-            errorFlag = true;
-            return false;
-        }
-        out = data[topIndex--];
-        errorFlag = false;
-        return true;
-    }
+  T remove() {
+    if (index < 0) throw std::underflow_error("Stack empty");
+    return el[index--];
+  }
 
-    bool top(T& out) const {
-        if (isEmpty()) {
-            return false;
-        }
-        out = data[topIndex];
-        return true;
-    }
+  T check() const {
+    if (index < 0) throw std::underflow_error("No elements");
+    return el[index];
+  }
 
-    bool isEmpty() const {
-        return topIndex == -1;
-    }
-
-    bool isFull() const {
-        return topIndex == size - 1;
-    }
-
-    int count() const {
-        return topIndex + 1;
-    }
-
-    bool hasError() const {
-        return errorFlag;
-    }
+  bool hasElements() const {
+    return index >= 0;
+  }
 };
 
 #endif  // INCLUDE_TSTACK_H_
