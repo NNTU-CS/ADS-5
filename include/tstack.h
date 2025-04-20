@@ -4,13 +4,14 @@
 
 template<typename T, int size>
 class TStack {
-private:
+ private:
     T* arr;
     int top;
-public:
+
+ public:
     TStack() : top(-1) {
         arr = new T[size];
-    };
+    }
     ~TStack() {
         delete[] arr;
         arr = nullptr;
@@ -24,8 +25,7 @@ public:
     void Push(T value) {
         if (!isFull()) {
             arr[++top] = value;
-        }
-        else {
+        } else {
             throw std::string("Full");
         }
     }
@@ -33,17 +33,11 @@ public:
         if (!isEmpty()) {
             return arr[top--];
         }
-        else {
-            throw std::string("Empty");
-        }
     }
     T peekLast() {
         if (!isEmpty()) {
             return arr[top];
         }
-    }
-    void Print() {
-        std::cout << pop() << " ";
     }
 };
 
