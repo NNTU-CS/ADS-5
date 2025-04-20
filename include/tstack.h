@@ -30,11 +30,15 @@ class TStack {
     T pop() {
         if (!isEmpty()) {
             return arr[top--];
+        } else {
+         return T();
         }
     }
     T peekLast() {
         if (!isEmpty()) {
             return arr[top];
+        } else {
+         return T();
         }
     }
 };
