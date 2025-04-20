@@ -2,31 +2,25 @@
 #include <string>
 #include <map>
 #include "tstack.h"
-namespace {
-  std::map<char, int> op_priority = {
-      {'^', 4},
-      {'*', 3}, {'/', 3},
-      {'+', 2}, {'-', 2},
-      {'(', 1}
-  };
-
-  bool isDigit(char c) {
-    return c >= '0' && c <= '9';
+std::map<char, int> op_priority = {
+    {'^', 4},
+    {'*', 3}, {'/', 3},
+    {'+', 2}, {'-', 2},
+    {'(', 1}
+};
+bool isDigit(char c) {
+  return c >= '0' && c <= '9';
+}
+bool isOperator(char c) {
+  return op_priority.count(c) && c != '(';
+}
+int power(int base, int exp) {
+  int result = 1;
+  for (int i = 0; i < exp; ++i) {
+    result *= base;
   }
-
-  bool isOperator(char c) {
-    return op_priority.count(c) && c != '(';
-  }
-
-  int power(int base, int exp) {
-    int result = 1;
-    for (int i = 0; i < exp; ++i) {
-      result *= base;
-    }
-    return result;
-  }
-} //namespace
-
+  return result;
+}
 std::string infx2pstfx(const std::string& inf) {
   std::map<char, int> priority = {
       {'(', 0},
@@ -34,14 +28,11 @@ std::string infx2pstfx(const std::string& inf) {
       {'*', 2}, {'/', 2},
       {'^', 3}
   };
-  
   TStack<char, 100> stack;
   std::string postfix;
   bool prevWasDigit = false;
-  
   for (char c : inf) {
     if (c == ' ') continue;
-  
     if (isdigit(c)) {
       if (prevWasDigit) {
         postfix += c;
@@ -57,7 +48,6 @@ std::string infx2pstfx(const std::string& inf) {
         postfix += ' ';
         prevWasDigit = false;
       }
-  
       if (c == '(') {
         stack.push(c);
       } else if (c == ')') {
@@ -75,8 +65,6 @@ std::string infx2pstfx(const std::string& inf) {
           }
           postfix += stack.pop();
         }
-  
-        // Добавляем пробел только если предыдущий символ не пробел
         if (!postfix.empty() && postfix.back() != ' ') {
           postfix += ' ';
         }
@@ -84,7 +72,6 @@ std::string infx2pstfx(const std::string& inf) {
       }
     }
   }
-  
   while (!stack.empty()) {
     if (!postfix.empty() && postfix.back() != ' ') {
       postfix += ' ';
@@ -94,7 +81,6 @@ std::string infx2pstfx(const std::string& inf) {
   
   return postfix;
 }
-
 int eval(const std::string& pref) {
   TStack<int, 100> stack;
   int num = 0;
