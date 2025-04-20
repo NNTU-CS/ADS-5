@@ -1,10 +1,10 @@
 // Copyright 2025 NNTU-CS
-#include "include/tstack.h"
 #include "alg.h"
 #include <iostream>
 #include <string>
 #include <sstream>
 #include <cctype>
+#include "tstack.h"
 
 int precedence(char op) {
   if (op == '+' || op == '-') return 1;
