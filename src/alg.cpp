@@ -23,9 +23,8 @@ std::string infx2pstfx(const std::string& inf) {
     if (isdigit(temp)) {
       std::string temp_string;
       while (i < inf.length() && isdigit(inf[i])) {
-        temp_string += inf[i];
+        temp_string += inf[++i];
         i++;
-        temp = inf[i];
       }
       i--;
       postfix += temp_string;
