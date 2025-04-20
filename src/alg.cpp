@@ -52,49 +52,14 @@ std::string infx2pstfx(const std::string& inf) {
     return postfix;
 }
 
-int eval(const std::string& post) {
-    TStack<int, 100> stack;
-    
-    for (size_t i = 0; i < post.size(); i++) {
-        char c = post[i];
-        
-        if (isdigit(c)) {
-            int num = 0;
-            while (i < post.size() && isdigit(post[i])) {
-                num = num * 10 + (post[i++] - '0');
-            }
-            stack.push(num);
-            i--;
-        }
-        else if (c == ' ') {
-            continue;
-        }
-        else {
-            int b = stack.top();
-            stack.pop();
-            int a = stack.top();
-            stack.pop();
-            
-            switch (c) {
-                case '+': stack.push(a + b); break;
-                case '-': stack.push(a - b); break;
-                case '*': stack.push(a * b); break;
-                case '/': stack.push(a / b); break;
-            }
-        }
-    }
-    
-    return stack.top();
-}
-
-int eval(const std::string& post) {
+int eval(const std::string& pref) {
   TStack<int, 100> stack;
   for (size_t i = 0; i < post.size(); i++) {
-    char c = post[i];
+    char c = pref[i];
     if (isdigit(c)) {
       int num = 0;
-      while (i < post.size() && isdigit(post[i])) {
-        num = num * 10 + (post[i++] - '0');
+      while (i < pref.size() && isdigit(pref[i])) {
+        num = num * 10 + (pref[i++] - '0');
       }
       stack.push(num);
       i--;
