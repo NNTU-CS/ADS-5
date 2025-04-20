@@ -9,17 +9,14 @@ class TStack {
   int top;
 public:
   TStack() : top(-1) {}
-
   bool isEmpty() const {
     return top == -1;
   }
-
   bool isFull() const {
     return top == size - 1;
   }
-
   T get() const {
-		if (isEmpty()) {
+    if (isEmpty()) {
 			throw std::runtime_error("Stack is empty");
     }
     return arr[top];
