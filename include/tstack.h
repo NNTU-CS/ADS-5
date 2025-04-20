@@ -2,39 +2,41 @@
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 
-template<typename T, int size>
+#include <stdexcept>
+#include <iostream>
+
+template <typename T, int kStackSize>
 class TStack {
-public:
-    TStack() : top(-1) {}
-
-    void push(const T& item) {
-        if (top >= size - 1) {
-            throw std::overflow_error("Stack overflow");
-        }
-        data[++top] = item;
-    }
-
-    void pop() {
-        if (top < 0) {
-            throw std::underflow_error("Stack underflow");
-        }
-        --top;
-    }
-
-    T topItem() const {
-        if (top < 0) {
-            throw std::underflow_error("Stack is empty");
-        }
-        return data[top];
-    }
-
-    bool isEmpty() const {
-        return top == -1;
-    }
-
 private:
-    T data[size];
-    int top;
+  T stackArray[kStackSize];
+  int topIndex;
+
+public:
+  TStack() : topIndex(-1) {}
+  void push(const T& value) {
+    if (topIndex >= kStackSize - 1) {
+      throw std::overflow_error("Stack overflow");
+    }
+    stackArray[++topIndex] = value;
+  }
+  void pop() {
+    if (isEmpty()) {
+      throw std::underflow_error("Stack underflow");
+    }
+    --topIndex;
+  }
+  T top() const {
+    if (isEmpty()) {
+      throw std::underflow_error("Stack is empty");
+    }
+    return stackArray[topIndex];
+  }
+  bool isEmpty() const {
+    return topIndex < 0;
+  }
+  bool isFull() const {
+    return topIndex >= kStackSize - 1;
+  }
 };
 
-#endif
+#endif // INCLUDE_TSTACK_H_
