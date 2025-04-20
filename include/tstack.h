@@ -15,7 +15,7 @@ class TStack {
     return top == -1;
   }
   bool isFull() const {
-    return top == KstackSize - 1;
+    return top == kStackSize - 1;
   }
   T get() const {
     if (isEmpty()) {
