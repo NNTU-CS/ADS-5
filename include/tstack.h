@@ -5,42 +5,55 @@
 template<typename T, int size>
 class TStack {
  private:
-    T el[size];
-    int indx;
+    T data[size];
+    int topIndex;
+    bool errorFlag;
 
  public:
-    TStack() : indx(-1) {}
+    TStack() : topIndex(-1), errorFlag(false) {}
 
     bool push(const T& value) {
-        if (indx >= size - 1) {
+        if (topIndex >= size - 1) {
+            errorFlag = true;
             return false;
         }
-        el[++indx] = value;
+        data[++topIndex] = value;
+        errorFlag = false;
         return true;
     }
 
-    bool pop(T& value) {
-        if (indx < 0) {
+    bool pop(T& out) {
+        if (isEmpty()) {
+            errorFlag = true;
             return false;
         }
-        value = el[indx--];
+        out = data[topIndex--];
+        errorFlag = false;
         return true;
     }
 
-    bool top(T& value) const {
-        if (indx < 0) {
+    bool top(T& out) const {
+        if (isEmpty()) {
             return false;
         }
-        value = el[indx];
+        out = data[topIndex];
         return true;
     }
 
     bool isEmpty() const {
-        return indx == -1;
+        return topIndex == -1;
     }
 
-    int getSize() const {
-        return indx + 1;
+    bool isFull() const {
+        return topIndex == size - 1;
+    }
+
+    int count() const {
+        return topIndex + 1;
+    }
+
+    bool hasError() const {
+        return errorFlag;
     }
 };
 
