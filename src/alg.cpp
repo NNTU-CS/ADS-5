@@ -51,7 +51,7 @@ std::string infx2pstfx(const std::string& inf) {
 
 int eval(const std::string& pref) {
     TStack<int, 100> stack;
-    std::istringstream iz(post);
+    std::istringstream iz(pref);
     std::string tek;
 
     while (iz >> tek) {
