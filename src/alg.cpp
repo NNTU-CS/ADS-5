@@ -1,15 +1,17 @@
 // Copyright 2025 NNTU-CS
-#include "include/tstack.h"
-#include <string>
+#include "alg.h"
 #include <iostream>
+#include <string>
 #include <sstream>
 #include <cctype>
 
 int precedence(char op) {
-    if (op == '+' || op == '-')
+    if (op == '+' || op == '-') {
         return 1;
-    if (op == '*' || op == '/')
+    }
+    if (op == '*' || op == '/') {
         return 2;
+    }
     return 0;
 }
 
@@ -38,7 +40,8 @@ std::string infx2pstfx(const std::string& inf) {
             }
             stack.pop();
         } else {
-            while (!stack.isEmpty() && precedence(inf[i]) <= precedence(stack.top())) {
+            while (!stack.isEmpty() &&
+                   precedence(inf[i]) <= precedence(stack.top())) {
                 postfix += stack.top();
                 postfix += " ";
                 stack.pop();
