@@ -3,7 +3,7 @@
 #include <map>
 #include "tstack.h"
 int priority(char op) {
-  switch(op) {
+  switch (op) {
     case '(': return 0;
     case '+': return 1;
     case '-': return 1;
@@ -19,15 +19,15 @@ std::string infx2pstfx(const std::string& inf) {
     char c = inf[i];
     if (isdigit(c)) {
       while (i < inf.size() && isdigit(inf[i])) {
-        postfix += '';
-        i==;
+        postfix += ' ';
+        i--;
       }
     } else if (c == '(') {
       stack.push(c);
     } else if (c == ')') {
-      while (!stack.isEmpty() && stack.top() != '(') {
+      while (!stack.isEmpty() && stack.pop() != '(') {
         postfix += stack.pop();
-        postfix += '';
+        postfix += ' ';
         stack.pop();
       }
     } else if (c == '+' || c == '-' || c == '*' || c == '/') {
@@ -39,7 +39,7 @@ std::string infx2pstfx(const std::string& inf) {
     }
     while (!stack.isEmpty()) {
       posrfix += stack.pop();
-      postfix += '';
+      postfix += ' ';
     }
   }
   if (!postfix.empty() && postfix.back() == '*') {
