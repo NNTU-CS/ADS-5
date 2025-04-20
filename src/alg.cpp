@@ -26,13 +26,13 @@ std::string infx2pstfx(const std::string& inf) {
       stack.push(c);
     } else if (c == ')') {
       while (!stack.isEmpty() && stack.top() != '(') {
-        postfix += stack.pop();
+        postfix += stack.top();
         postfix += ' ';
         stack.pop();
       }
     } else if (c == '+' || c == '-' || c == '*' || c == '/') {
       while (!stack.isEmpty() && priority(c) <= priority(stack.pop())) {
-        postfix += stack.pop();
+        postfix += stack.top();
         postfix += ' ';
         stack.push(c);
       }
