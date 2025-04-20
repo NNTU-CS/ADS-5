@@ -64,21 +64,25 @@ std::string infx2pstfx(const std::string& inf) {
 }
 
 
-int eval(const std::string& pref) {
-  TStack<int, 100> stack2;
-  std::string num;
-  for (char ln : post) {
-      if (isdigit(ln)) {
-          num += ln;
-      } else if (isspace(ln)) {
-          if (num.empty()) continue;
-          stack2.Push(std::stoi(num));
-          num = "";
+int eval(const std::string& ref) {
+    TStack<int, 100> stack2;
+    std::string num;
+
+    for (char ln : pref) {
+        if (isdigit(ln)) {
+            num += ln;
+        } else if (isspace(ln)) {
+            if (num.empty()) continue;
+            stack2.Push(std::stoi(num));
+            num = "";
         } else if (ln == '+' || ln == '-' || ln == '*' || ln == '/') {
+            if (stack2.IsEmpty()) return 0;
             int operand2 = stack2.Pop();
+             if (stack2.IsEmpty()) return 0;
             int operand1 = stack2.Pop();
-            int result;}
-        switch (ln) {
+            int result;
+
+            switch (ln) {
                 case '+': result = operand1 + operand2; break;
                 case '-': result = operand1 - operand2; break;
                 case '*': result = operand1 * operand2; break;
@@ -86,12 +90,12 @@ int eval(const std::string& pref) {
                 default: return 0;
             }
             stack2.Push(result);
-  }
-  
-    if (!stack1.IsEmpty()) {
-            return stack2.Pop();
-        } else {
-            return 0;
         }
-}
+    }
 
+    if (!stack2.IsEmpty()) {
+        return stack2.Pop();
+    } else {
+        return 0;
+    }
+}
