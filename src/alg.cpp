@@ -12,7 +12,6 @@ std::string infx2pstfx(const std::string& inf) {
 
     for (size_t i = 0; i < inf.size(); ++i) {
         char c = inf[i];
-
         if (isdigit(c)) {
             while (i < inf.size() && isdigit(inf[i])) {
                 res += inf[i++];
@@ -39,8 +38,7 @@ std::string infx2pstfx(const std::string& inf) {
     }
 
     while (!stack.isEmpty()) {
-        stack.pop(c);
-        res += c;
+        res += stack.pop();
         res += ' ';
     }
 
