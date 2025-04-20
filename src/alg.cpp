@@ -15,7 +15,7 @@ int toInt(const std::string& s) {
   int result = 0;
   for (char ch : s) {
     if (ch < '0' || ch > '9') {
-      throw std::invalid_argument("Invalid character in input string");
+      throw "Invalid character in input string";
     }
     result = result * 10 + (ch - '0');
   }
