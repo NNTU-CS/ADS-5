@@ -41,7 +41,7 @@ std::string infx2pstfx(const std::string& inf) {
         stack.pop();
       }
     } else {
-      while (!stack.isEmpty() && 
+      while (!stack.isEmpty() &&
         prioritet(stack.get()) >= prioritet(inf[count])) {
         pref += stack.get();
         pref += ' ';
@@ -83,7 +83,7 @@ int eval(const std::string& pref) {
       stack.pop();
       int final = left - right;
       stack.push(final);
-    } else if (pref[count] == '*' ) {
+    } else if (pref[count] == '*') {
       int right = stack.get();
       stack.pop();
       int left = stack.get();
