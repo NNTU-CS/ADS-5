@@ -22,11 +22,10 @@ std::string infx2pstfx(const std::string& inf) {
     char temp = inf[i];
     if (isdigit(temp)) {
       std::string temp_string;
-      while (i < inf.length() && isdigit(inf[i])) {
+      temp_string += temp;
+      while (i+1 < inf.length() && isdigit(inf[i+1])) {
         temp_string += inf[++i];
-        i++;
       }
-      i--;
       postfix += temp_string;
       postfix += " ";
     } else if (temp == '(') {
