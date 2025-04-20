@@ -13,7 +13,7 @@ class TStack {
   bool isEmpty() const {
     return index < 0;
   }
-  bool isFull() const {
+  bool isfull() const {
     return index > size - 1;
   }
   void push(const T& elem) {
