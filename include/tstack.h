@@ -4,13 +4,12 @@
 
 template<typename T, int size>
 class TStack {
-  static_assert(N > 0, "Stack size must be greater than 0");
-
-  private:
+ 
+ private:
     std::array<T, size>
     int top;
-
-  public:
+ 
+ public:
     TStack(): top(-1) {}
     bool isEmpty()const {
       return top == -1;
