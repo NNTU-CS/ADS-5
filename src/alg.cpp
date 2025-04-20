@@ -13,40 +13,49 @@ int precedence(char op) {
 }
 
 std::string infx2pstfx(const std::string& inf) {
-    TStack<char, 100> stack;
-    std::string op;
-    std::istringstream iz(inf);
-    std::string tek;
+  TStack<char, 100> stack;
+  std::string op;
+  std::string tek; 
 
-    while (iz >> tek) {
-        if (std::isdigit(tek[0])) {
-            op += tek + ' ';
-        }
-        else if (tek[0] == '(') {
-            stack.dob('(');
-        }
-        else if (tek[0] == ')') {
-            while (!stack.nepol() && stack.pe() != '(') {
-                op += stack.dl();
-                op += ' ';
-            }
-            stack.dl();
-        }
-        else { 
-            while (!stack.nepol() && precedence(stack.pe()) >= precedence(tek[0])) {
-                op += stack.dl();
-                op += ' ';
-            }
-            stack.dob(tek[0]);
-        }
-    }
+  for (size_t i = 0; i < inf.length(); ++i) {
+      char current = inf[i];
 
-    while (!stack.nepol()) {
-        op += stack.dl();
-        op += ' ';
-    }
+      if (std::isdigit(current)) {
+          tek.clear();
+          // Собираем полное число
+          while (i < inf.length() && std::isdigit(inf[i])) {
+              tek += inf[i];
+              i++;
+          }
+          i--; 
+          op += tek + ' '; 
+      }
+      else if (current == '(') {
+          stack.dob('(');
+      }
+      else if (current == ')') {
+          while (!stack.nepol() && stack.pe() != '(') {
+              op += stack.dl();
+              op += ' ';
+          }
+          if (!stack.nepol()) stack.dl(); 
+      }
+      else { 
+          while (!stack.nepol() && precedence(stack.pe()) >= precedence(current)) {
+              op += stack.dl();
+              op += ' ';
+          }
+          stack.dob(current);
+      }
+  }
 
-    return op;
+
+  while (!stack.nepol()) {
+      op += stack.dl();
+      op += ' ';
+  }
+
+  return op;
 }
 
 int eval(const std::string& pref) {
