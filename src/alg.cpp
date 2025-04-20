@@ -1,4 +1,5 @@
 // Copyright 2025 NNTU-CS
+#include "include/tstack.h"
 #include "alg.h"
 #include <iostream>
 #include <string>
