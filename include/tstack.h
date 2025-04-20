@@ -24,14 +24,14 @@ class TStack {
     return top == size - 1;
   }
   void pop() {
-    if (top >= 0) {
+    if (!isEmpty()) {
       top--;
     } else {
       throw std::string("Empty");
     }
   }
   void push(T item) {
-    if (top < size - 1) {
+    if (!isFull()) {
       arr[++top] = item;
     } else {
       throw std::string("Full");
