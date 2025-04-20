@@ -5,12 +5,11 @@
 
   template <typename T, std::size_t N>
 class TStack {
-private:
+ private:
     T mas[N];
     std::size_t el;
 
-public:
-
+ public:
     TStack() : el(0) {}
     bool pol() const {
         return el >= N;
