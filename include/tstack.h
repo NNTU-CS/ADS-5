@@ -4,10 +4,10 @@
 #include <array>
 #include <stdexcept>
 
-template <typename T, int size>
+template <typename T, int Capacity>
 class TStack {
  private:
-  static constexpr int kStackSize = size;
+  static constexpr int kStackSize = Capacity;
   std::array<T, kStackSize> data_;
   int top_{-1};
 
@@ -31,7 +31,7 @@ class TStack {
     return data_[top_];
   }
 
-  int count() const { return top_ + 1; }
+  int size() const { return top_ + 1; }
   bool empty() const { return top_ < 0; }
   bool full() const { return top_ == kStackSize - 1; }
 };
