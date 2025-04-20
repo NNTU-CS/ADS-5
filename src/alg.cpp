@@ -1,104 +1,104 @@
 // Copyright 2021 NNTU-CS
-#include <cctype>
-#include <sstream>
-#include <stdexcept>
 #include <string>
-
+#include <cctype>
 #include "tstack.h"
 
-int getPriority(char operation) {
-  if (operation == '+' || operation == '-') return 1;
-  if (operation == '*' || operation == '/') return 2;
+int GetPriority(char op) {
+  if (op == '+' || op == '-') {
+    return 1;
+  }
+  if (op == '*' || op == '/') {
+    return 2;
+  }
   return 0;
 }
 
-bool isOperator(char symbol) {
-  return (symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/');
-}
+std::string infx2pstfx(const std::string& inf) {
+  TStack<char, 100> stack;
+  std::string result;
+  std::string number;
 
-std::string infx2pstfx(const std::string& infix) {
-  std::string postfix;
-  TStack<char, 128> operatorStack;
-
-  for (size_t i = 0; i < infix.length(); ++i) {
-    char currentChar = infix[i];
-
-    if (std::isspace(static_cast<unsigned char>(currentChar))) continue;
-
-    if (std::isdigit(static_cast<unsigned char>(currentChar))) {
-      while (i < infix.length() &&
-             std::isdigit(static_cast<unsigned char>(infix[i]))) {
-        postfix += infix[i];
-        ++i;
+  for (char c : inf) {
+    if (isdigit(c)) {
+      number += c;
+    } else {
+      if (!number.empty()) {
+        result += number + " ";
+        number.clear();
       }
-      postfix += ' ';
-      --i;
-    } else if (currentChar == '(') {
-      operatorStack.push(currentChar);
-    } else if (currentChar == ')') {
-      while (!operatorStack.isEmpty() && operatorStack.peek() != '(') {
-        postfix += operatorStack.peek();
-        postfix += ' ';
-        operatorStack.pop();
+
+      if (c == '(') {
+        stack.Push(c);
+      } else if (c == ')') {
+        while (!stack.IsEmpty() && stack.Top() != '(') {
+          result += stack.Pop();
+          result += " ";
+        }
+        if (!stack.IsEmpty()) {
+          stack.Pop();
+        }
+      } else if (c == '+' || c == '-' || c == '*' || c == '/') {
+        while (!stack.IsEmpty() && GetPriority(stack.Top()) >= GetPriority(c)) {
+          result += stack.Pop();
+          result += " ";
+        }
+        stack.Push(c);
       }
-      if (!operatorStack.isEmpty()) operatorStack.pop();
-    } else if (isOperator(currentChar)) {
-      while (!operatorStack.isEmpty() && isOperator(operatorStack.peek()) &&
-             getPriority(operatorStack.peek()) >= getPriority(currentChar)) {
-        postfix += operatorStack.peek();
-        postfix += ' ';
-        operatorStack.pop();
-      }
-      operatorStack.push(currentChar);
     }
   }
 
-  while (!operatorStack.isEmpty()) {
-    postfix += operatorStack.peek();
-    postfix += ' ';
-    operatorStack.pop();
+  if (!number.empty()) {
+    result += number + " ";
   }
 
-  if (!postfix.empty() && postfix.back() == ' ') postfix.pop_back();
-  return postfix;
+  while (!stack.IsEmpty()) {
+    result += stack.Pop();
+    result += " ";
+  }
+
+  if (!result.empty() && result.back() == ' ') {
+    result.pop_back();
+  }
+
+  return result;
 }
 
-int eval(const std::string& postfix) {
-  std::stringstream stream(postfix);
-  std::string token;
-  TStack<int, 128> valueStack;
+int eval(const std::string& post) {
+  TStack<int, 100> stack;
+  std::string number;
 
-  while (stream >> token) {
-    if (token.length() == 1 && isOperator(token[0])) {
-      if (valueStack.size() < 2)
-        throw std::runtime_error("Invalid postfix expression");
-      int rightOperand = valueStack.peek();
-      valueStack.pop();
-      int leftOperand = valueStack.peek();
-      valueStack.pop();
-      int result;
-
-      switch (token[0]) {
+  for (size_t i = 0; i < post.size(); ++i) {
+    char c = post[i];
+    if (isdigit(c)) {
+      number += c;
+    } else if (c == ' ' && !number.empty()) {
+      stack.Push(std::stoi(number));
+      number.clear();
+    } else if (c == '+' || c == '-' || c == '*' || c == '/') {
+      int b = stack.Pop();
+      int a = stack.Pop();
+      int res = 0;
+      switch (c) {
         case '+':
-          result = leftOperand + rightOperand;
+          res = a + b;
           break;
         case '-':
-          result = leftOperand - rightOperand;
+          res = a - b;
           break;
         case '*':
-          result = leftOperand * rightOperand;
+          res = a * b;
           break;
         case '/':
-          result = leftOperand / rightOperand;
+          res = a / b;
           break;
       }
-      valueStack.push(result);
-    } else {
-      valueStack.push(std::stoi(token));
+      stack.Push(res);
     }
   }
 
-  if (valueStack.size() != 1)
-    throw std::runtime_error("Invalid postfix expression");
-  return valueStack.peek();
+  if (!number.empty()) {
+    stack.Push(std::stoi(number));
+  }
+
+  return stack.Pop();
 }
