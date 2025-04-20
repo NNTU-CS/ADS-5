@@ -78,7 +78,7 @@ int eval(const std::string& pref) {
             int operand2 = stack2.Pop();
             int operand1 = stack2.Pop();
             int result;}
-        switch (c) {
+        switch (ln) {
                 case '+': result = operand1 + operand2; break;
                 case '-': result = operand1 - operand2; break;
                 case '*': result = operand1 * operand2; break;
@@ -87,10 +87,11 @@ int eval(const std::string& pref) {
             }
             stack2.Push(result);
   }
-  }
+  
     if (!stack1.IsEmpty()) {
             return stack2.Pop();
         } else {
             return 0;
         }
+}
 
