@@ -1,10 +1,10 @@
 // Copyright 2025 NNTU-CS
 #include <string>
 #include <map>
-#include "tstack.h"
 #include <cctype>
 #include <sstream>
 #include <stdexcept>
+#include "tstack.h"
 
 int prec(char gg) {
     switch (gg) {
@@ -30,9 +30,9 @@ std::string infx2pstfx(const std::string& inf) {
     TStack<char, 100> gg;
     std::string res;
     for (size_t i = 0; i < inf.size(); ) {
-
-        if (std::isspace(inf[i])) { ++i; continue; }
-
+        if (std::isspace(inf[i])) {
+            ++i; continue;
+        }
         if (std::isdigit(inf[i])) {
             while (i < inf.size() && std::isdigit(inf[i]))
                 res.push_back(inf[i++]);
@@ -72,8 +72,7 @@ std::string infx2pstfx(const std::string& inf) {
     return res;
 }
 
-int eval(const std::string& post)
-{
+int eval(const std::string& post) {
     TStack<int, 100> st;
     std::istringstream ss(post);
 
