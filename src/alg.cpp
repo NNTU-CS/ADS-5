@@ -44,7 +44,7 @@ std::string infx2pstfx(const std::string& inf) {
         output += ' ';
       }
       if (!stack.isEmpty()) stack.pop();
-        } else if (isOperator(ch)) {
+      } else if (isOperator(ch)) {
       while (!stack.isEmpty() && stack.peek() != '(' &&
         precedence[ch] <= precedence[stack.peek()]) {
         output += stack.pop();
@@ -56,6 +56,9 @@ std::string infx2pstfx(const std::string& inf) {
   while (!stack.isEmpty()) {
     output += stack.pop();
     output += ' ';
+  }
+  if (!output.empty() && output.back() == ' ') {
+    output.erase(output.size() - 1);
   }
   return output;
 }
