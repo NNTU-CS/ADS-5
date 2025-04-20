@@ -10,6 +10,7 @@ std::string infx2pstfx(const std::string& inf) {
         {'+', 1}, {'-', 1},
         {'*', 2}, {'/', 2}
     };
+    
     for (size_t i = 0; i < inf.size(); ++i) {
         char c = inf[i];
         if (c == ' ') continue;
@@ -19,20 +20,17 @@ std::string infx2pstfx(const std::string& inf) {
             }
             postfix += ' ';
             i--;
-        }
-        else if (c == '(') {
+        } else if (c == '(') {
             stack.push(c);
-        }
-        else if (c == ')') {
-            while (!stack.isEmpty() && stack.top() != '(') {
+        } else if (c == ')') {
+            while (!stack.isEmpty() && stack.peek() != '(') {
                 postfix += stack.pop();
                 postfix += ' ';
             }
             stack.pop();
-        }
-        else {
-            while (!stack.isEmpty() && stack.top() != '(' && 
-                   priority[stack.top()] >= priority[c]) {
+        } else {
+            while (!stack.isEmpty() && stack.peek() != '(' && 
+                   priority[stack.peek()] >= priority[c]) {
                 postfix += stack.pop();
                 postfix += ' ';
             }
@@ -62,8 +60,7 @@ int eval(const std::string& post) {
         }
         if (isdigit(c)) {
             numStr += c;
-        }
-        else {
+        } else {
             if (!numStr.empty()) {
                 stack.push(std::stoi(numStr));
                 numStr.clear();
