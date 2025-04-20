@@ -31,7 +31,7 @@ class TStack {
     return data_[top_];
   }
 
-  int size() const { return top_ + 1; }
+  int count() const { return top_ + 1; }
   bool empty() const { return top_ < 0; }
   bool full() const { return top_ == kStackSize - 1; }
 };
