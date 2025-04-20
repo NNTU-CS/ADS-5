@@ -13,7 +13,7 @@ int priority(char oper) {
     }
 }
 std::string infx2pstfx(const std::string& inf) {
-  std::string outS;
+    std::string outS;
   TStack<char, 100> stack;
   for (size_t j = 0; j < inf.length(); j++) {
     char symb = inf[j];
