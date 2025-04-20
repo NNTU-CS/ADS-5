@@ -17,13 +17,13 @@ public:
   }
   T get() const {
     if (isEmpty()) {
-		  throw std::runtime_error("Stack is empty");
+      throw std::runtime_error("Stack is empty");
     }
     return arr[top];
   }
   void pop() {
-  	if (isEmpty()) {
-	    throw std::runtime_error("Stack is empty");
+    if (isEmpty()) {
+      throw std::runtime_error("Stack is empty");
     }
     top--;
   }
