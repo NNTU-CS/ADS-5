@@ -6,46 +6,56 @@
 using namespace std;
 
 template <typename T, int SIZE>
-class TStack {
+class ArrayStack {
 private:
-    T data[SIZE];
-    int top;
-
+  T* data;
+  int capacity;
+  int top;
 public:
-    TStack() {
-        top = -1;
+  ArrayStack(int capacity) : capacity(capacity), top(-1) {
+    if (capacity <= 0) {
+      throw std::invalid_argument("Capacity must be a positive integer.");
     }
-    bool push(T value) {
-        if (top >= SIZE - 1) {
-            return false; 
-        }
-        top++;
-        data[top] = value;
-        return true;
+    data = new T[capacity];
+  }
+
+  ~ArrayStack() {
+    delete[] data;
+    data = nullptr; 
+  }
+  void push(const T& value) {
+    if (isFull()) {
+      throw std::overflow_error("Stack is full.");
     }
-    T pop() {
-        if (top < 0) {
-            return T(); 
-        }
-        T temp = data[top];
-        top--;
-        return temp;
+    data[++top] = value;
+  }
+  T pop() {
+    if (isEmpty()) {
+      throw std::underflow_error("Stack is empty.");
     }
-    T peek() const {
-        if (top < 0) {
-            return T();
-        }
-        return data[top];
+    return data[top--];
+  }
+
+  T peek() const {
+    if (isEmpty()) {
+      throw std::underflow_error("Stack is empty.");
     }
-    bool isEmpty() const {
-        return (top == -1);
-    }
+    return data[top];
+  }
+  bool isEmpty() const { return top == -1; }
+
+  bool isFull() const { return top == capacity - 1; }
+
+  int getSize() const { return top + 1; }
+
+  int getCapacity() const { return capacity; }
+};
 };
 
 std::string infx2pstfx(const std::string& inf) {
     std::string infix = inf;
     std::string postfix = "";
-    TStack<char, 100> opStack;
+    ArrayStack<char, 100> opStack;
 
     auto priority = [](char op) {
         if (op == '+' || op == '-') return 1;
