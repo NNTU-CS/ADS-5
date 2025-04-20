@@ -1,84 +1,107 @@
 // Copyright 2025 NNTU-CS
 #include <string>
 #include <map>
+#include <cctype>
+#include <sstream>
 #include "tstack.h"
 
+int priority(char op) {
+    if (op == '+' || op == '-') return 1;
+    if (op == '*' || op == '/') return 2;
+    return 0;
+}
+
+bool is_operator(char ch) {
+    return ch == '+' || ch == '-' || ch == '*' || ch == '/';
+}
+
 std::string infx2pstfx(const std::string& inf) {
-  std::string res;
+    std::string result;
     TStack<char, 100> stack;
-    std::map<char, int> precedence = {
-        {'*', 3}, {'/', 3}, {'+', 2}, {'-', 2}, {'(', 1}
-    };
+    std::string number;
 
     for (size_t i = 0; i < inf.size(); ++i) {
-        char c = inf[i];
-        if (isdigit(c)) {
-            while (i < inf.size() && isdigit(inf[i])) {
-                res += inf[i++];
+        char ch = inf[i];
+
+        if (std::isdigit(ch)) {
+            number += ch;
+        } else {
+            if (!number.empty()) {
+                result += number + " ";
+                number.clear();
             }
-            res += ' ';
-            --i;
-        } else if (c == '(') {
-            stack.push(c);
-        } else if (c == ')') {
-            while (!stack.isEmpty() && stack.top(c)) {
-                res += c;
-                res += ' ';
+
+            if (ch == '(') {
+                stack.push(ch);
+            } else if (ch == ')') {
+                char topOp;
+                while (!stack.isEmpty() && stack.top(topOp) && topOp != '(') {
+                    stack.pop(topOp);
+                    result += topOp;
+                    result += " ";
+                }
+                if (!stack.isEmpty()) {
+                    stack.pop(topOp); // удалить '('
+                }
+            } else if (is_operator(ch)) {
+                char topOp;
+                while (!stack.isEmpty() && stack.top(topOp) &&
+                       is_operator(topOp) && priority(topOp) >= priority(ch)) {
+                    stack.pop(topOp);
+                    result += topOp;
+                    result += " ";
+                }
+                stack.push(ch);
             }
-            stack.pop(c);
-        } else if (precedence.count(c)) {
-            while (!stack.isEmpty() && stack.top(c) && stack.top(c) != '(' &&
-                   precedence[stack.top(c)] >= precedence[c]) {
-                res += c;
-                res += ' ';
-                stack.pop(c);
-            }
-            stack.push(c);
         }
     }
 
+    if (!number.empty()) {
+        result += number + " ";
+    }
+
+    char remaining;
     while (!stack.isEmpty()) {
-        res += stack.pop();
-        res += ' ';
+        stack.pop(remaining);
+        result += remaining;
+        result += " ";
     }
 
-    if (!res.empty()) {
-        res.pop_back();
-    }
-
-    return res;
+    return result;
 }
 
-int eval(const std::string& pref) {
-      TStack<int, 100> stack;
-    int num = 0;
-    bool parsingNumber = false;
+int eval(const std::string& post) {
+    TStack<int, 100> stack;
+    std::istringstream in(post);
+    std::string token;
 
-    for (char c : pref) {
-        if (isdigit(c)) {
-            num = num * 10 + (c - '0');
-            parsingNumber = true;
-        } else if (c == ' ') {
-            if (parsingNumber) {
-                stack.push(num);
-                num = 0;
-                parsingNumber = false;
+    while (in >> token) {
+        if (std::isdigit(token[0])) {
+            stack.push(std::stoi(token));
+        } else if (token.length() == 1 && is_operator(token[0])) {
+            int b, a;
+            if (!stack.pop(b) || !stack.pop(a)) {
+                // Ошибка: недостаточно операндов
+                return 0;
             }
-        } else {
-            int b = 0;
-            int a = 0;
-            stack.pop(b);
-            stack.pop(a);
-            switch (c) {
-                case '+': stack.push(a + b); break;
-                case '-': stack.push(a - b); break;
-                case '*': stack.push(a * b); break;
-                case '/': stack.push(a / b); break;
+
+            int result = 0;
+            switch (token[0]) {
+                case '+': result = a + b; break;
+                case '-': result = a - b; break;
+                case '*': result = a * b; break;
+                case '/':
+                    if (b == 0) return 0; // деление на ноль
+                    result = a / b;
+                    break;
             }
+            stack.push(result);
         }
     }
 
     int res = 0;
-    stack.top(res);
+    if (!stack.pop(res)) {
+        return 0;
+    }
     return res;
 }
