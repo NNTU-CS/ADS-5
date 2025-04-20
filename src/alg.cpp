@@ -59,8 +59,8 @@ std::string infx2pstfx(const std::string& inf) {
   if (!postfix.empty() && postfix.back() == ' ') {
       postfix.pop_back();
   }
-  return postfix;
     }
+    return postfix;
 }
 
 
