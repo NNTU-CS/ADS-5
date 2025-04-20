@@ -18,7 +18,7 @@ int getPriority(char op) {
   }
 }
 std::string infx2pstfx(const std::string& inf) {
-  TStack<char> stack(100);
+  TStack<char, 100> stack;
   std::string postfix;
   bool flag = false;
   for (size_t i = 0; i < inf.size(); ++i) {
@@ -61,7 +61,7 @@ std::string infx2pstfx(const std::string& inf) {
   return postfix;
 }
 int eval(const std::string& pref) {
-  TStack<int> stack(100);
+  TStack<int, 100> stack;
   int num = 0;
   bool flag = false;
   for (size_t i = 0; i < pref.size(); ++i) {
