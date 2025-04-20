@@ -22,6 +22,8 @@ int Prioritet(char ch) {
     case '*':
     case '/':
         return 2;
+    default:
+        return -1;
     }
 }
 
