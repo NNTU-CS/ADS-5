@@ -25,8 +25,6 @@ class TStack {
     void Push(T value) {
         if (!isFull()) {
             arr[++top] = value;
-        } else {
-            throw std::string("Full");
         }
     }
     T pop() {
