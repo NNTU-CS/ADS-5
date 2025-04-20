@@ -19,11 +19,11 @@ public:
     }
     stackArray[++topIndex] = value;
   }
-  void pop() {
+  T pop() {
     if (isEmpty()) {
       throw std::underflow_error("Stack underflow");
     }
-    --topIndex;
+    return stackArray[topIndex--];
   }
   T top() const {
     if (isEmpty()) {
@@ -32,11 +32,7 @@ public:
     return stackArray[topIndex];
   }
   bool isEmpty() const {
-    return topIndex < 0;
-  }
-  bool isFull() const {
-    return topIndex >= kStackSize - 1;
+    return topIndex == -1;
   }
 };
-
 #endif // INCLUDE_TSTACK_H_
