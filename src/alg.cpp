@@ -15,10 +15,10 @@ std::string infx2pstfx(const std::string& inf) {
     std::string output;
 
     for (char ch : inf) {
-        if (std::isspace(ch)) continue; // Пропускаем пробелы
+        if (std::isspace(ch)) continue;
         if (std::isdigit(ch)) {
-            output += ch; // Добавляем операнды в выходную строку
-            output += ' '; // Добавляем пробел для разделения
+            output += ch;
+            output += ' ';
         } else if (ch == '(') {
             stack1.push(ch);
         } else if (ch == ')') {
@@ -26,8 +26,8 @@ std::string infx2pstfx(const std::string& inf) {
                 output += stack1.pop();
                 output += ' ';
             }
-            stack1.pop(); // Удаляем '('
-        } else { // Оператор
+            stack1.pop();
+        } else {
             while (!stack1.isEmpty() && precedence(stack1.peek()) >= precedence(ch)) {
                 output += stack1.pop();
                 output += ' ';
@@ -50,7 +50,7 @@ int eval(const std::string& post) {
     while (iss >> token) {
         if (std::isdigit(token[0])) {
             stack2.push(std::stoi(token));
-        } else { // Оператор
+        } else {
             int right = stack2.pop();
             int left = stack2.pop();
             switch (token[0]) {
