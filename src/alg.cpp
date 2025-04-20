@@ -22,15 +22,15 @@ std::string infx2pstfx(const std::string& inf) {
   TStack<char, 100> stack;
 
   for (char ln: inf) {
+       ln = inf[i];
         if (isspace(ln)) continue;
         if (isalnum(ln)) {
           std::string num;
           num += ln;
-          size_t pos = &ln - &inf[0] + 1;
+          size_t pos = i + 1;
           while (pos < inf.length() && isdigit(inf[pos])) {
               num += inf[pos];
               pos++;
-              ln = inf[pos-1];
               i++;
   }
   postfix += num + " ";
@@ -72,7 +72,7 @@ int eval(const std::string& pref) {
            if (num.empty()) continue;
             stack.push(std::stoi(num));
             num = "";
-        } else if (c == '+' || c == '-' || c == '*' || c == '/') {
+        } else if (ln == '+' || ln == '-' || ln == '*' || ln == '/') {
             int operand2 = stack.pop();
             int operand1 = stack.pop();
             int result;}
