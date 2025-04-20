@@ -54,7 +54,10 @@ std::string infx2pstfx(const std::string& inf) {
       op += stack.dl();
       op += ' ';
   }
-
+    if (!op.empty() && op.back() == ' ') {
+        op.erase(op.size() - 1);
+    }
+    
   return op;
 }
 
