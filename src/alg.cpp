@@ -41,7 +41,7 @@ std::string infx2pstfx(const std::string& infix) {
       }
       operators.remove(); // Remove '('
     } else if (checkIfOperator(ch)) {
-      while (operators.hasElements() && 
+      while (operators.hasElements() &&
              priority(operators.check()) >= priority(ch)) {
         postfix += operators.remove();
         postfix += ' ';
