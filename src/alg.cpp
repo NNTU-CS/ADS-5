@@ -6,8 +6,6 @@
 #include <sstream>
 #include <stdexcept>
 
-namespace {
-
 int prec(char gg) {
     switch (gg) {
         case '+': case '-': return 1;
@@ -28,12 +26,9 @@ int apply(int a, int b, char gg) {
     }
 }
 
-}
-
 std::string infx2pstfx(const std::string& inf) {
-   TStack<char, 100> gg;
+    TStack<char, 100> gg;
     std::string res;
-
     for (size_t i = 0; i < inf.size(); ) {
 
         if (std::isspace(inf[i])) { ++i; continue; }
