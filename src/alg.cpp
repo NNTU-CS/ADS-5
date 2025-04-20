@@ -3,21 +3,21 @@
 #include <map>
 #include "tstack.h"
 
-int operationPriority(char operation) {
+int PriorityOperation(char operation) {
   switch (operation) {
     case('('): return 0;
     case(')'): return 1;
     case('-'): return 2;
     case('+'): return 2;
-    case('*'): return 3;
     case('/'): return 3;
+    case('*'): return 3;
     default: return -1;
   }
 }
 
 std::string infx2pstfx(const std::string& inf) {
   std::string postfixStr = "";
-  TStack<char, 100> signStack;
+  TStack<char, 100> SignStack;
   for (int i = 0; i < inf.length(); i++) {
     char temp = inf[i];
     if (isdigit(temp)) {
@@ -30,32 +30,32 @@ std::string infx2pstfx(const std::string& inf) {
       postfixStr += temp_num;
       postfixStr += " ";
     } else if (temp == '(') {
-      signStack.push(temp);
+      SignStack.push(temp);
     } else if (temp == ')') {
-      while (!signStack.isempty() && signStack.top() != '(') {
-        postfixStr += signStack.top();
+      while (!SignStack.isempty() && SignStack.top() != '(') {
+        postfixStr += SignStack.top();
         postfixStr += " ";
-        signStack.pop();
+        SignStack.pop();
       }
-      if (!signStack.isempty() && signStack.top() == '(') {
-        signStack.pop();
+      if (!SignStack.isempty() && SignStack.top() == '(') {
+        SignStack.pop();
       }
     } else if (temp == '+' || temp == '-' || temp == '*' || temp == '/') {
-      while (signStack.isempty() &&
-        operationPriority(temp) <= operationPriority(signStack.top())) {
-        postfixStr += signStack.top();
+      while (!SignStack.isempty() &&
+        PriorityOperation(temp) <= PriorityOperation(SignStack.top())) {
+        postfixStr += SignStack.top();
         postfixStr += " ";
-        signStack.pop();
+        SignStack.pop();
       }
-      signStack.push(temp);
+      SignStack.push(temp);
     } else if (temp == ' ') {
       continue;
     }
   }
-  while (!signStack.isempty()) {
-    postfixStr += signStack.top();
+  while (!SignStack.isempty()) {
+    postfixStr += SignStack.top();
     postfixStr += " ";
-    signStack.pop();
+    SignStack.pop();
   }
   if (!postfixStr.empty() && postfixStr.back() == ' ') {
     postfixStr.pop_back();
@@ -64,22 +64,22 @@ std::string infx2pstfx(const std::string& inf) {
 }
 
 int eval(const std::string& pref) {
-  TStack<int, 100> StackNum;
+  TStack<int, 100> NumberStack;
   for (int i = 0; i < pref.length(); i++) {
     char temp = pref[i];
     if (isdigit(temp)) {
-      std::string number;
+      std::string num;
       while (i < pref.length() && isdigit(pref[i])) {
-        number += pref[i];
+        num += pref[i];
         i++;
       }
       i--;
-      StackNum.push(std::stoi(number));
+      NumberStack.push(std::stoi(num));
     } else if (temp == '+' || temp == '-' || temp == '*' || temp == '/') {
-      int right = StackNum.top();
-      StackNum.pop();
-      int left = StackNum.top();
-      StackNum.pop();
+      int right = NumberStack.top();
+      NumberStack.pop();
+      int left = NumberStack.top();
+      NumberStack.pop();
       int result;
       switch (temp) {
       case '+':
@@ -95,8 +95,8 @@ int eval(const std::string& pref) {
         result = left / right;
         break;
       }
-      StackNum.push(result);
+      NumberStack.push(result);
     }
   }
-  return StackNum.top();
+  return NumberStack.top();
 }
