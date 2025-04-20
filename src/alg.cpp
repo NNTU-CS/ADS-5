@@ -1,4 +1,5 @@
 // Copyright 2025 NNTU-CS
+#include <iostream>
 #include <string>
 #include <map>
 #include "tstack.h"
@@ -65,7 +66,8 @@ std::string infx2pstfx(const std::string& inf) {
   }
   return outS;
 }
-int eval(const std::string& pref) { TStack<int, 100> stack;
+int eval(const std::string& pref) {
+    TStack<int, 100> stack;
     std::istringstream iss(pref);
     std::string tok;
     while (iss >> tok) {
