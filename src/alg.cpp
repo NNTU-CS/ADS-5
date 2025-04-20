@@ -10,7 +10,6 @@ std::string infx2pstfx(const std::string& inf) {
         {'+', 1}, {'-', 1},
         {'*', 2}, {'/', 2}
     };
-    
     for (size_t i = 0; i < inf.size(); ++i) {
         char c = inf[i];
         if (c == ' ') continue;
@@ -29,8 +28,7 @@ std::string infx2pstfx(const std::string& inf) {
             }
             stack.pop();
         } else {
-            while (!stack.isEmpty() && stack.peek() != '(' && 
-                   priority[stack.peek()] >= priority[c]) {
+            while (!stack.isEmpty() && stack.peek() != '(' && priority[stack.peek()] >= priority[c]) {
                 postfix += stack.pop();
                 postfix += ' ';
             }
