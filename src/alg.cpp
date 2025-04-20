@@ -15,7 +15,7 @@ int precedence(char op) {
 std::string infx2pstfx(const std::string& inf) {
   TStack<char, 100> stack;
   std::string op;
-  std::string tek; 
+  std::string tek;
   for (size_t i = 0; i < inf.length(); ++i) {
     char current = inf[i];
     if (std::isdigit(current)) {
@@ -24,10 +24,9 @@ std::string infx2pstfx(const std::string& inf) {
       tek += inf[i];
       i++;
     }
-    i--; 
-    op += tek + ' '; 
-    }
-    else if (current == '(') {
+    i--;
+    op += tek + ' ';
+    } else if (current == '(') {
       stack.dob('(');
     }
     else if (current == ')') {
@@ -36,8 +35,7 @@ std::string infx2pstfx(const std::string& inf) {
         op += ' ';
       }
       if (!stack.nepol()) stack.dl(); 
-    }
-    else { 
+    } else {
       while (!stack.nepol() && precedence(stack.pe()) >= precedence(current)) {
         op += stack.dl();
         op += ' ';
@@ -62,8 +60,7 @@ int eval(const std::string& pref) {
   while (iz >> tek) {
     if (std::isdigit(tek[0])) {
       stack.dob(std::stoi(tek));
-    }
-    else {
+    } else {
       int right = stack.dl();
       int left = stack.dl();
       switch (tek[0]) {
