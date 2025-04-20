@@ -30,14 +30,14 @@ class TStack {
     --index_;
   }
 
-  T& top() {
+  T& get() {
     if (isEmpty()) {
       throw std::underflow_error("Stack is empty");
     }
     return buffer_[index_];
   }
 
-  const T& top() const {
+  const T& get() const {
     if (isEmpty()) {
       throw std::underflow_error("Stack is empty");
     }
