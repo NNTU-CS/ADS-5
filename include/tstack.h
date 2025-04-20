@@ -21,11 +21,11 @@ public:
     }
     return arr[top];
   }
-  void pop() {
+  int pop() {
     if (isEmpty()) {
       throw std::runtime_error("Stack is empty");
     }
-    top--;
+    return data[top--];
   }
   void push(const T& item) {
     if (isFull()) {
