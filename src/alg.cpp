@@ -4,7 +4,7 @@
 #include "tstack.h"
 
 bool isDigit(char ch) {
-  return ch >= '0' && ch <= '9'; 
+  return ch >= '0' && ch <= '9';
 }
 
 bool isOperator(char ch) {
@@ -14,11 +14,13 @@ bool isOperator(char ch) {
 int toInt(const std::string& s) {
   int result = 0;
   for (char ch : s) {
+    if (ch < '0' || ch > '9') {
+      throw std::invalid_argument("Invalid character in input string");
+    }
     result = result * 10 + (ch - '0');
   }
   return result;
 }
-
 
 std::string infx2pstfx(const std::string& inf) {
   std::map<char, int> precedence;
