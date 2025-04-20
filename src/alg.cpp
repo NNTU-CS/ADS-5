@@ -25,7 +25,7 @@ namespace {
     }
     return result;
   }
-}
+} //namespace
 
 std::string infx2pstfx(const std::string& inf) {
   std::map<char, int> priority = {
@@ -34,24 +34,25 @@ std::string infx2pstfx(const std::string& inf) {
       {'*', 2}, {'/', 2},
       {'^', 3}
   };
+  
   TStack<char, 100> stack;
   std::string postfix;
   bool prevWasDigit = false;
+  
   for (char c : inf) {
     if (c == ' ') continue;
+  
     if (isdigit(c)) {
       if (prevWasDigit) {
         postfix += c;
-      }
-      else {
+      } else {
         if (!postfix.empty() && postfix.back() != ' ') {
           postfix += ' ';
         }
         postfix += c;
       }
       prevWasDigit = true;
-    }
-    else {
+    } else {
       if (prevWasDigit) {
         postfix += ' ';
         prevWasDigit = false;
@@ -59,32 +60,38 @@ std::string infx2pstfx(const std::string& inf) {
   
       if (c == '(') {
         stack.push(c);
-      }
-      else if (c == ')') {
+      } else if (c == ')') {
         while (!stack.empty() && stack.Top() != '(') {
+          if (!postfix.empty() && postfix.back() != ' ') {
+            postfix += ' ';
+          }
           postfix += stack.pop();
-          postfix += ' ';
         }
         stack.pop();
-      }
-      else {
+      } else {
         while (!stack.empty() && priority[stack.Top()] >= priority[c]) {
+          if (!postfix.empty() && postfix.back() != ' ') {
+            postfix += ' ';
+          }
           postfix += stack.pop();
+        }
+  
+        // Добавляем пробел только если предыдущий символ не пробел
+        if (!postfix.empty() && postfix.back() != ' ') {
           postfix += ' ';
         }
         stack.push(c);
       }
     }
   }
+  
   while (!stack.empty()) {
-    postfix += stack.pop();
-    if (!stack.empty()) {
+    if (!postfix.empty() && postfix.back() != ' ') {
       postfix += ' ';
     }
+    postfix += stack.pop();
   }
-  if (!postfix.empty() && postfix.back() == ' ') {
-    postfix.pop_back();
-  }
+  
   return postfix;
 }
 
@@ -104,8 +111,7 @@ int eval(const std::string& pref) {
     if (isdigit(c)) {
       num = num * 10 + (c - '0');
       readingNum = true;
-    }
-    else {
+    } else {
       if (readingNum) {
         stack.push(num);
         num = 0;
