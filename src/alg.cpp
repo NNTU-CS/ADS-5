@@ -78,7 +78,6 @@ std::string infx2pstfx(const std::string& inf) {
     }
     postfix += stack.pop();
   }
-  
   return postfix;
 }
 int eval(const std::string& pref) {
