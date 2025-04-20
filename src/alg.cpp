@@ -35,8 +35,8 @@ std::string infx2pstfx(const std::string& inf) {
   }
   postfix += num + " ";
 } else if (ln == '(') {
-      stack1.Push(ln);}
-} else if (ln == ')') {
+      stack1.Push(ln);
+        } else if (ln == ')') {
       while (!stack1.IsEmpty() && stack1.peek() != '(') {
           postfix += stack1.Pop();
           postfix += " ";
@@ -61,6 +61,7 @@ std::string infx2pstfx(const std::string& inf) {
   }
 
   return postfix;
+}
 
 int eval(const std::string& pref) {
   TStack<int, 100> stack2;
