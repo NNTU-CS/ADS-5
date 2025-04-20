@@ -59,7 +59,7 @@ int eval(const std::string& post) {
   TStack<int, 128> st;
   while (ss >> token) {
     if (token.size() == 1 && isOp(token[0])) {
-      if (st.size() < 2) throw std::runtime_error("incorrect postfix");
+      if (st.count() < 2) throw std::runtime_error("incorrect postfix");
       int rhs = st.top();
       st.pop();
       int lhs = st.top();
@@ -82,6 +82,6 @@ int eval(const std::string& post) {
       st.push(std::stoi(token));
     }
   }
-  if (st.size() != 1) throw std::runtime_error("incorrect postfix");
+  if (st.count() != 1) throw std::runtime_error("incorrect postfix");
   return st.top();
 }
