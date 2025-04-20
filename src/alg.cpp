@@ -22,8 +22,8 @@ std::string infx2pstfx(const std::string& inf) {
         if (isdigit(inf[i])) {
             if (needsSpace) {
                 postfix += ' ';
-                needsSpace = false;
             }
+            needsSpace = false;
             while (i < inf.length() && isdigit(inf[i])) {
                 postfix += inf[i++];
             }
@@ -35,8 +35,8 @@ std::string infx2pstfx(const std::string& inf) {
             while (!stack.isEmpty() && stack.top() != '(') {
                 if (needsSpace) {
                     postfix += ' ';
-                    needsSpace = false;
                 }
+                needsSpace = false;
                 postfix += stack.top();
                 stack.pop();
                 needsSpace = true;
@@ -49,8 +49,8 @@ std::string infx2pstfx(const std::string& inf) {
                    precedence(inf[i]) <= precedence(stack.top())) {
                 if (needsSpace) {
                     postfix += ' ';
-                    needsSpace = false;
                 }
+                needsSpace = false;
                 postfix += stack.top();
                 stack.pop();
                 needsSpace = true;
@@ -62,8 +62,8 @@ std::string infx2pstfx(const std::string& inf) {
     while (!stack.isEmpty()) {
         if (needsSpace) {
             postfix += ' ';
-            needsSpace = false;
         }
+        needsSpace = false;
         postfix += stack.top();
         stack.pop();
         needsSpace = true;
