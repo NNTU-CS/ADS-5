@@ -7,35 +7,32 @@ class TStack {
 private:
     T el[size];
     int indx;
-
 public:
     TStack() : indx(-1) {}
-
-    void push(const T& value) {
+    bool push(const T& value) {
         if (indx >= size - 1) {
-            throw std::overflow_error("Stack overflow");
+            return false; // Стек переполнен
         }
         el[++indx] = value;
+        return true;
     }
-
-    T pop() {
+    bool pop(T& value) {
         if (indx < 0) {
-            throw std::underflow_error("Stack underflow");
+            return false; // Стек пуст
         }
-        return el[indx--];
+        value = el[indx--];
+        return true;
     }
-
-    T top() const {
+    bool top(T& value) const {
         if (indx < 0) {
-            throw std::underflow_error("Stack is empty");
+            return false; // Стек пуст
         }
-        return el[indx];
+        value = el[indx];
+        return true;
     }
-
     bool isEmpty() const {
         return indx == -1;
     }
-
     int getSize() const {
         return indx + 1;
     }
