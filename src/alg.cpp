@@ -18,51 +18,50 @@ int priority(char op) {
             return 0;}}
 
 std::string infx2pstfx(const std::string& inf) {
-  std::string postfix = "";
-  TStack<char, 100> stack1;
+    std::string postfix = "";
+    TStack<char, 100> stack1;
 
     for (int i = 0; i < inf.length(); ++i) {
         char ln = inf[i];
         if (isspace(ln)) continue;
         if (isalnum(ln)) {
-          std::string num;
-          num += ln;
-          size_t pos = i + 1;
-          while (pos < inf.length() && isdigit(inf[pos])) {
-              num += inf[pos];
-              pos++;
-              i++;
-          }
-        postfix += num + " ";
+            std::string num;
+            num += ln;
+            size_t pos = i + 1;
+            while (pos < inf.length() && isdigit(inf[pos])) {
+                num += inf[pos];
+                pos++;
+                i++;
+            }
+            postfix += num + " ";
         } else if (ln == '(') {
-      stack1.Push(ln);
+            stack1.Push(ln);
         } else if (ln == ')') {
-      while (!stack1.IsEmpty() && stack1.peek() != '(') {
-          postfix += stack1.Pop();
-          postfix += " ";
-      }
-      if (!stack1.IsEmpty() && stack1.peek() == '(') {
-          stack1.Pop();
-} else {
-         while (!stack1.IsEmpty() && priority(ln) <= priority(stack1.peek())) {
-            postfix += stack1.Pop();
-            postfix += " ";
+            while (!stack1.IsEmpty() && stack1.peek() != '(') {
+                postfix += stack1.Pop();
+                postfix += " ";
+            }
+            if (!stack1.IsEmpty() && stack1.peek() == '(') {
+                stack1.Pop();
+            }
+       }  else if ( !isalnum(ln) && ln != '(' && ln != ')') {
+            while (!stack1.IsEmpty() && priority(ln) <= priority(stack1.peek())) {
+                postfix += stack1.Pop();
+                postfix += " ";
+            }
+            stack1.Push(ln);
         }
-        stack1.Push(ln);
-      }
-  }
-  while (!stack1.IsEmpty()) {
-          postfix += stack1.Pop();
-          postfix += " ";
-      }
+    }
+     while (!stack1.IsEmpty()) {
+        postfix += stack1.Pop();
+        postfix += " ";
+    }
 
-  if (!postfix.empty() && postfix.back() == ' ') {
-      postfix.pop_back();
-  }
+    if (!postfix.empty() && postfix.back() == ' ') {
+        postfix.pop_back();
     }
     return postfix;
 }
-
 
 int eval(const std::string& pref) {
     TStack<int, 100> stack2;
@@ -93,7 +92,7 @@ int eval(const std::string& pref) {
         }
     }
 
-    if (!stack2.IsEmpty()) {
+    if (!stack1.IsEmpty()) {
         return stack2.Pop();
     } else {
         return 0;
