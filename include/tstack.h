@@ -25,6 +25,13 @@ class TStack {
     return T();
   }
 
+  T peek() const {
+    if (!isEmpty()) {
+        return data[top_index];
+    }
+    return T();
+}
+
   T Top() const {
     if (!IsEmpty()) {
       return data[top_index];
