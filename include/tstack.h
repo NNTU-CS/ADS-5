@@ -15,7 +15,7 @@ class TStack {
     return top == -1;
   }
   bool isFull() const {
-    return top == size - 1;
+    return top == KstackSize - 1;
   }
   T get() const {
     if (isEmpty()) {
@@ -23,7 +23,7 @@ class TStack {
     }
     return arr[top];
   }
-  int pop() {
+  T pop() {
     if (isEmpty()) {
       throw std::runtime_error("Stack is empty");
     }
