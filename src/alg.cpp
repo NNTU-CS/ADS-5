@@ -1,10 +1,10 @@
 // Copyright 2025 NNTU-CS
 #include <string>
 #include <map>
-#include "tstack.h"
 #include <cctype>
 #include <sstream>
 #include <stdexcept>
+#include "tstack.h"
 
 static int precedence(char op) {
   return (op == '+' || op == '-') ? 1 : (op == '*' || op == '/') ? 2 : 0;
