@@ -2,52 +2,39 @@
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 
-#include <array>
-#include <stdexcept>
-
 template <typename T, int size>
 class TStack {
  private:
-  static_assert(size > 0, "Stack size must be a positive value");
-  static constexpr int kMaxStackSize = size;
-
-  std::array<T, kMaxStackSize> items;
-  int headIndex;
+  static constexpr int kStackSize = size;
+  T data[kStackSize];
+  int top_index;
 
  public:
-  TStack() : headIndex(-1) {}
+  TStack() : top_index(-1) {}
 
-  void push(const T& item) {
-    if (isFull()) {
-      throw std::overflow_error("Stack is full: overflow");
+  void Push(const T& value) {
+    if (top_index + 1 < kStackSize) {
+      data[++top_index] = value;
     }
-    items[++headIndex] = item;
   }
 
-  void pop() {
-    if (isEmpty()) {
-      throw std::underflow_error("Stack is empty: underflow");
+  T Pop() {
+    if (!IsEmpty()) {
+      return data[top_index--];
     }
-    --headIndex;
+    return T();
   }
 
-  T& peek() {
-    if (isEmpty()) {
-      throw std::underflow_error("Stack is empty");
+  T Top() const {
+    if (!IsEmpty()) {
+      return data[top_index];
     }
-    return items[headIndex];
+    return T();
   }
 
-  const T& peek() const {
-    if (isEmpty()) {
-      throw std::underflow_error("Stack is empty");
-    }
-    return items[headIndex];
+  bool IsEmpty() const {
+    return top_index == -1;
   }
-
-  int size() const { return headIndex + 1; }
-  bool isEmpty() const { return headIndex < 0; }
-  bool isFull() const { return headIndex == kMaxStackSize - 1; }
 };
 
 #endif  // INCLUDE_TSTACK_H_
