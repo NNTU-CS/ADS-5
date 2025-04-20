@@ -1,6 +1,9 @@
 // Copyright 2025 NNTU-CS
 #include <string>
-#include <map>
+#include <sstream>
+#include <stack>
+#include <cctype>
+#include <algorithm>
 #include "tstack.h"
 
 static int precedence(char op) {
@@ -14,85 +17,70 @@ static bool isOperator(char c) {
 }
 
 std::string infx2pstfx(const std::string& inf) {
-    TStack<char, 100> st;
+    std::stack<char> st;
     std::string output;
     for (size_t i = 0; i < inf.size(); ++i) {
         char c = inf[i];
         if (std::isdigit(c)) {
             std::string num;
             while (i < inf.size() && std::isdigit(inf[i])) {
-                num.push_back(inf[i]);
-                ++i;
+                num.push_back(inf[i++]);
             }
             --i;
             output += num;
             output.push_back(' ');
         }
         else if (c == '(') {
-            st.Push(c);
+            st.push(c);
         }
         else if (c == ')') {
-            while (!st.IsEmpty() && st.Top() != '(') {
+            while (!st.empty() && st.top() != '(') {
                 output.push_back(st.top());
                 output.push_back(' ');
-                st.Pop();
+                st.pop();
             }
-            if (!st.empty() && st.top() == '(') {
-                st.Pop();
-            }
+            if (!st.empty()) st.pop();  
         }
         else if (isOperator(c)) {
-            while (!st.IsEmpty() && isOperator(st.Top()) &&
+            while (!st.empty() && isOperator(st.top()) &&
                 precedence(st.top()) >= precedence(c)) {
-                output.push_back(st.Top());
+                output.push_back(st.top());
                 output.push_back(' ');
-                st.Pop();
+                st.pop();
             }
-            st.Push(c);
-        }
-        else {
-        }
+            st.push(c);
+        } 
     }
-    while (!st.IsEmpty()) {
-        if (st.Top() != '(') {
-            output.push_back(st.Top());
+    while (!st.empty()) {
+        if (st.top() != '(') {
+            output.push_back(st.top());
             output.push_back(' ');
         }
-        st.Pop();
+        st.pop();
     }
-    if (!output.empty() && output.back() == ' ') {
+    if (!output.empty() && output.back() == ' ')
         output.pop_back();
-    }
     return output;
 }
-
 int eval(const std::string& post) {
-    TStack<int, 100> st;
+    std::stack<int> st;
     std::istringstream iss(post);
     std::string token;
     while (iss >> token) {
-        char c = token[0];
-        if (token.size() == 1 && isOperator(c)) {
-            int b = st.Top(); st.Pop();
-            int a = st.Top(); st.Pop();
+        if (token.size() == 1 && isOperator(token[0])) {
+            int b = st.top(); st.pop();
+            int a = st.top(); st.pop();
+            char op = token[0];
             int res = 0;
-            if (c == '+') {
-                res = a + b;
-            }
-            else if (c == '-') {
-                res = a - b;
-            }
-            else if (c == '*') {
-                res = a * b;
-            }
-            else if (c == '/') {
-                res = a / b;
-            }
-            st.Push(res);
+            if (op == '+') res = a + b;
+            else if (op == '-') res = a - b;
+            else if (op == '*') res = a * b;
+            else if (op == '/') res = a / b;
+            st.push(res);
         }
         else {
-            st.Push(std::stoi(token));
+            st.push(std::stoi(token));
         }
     }
-    return st.Top();
+    return st.top();
 }
