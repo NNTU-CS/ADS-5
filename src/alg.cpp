@@ -1,46 +1,48 @@
-// Copyright 2025 NNTU-CS
+// Copyright 2021 NNTU-CS
 #include <string>
-#include <map>
+#include <sstream>
+#include <cctype>
 #include "tstack.h"
 
-std::string infx2pstfx(const std::string& inf) {
-  std::map<char, int> priority = {
-    {'+', 1}, {'-', 1},
-    {'*', 2}, {'/', 2}
-  };
+int priority(char op) {
+  if (op == '*' || op == '/') return 2;
+  if (op == '+' || op == '-') return 1;
+  return 0;
+}
 
-  std::string result;
+std::string infx2pstfx(const std::string& inf) {
+  std::string out;
   TStack<char, 100> stack;
-  for (size_t i = 0; i < inf.size(); ++i) {
-    if (std::isdigit(inf[i])) {
-      while (i < inf.size() && std::isdigit(inf[i])) {
-        result += inf[i++];
-      }
-      result += ' ';
-      --i;
-    } else if (inf[i] == '(') {
-      stack.push('(');
-    } else if (inf[i] == ')') {
-      while (!stack.isEmpty() && stack.top() != '(') {
-        result += stack.pop();
-        result += ' ';
+
+  for (size_t i = 0; i < inf.size(); i++) {
+    char ch = inf[i];
+
+    if (isdigit(ch)) {
+      out += ch;
+    } else if (ch == '(') {
+      stack.push(ch);
+    } else if (ch == ')') {
+      while (!stack.isEmpty() && stack.getTop() != '(') {
+        out += ' ';
+        out += stack.pop();
       }
       if (!stack.isEmpty()) stack.pop();
-    } else if (priority.count(inf[i])) {
-      while (!stack.isEmpty() && priority[stack.top()] >= priority[inf[i]]) {
-        result += stack.pop();
-        result += ' ';
+    } else if (priority(ch) > 0) {
+      out += ' ';
+      while (!stack.isEmpty() && priority(stack.getTop()) >= priority(ch)) {
+        out += stack.pop();
+        out += ' ';
       }
-      stack.push(inf[i]);
+      stack.push(ch);
     }
   }
 
   while (!stack.isEmpty()) {
-    result += stack.pop();
-    result += ' ';
+    out += ' ';
+    out += stack.pop();
   }
 
-  return result;
+  return out;
 }
 
 int eval(const std::string& post) {
@@ -49,21 +51,17 @@ int eval(const std::string& post) {
   TStack<int, 100> stack;
 
   while (iss >> token) {
-    if (std::isdigit(token[0])) {
+    if (isdigit(token[0])) {
       stack.push(std::stoi(token));
     } else {
       int b = stack.pop();
       int a = stack.pop();
-      int res = 0;
-
       switch (token[0]) {
-        case '+': res = a + b; break;
-        case '-': res = a - b; break;
-        case '*': res = a * b; break;
-        case '/': res = a / b; break;
+        case '+': stack.push(a + b); break;
+        case '-': stack.push(a - b); break;
+        case '*': stack.push(a * b); break;
+        case '/': stack.push(a / b); break;
       }
-
-      stack.push(res);
     }
   }
 
