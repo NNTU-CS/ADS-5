@@ -2,7 +2,7 @@
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 #include <stdexcept>
-template<typename T, int size>
+template<typename T, int K>
 class TStack {
  private:
     T data[K];
