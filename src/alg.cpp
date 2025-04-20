@@ -33,10 +33,8 @@ std::string infx2pstfx(const std::string& inf) {
       stack.push(inf[count]);
     } else if (inf[count] == ')') {
       while (!stack.isEmpty() && stack.get() != '(') {
-        str[count_p] = stack.get();
-        count_p += 1;
-        str[count_p] = ' ';
-        count_p += 1;
+        pref += stack.get();
+        pref += ' ';
         stack.pop();
       }
       if (!stack.isEmpty()) {
@@ -64,8 +62,6 @@ std::string infx2pstfx(const std::string& inf) {
 int eval(const std::string& pref) {
   TStack<int, 100>stack;
   int len = 0;
-  int count_p = 0;
-  char str[100] = { 0 };
   while (pref[len] != '\0') {
     len += 1;
   }
