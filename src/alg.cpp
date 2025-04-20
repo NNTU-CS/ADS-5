@@ -50,53 +50,35 @@ std::string infx2pstfx(const std::string& inf) {
 }
 
 int eval(const std::string& pref) {
- TStack<int, 100> stack;
- std::istringstream iz(pref);
- std::string tek;
+TStack<int, 100> stack;
+    std::istringstream iz(pref);
+    std::string tek;
 
- while (iz >> tek) {
-     if (std::isdigit(tek[0])) {
-         stack.dob(std::stoi(tek));
-     }
-     else {
-         if (stack.nepol()) {
-             int right = stack.dl();
-             if (stack.nepol()) {
-                 int left = stack.dl();
-                 switch (tek[0]) {
-                 case '-':
-                     stack.dob(left - right);
-                     break;
-                 case '+':
-                     stack.dob(left + right);
-                     break;
-                 case '/':
-                     if (right == 0) {
-                         throw std::runtime_error("Division by zero");
-                     }
-                     stack.dob(left / right);
-                     break;
-                 case '*':
-                     stack.dob(left * right);
-                     break;
-                 default:
-                     throw std::invalid_argument("Unknown operator");
-                 }
-             }
-             else {
-                 throw std::runtime_error("Not enough operands");
-             }
-         }
-         else {
-             throw std::runtime_error("Not enough operands");
-         }
-     }
- }
+    while (iz >> tek) {
+        if (std::isdigit(tek[0])) {
+            stack.dob(std::stoi(tek));
+        }
+        else {
+            int right = stack.dl();
+            int left = stack.dl();
+            switch (tek[0]) {
+            case '-':
+                stack.dob(left - right);
+                break;
+            case '+':
+                stack.dob(left + right);
+                break;
+            case '/':
+                stack.dob(left / right);
+                break;
+            case '*':
+                stack.dob(left * right);
+                break;
+            default:
+                throw std::invalid_argument("Error");
+            }
+        }
+    }
 
- if (stack.nepol()) {
-     return stack.dl();
- }
- else {
-     throw std::runtime_error("No result in stack");
- }
+    return stack.dl();
 }
