@@ -64,7 +64,7 @@ std::string infx2pstfx(const std::string& inf) {
   return postfix;
 }
 
-int eval(const std::string& pref) {
+int eval(const std::string& post) {
   TStack<int, 100> Stack;
   for (int i = 0; i < post.length(); ++i) {
     char ch = post[i];
@@ -73,7 +73,7 @@ int eval(const std::string& pref) {
     }
     if (isdigit(ch)) {
       int num = 0;
-      while (i < post.length() && isdigit(post[i]))) {
+      while (i < post.length() && isdigit(post[i])) {
         num = num * 10 + (post[i] - '0');
         ++i;
       }
