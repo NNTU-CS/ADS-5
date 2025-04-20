@@ -15,12 +15,12 @@ int operationPriority(char operation) {
   }
 }
 
-std::string infx2pstfx(const std::string& inf){
+std::string infx2pstfx(const std::string& inf) {
   std::string postfixStr = "";
   TStack<char, 100> signStack;
   for (int i = 0; i < inf.length(); i++) {
     char temp = inf[i];
-    if (isdigit(temp)){
+    if (isdigit(temp)) {
       std::string temp_num;
       while (i < inf.length() && isdigit(inf[i])) {
         temp_num += inf[i];
@@ -54,7 +54,7 @@ std::string infx2pstfx(const std::string& inf){
   }
   while (!signStack.isempty()) {
     postfixStr += signStack.top();
-    postfixStr += " "
+    postfixStr += " ";
     signStack.pop();
   }
   if (!postfixStr.empty() && postfixStr.back() == ' ') {
