@@ -46,11 +46,11 @@ std::string infx2pstfx(const std::string& inf) {
             }
         } else {
             while (!stack12.IsEmpty() &&
-                priority(ln) <= priority(stack12.peek())) {
+                priority(ln1) <= priority(stack12.peek())) {
                 postfix += stack12.Pop();
                 postfix += " ";
             }
-            stack12.Push(ln);
+            stack12.Push(ln1);
         }
     }
     while (!stack12.IsEmpty()) {
@@ -68,7 +68,7 @@ int eval(const std::string& pref) {
     TStack<int, 100> stack2;
     std::string num;
 
-    for (char ln : pref) {
+    for (char ln1 : pref) {
         if (isdigit(ln1)) {
             num += ln1;
         } else if (isspace(ln1)) {
