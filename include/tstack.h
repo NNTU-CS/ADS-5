@@ -1,6 +1,7 @@
 // Copyright 2021 NNTU-CS
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
+#include <stdexcept>
 
 template<typename T, int size>
 class TStack {
@@ -18,16 +19,19 @@ public:
   }
 
   T get() const {
+		if (isEmpty()) {
+			throw std::runtime_error("Stack is empty");
+    }
     return arr[top];
   }
   void pop() {
-  	if (isempty()) {
+  	if (isEmpty()) {
 			throw std::runtime_error("Stack is empty");
     }
     top--;
   }
   void push(const T& item) {
-    if (isfull()) {
+    if (isFull()) {
       throw std::runtime_error("Stack is full");
     }
     arr[++top] = item;
