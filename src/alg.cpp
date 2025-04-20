@@ -1,8 +1,46 @@
 // Copyright 2025 NNTU-CS
 #include <string>
 #include <map>
+#include <iostream>
 #include "tstack.h"
 using namespace std;
+
+template <typename T, int SIZE>
+class TStack {
+private:
+    T data[SIZE];
+    int top;
+
+public:
+    TStack() {
+        top = -1;
+    }
+    bool push(T value) {
+        if (top >= SIZE - 1) {
+            return false; 
+        }
+        top++;
+        data[top] = value;
+        return true;
+    }
+    T pop() {
+        if (top < 0) {
+            return T(); 
+        }
+        T temp = data[top];
+        top--;
+        return temp;
+    }
+    T peek() const {
+        if (top < 0) {
+            return T();
+        }
+        return data[top];
+    }
+    bool isEmpty() const {
+        return (top == -1);
+    }
+};
 
 std::string infx2pstfx(const std::string& inf) {
     std::string infix = inf;
