@@ -6,12 +6,8 @@
 #include <cctype>
 
 int precedence(char op) {
-    if (op == '+' || op == '-') {
-        return 1;
-    }
-    if (op == '*' || op == '/') {
-        return 2;
-    }
+    if (op == '+' || op == '-') return 1;
+    if (op == '*' || op == '/') return 2;
     return 0;
 }
 
@@ -70,6 +66,7 @@ int eval(const std::string& post) {
         } else {
             int operand2 = stack.top();
             stack.pop();
+            if(stack.isEmpty()) return 0;
             int operand1 = stack.top();
             stack.pop();
 
@@ -81,6 +78,7 @@ int eval(const std::string& post) {
             } else if (token == "*") {
                 result = operand1 * operand2;
             } else if (token == "/") {
+                if (operand2 == 0) return 0;
                 result = operand1 / operand2;
             } else {
                 return 0;
@@ -89,6 +87,7 @@ int eval(const std::string& post) {
             stack.push(result);
         }
     }
+    if (stack.isEmpty()) return 0;
 
     return stack.top();
 }
