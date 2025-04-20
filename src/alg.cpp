@@ -1,14 +1,91 @@
 // Copyright 2025 NNTU-CS
+#include "include/tstack.h"
 #include <string>
-#include <map>
-#include "tstack.h"
+#include <iostream>
+#include <sstream>
+#include <cctype>
 
-std::string infx2pstfx(const std::string& inf) {
-  // добавьте код
-  return std::string("");
+int precedence(char op) {
+    if (op == '+' || op == '-')
+        return 1;
+    if (op == '*' || op == '/')
+        return 2;
+    return 0;
 }
 
-int eval(const std::string& pref) {
-  // добавьте код
-  return 0;
+std::string infx2pstfx(const std::string& inf) {
+    std::string postfix = "";
+    TStack<char, 100> stack;
+
+    for (size_t i = 0; i < inf.length(); ++i) {
+        if (isspace(inf[i])) continue;
+
+        if (isdigit(inf[i])) {
+            std::string num_str;
+            while (i < inf.length() && isdigit(inf[i])) {
+                num_str += inf[i];
+                i++;
+            }
+            i--;
+            postfix += num_str + " ";
+        } else if (inf[i] == '(') {
+            stack.push(inf[i]);
+        } else if (inf[i] == ')') {
+            while (!stack.isEmpty() && stack.top() != '(') {
+                postfix += stack.top();
+                postfix += " ";
+                stack.pop();
+            }
+            stack.pop();
+        } else {
+            while (!stack.isEmpty() && precedence(inf[i]) <= precedence(stack.top())) {
+                postfix += stack.top();
+                postfix += " ";
+                stack.pop();
+            }
+            stack.push(inf[i]);
+        }
+    }
+
+    while (!stack.isEmpty()) {
+        postfix += stack.top();
+        postfix += " ";
+        stack.pop();
+    }
+
+    return postfix;
+}
+
+int eval(const std::string& post) {
+    TStack<int, 100> stack;
+    std::stringstream ss(post);
+    std::string token;
+
+    while (ss >> token) {
+        if (isdigit(token[0])) {
+            stack.push(std::stoi(token));
+        } else {
+            int operand2 = stack.top();
+            stack.pop();
+            int operand1 = stack.top();
+            stack.pop();
+
+            int result;
+            if (token == "+") {
+                result = operand1 + operand2;
+            } else if (token == "-") {
+                result = operand1 - operand2;
+            } else if (token == "*") {
+                result = operand1 * operand2;
+            } else if (token == "/") {
+                result = operand1 / operand2;
+            } else {
+                return 0;
+            }
+
+            stack.push(result);
+        }
+    }
+
+    return stack.top();
 }
