@@ -1,7 +1,7 @@
 // Copyright 2025 NNTU-CS
 #include <iostream>
 #include <string>
-#include <map>
+#include <sstream>
 #include "tstack.h"
 int priority(char oper) {
     switch (oper) {
