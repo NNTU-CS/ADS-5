@@ -26,7 +26,7 @@ class TStack {
   }
 
   T peek() const {
-    if (!isEmpty()) {
+    if (!IsEmpty()) {
         return data[top_index];
     }
     return T();
