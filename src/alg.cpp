@@ -77,26 +77,27 @@ std::string infx2pstfx(const std::string& inf) {
     return res;
 }
 
-int eval(const std::string& pref) {
-  TStack<int, 100> tt;
+int eval(const std::string& post)
+{
+    TStack<int, 100> st;
     std::istringstream ss(post);
-    std::string pok;
 
-    while (ss >> pok) {
-        if (std::isdigit(pok[0])) {
-            tt.push(std::stoi(pok));
+    std::string tok;
+    while (ss >> tok) {
+        if (std::isdigit(tok[0])) {
+            st.push(std::stoi(tok));
         } else {
-            if (tt.size() < 2)
+            if (st.size() < 2)
                 throw std::runtime_error("not enough operands");
 
-            int b = tt.top(); tt.pop();
-            int a = tt.top(); tt.pop();
-            tt.push(apply(a, b, pok[0]));
+            int b = st.top(); st.pop();
+            int a = st.top(); st.pop();
+            st.push(apply(a, b, tok[0]));
         }
     }
 
-    if (tt.size() != 1)
+    if (st.size() != 1)
         throw std::runtime_error("wrong postfix expression");
 
-    return tt.top();
+    return st.top();
 }
