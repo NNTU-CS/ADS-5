@@ -29,16 +29,16 @@ std::string infx2pstfx(const std::string& inf) {
             --i;
             output += num;
             output.push_back(' ');
-        }else if (c == '(') {
+        } else if (c == '(') {
             st.push(c);
-        }else if (c == ')') {
+        } else if (c == ')') {
             while (!st.empty() && st.top() != '(') {
                 output.push_back(st.top());
                 output.push_back(' ');
                 st.pop();
             }
-            if (!st.empty()) st.pop();  
-        }else if (isOperator(c)) {
+            if (!st.empty()) st.pop(); 
+        } else if (isOperator(c)) {
             while (!st.empty() && isOperator(st.top()) &&
                 precedence(st.top()) >= precedence(c)) {
                 output.push_back(st.top());
@@ -46,7 +46,7 @@ std::string infx2pstfx(const std::string& inf) {
                 st.pop();
             }
             st.push(c);
-        } 
+        }
     }
     while (!st.empty()) {
         if (st.top() != '(') {
@@ -74,8 +74,7 @@ int eval(const std::string& post) {
             else if (op == '*') res = a * b;
             else if (op == '/') res = a / b;
             st.push(res);
-        }
-        else {
+        }else {
             st.push(std::stoi(token));
         }
     }
