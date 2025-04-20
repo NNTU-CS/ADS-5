@@ -29,19 +29,16 @@ std::string infx2pstfx(const std::string& inf) {
             --i;
             output += num;
             output.push_back(' ');
-        }
-        else if (c == '(') {
+        }else if (c == '(') {
             st.push(c);
-        }
-        else if (c == ')') {
+        }else if (c == ')') {
             while (!st.empty() && st.top() != '(') {
                 output.push_back(st.top());
                 output.push_back(' ');
                 st.pop();
             }
             if (!st.empty()) st.pop();  
-        }
-        else if (isOperator(c)) {
+        }else if (isOperator(c)) {
             while (!st.empty() && isOperator(st.top()) &&
                 precedence(st.top()) >= precedence(c)) {
                 output.push_back(st.top());
