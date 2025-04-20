@@ -20,17 +20,17 @@ public:
   T get() const {
     return arr[top];
   }
-
   void pop() {
-    if (top >= 0) {
-      top--;
+  	if (isempty()) {
+			throw std::runtime_error("Stack is empty");
     }
+    top--;
   }
-	
-  void push(T item) {
-    if (top < size - 1) {
-      arr[++top] = item;
+  void push(const T& item) {
+    if (isfull()) {
+      throw std::runtime_error("Stack is full");
     }
+    arr[++top] = item;
   }
 
 };
