@@ -23,7 +23,7 @@ std::string infx2pstfx(const std::string& inf) {
     if (isdigit(temp)) {
       std::string temp_string;
       while (i < inf.length() && isdigit(inf[i])) {
-        temp_string += temp;
+        temp_string += inf[i];
         i++;
         temp = inf[i];
       }
@@ -66,19 +66,19 @@ std::string infx2pstfx(const std::string& inf) {
 
 int eval(const std::string& pref) {
   TStack<int, 100> Stack;
-  for (int i = 0; i < static_cast<int>(post.length()); ++i) {
+  for (int i = 0; i < post.length(); ++i) {
     char ch = post[i];
     if (isspace(ch)) {
       continue;
     }
     if (isdigit(ch)) {
       int num = 0;
-      while (i < static_cast<int>(post.length()) && isdigit(post[i])) {
+      while (i < post.length() && isdigit(post[i]))) {
         num = num * 10 + (post[i] - '0');
         ++i;
       }
-      Stack.push(num);
       --i;
+      Stack.push(num);
     } else {
       if (Stack.isEmpty()) {
         throw std::runtime_error("Insufficient operands in postfix expression");
