@@ -9,7 +9,7 @@
 
 template<typename T, std::size_t N>
 class TStack {
-public:
+ public:
     constexpr TStack() noexcept : _top(0) {}
     constexpr std::size_t size()  const noexcept { return _top; }
     constexpr bool        empty() const noexcept { return _top == 0; }
@@ -25,7 +25,7 @@ public:
         --_top;
     }
     void clear() noexcept { _top = 0; }
-private:
+ private:
     T _data[N];
     std::size_t _top;
     void check_empty() const {
