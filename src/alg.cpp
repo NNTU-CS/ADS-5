@@ -6,8 +6,7 @@
 #include "tstack.h"
 
 int getPriority(char op) {
-  switch (op) 
-  {
+  switch (op) {
     case '(': return 0;
     case ')': return 1;
     case '+': case '-': return 2;
