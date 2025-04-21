@@ -17,7 +17,9 @@ bool isOperator(char c) {
 }
 int power(int base, int exp) {
   int res = 1;
-  for (int i = 0; i < exp; ++i) res *= base;
+  for (int i = 0; i < exp; ++i) {
+    res *= base;
+  }
   return res;
 }
 std::string infx2pstfx(const std::string& inf) {
@@ -31,11 +33,16 @@ std::string infx2pstfx(const std::string& inf) {
   std::string postfix;
   bool prevWasDigit = false;
   for (char c : inf) {
-    if (c == ' ') continue;
+    if (c == ' ') {
+      continue;
+    }
     if (isDigit(c)) {
-      if (prevWasDigit) postfix.push_back(c);
-      else {
-        if (!postfix.empty() && postfix.back() != ' ') postfix.push_back(' ');
+      if (prevWasDigit) {
+        postfix.push_back(c);
+      } else {
+        if (!postfix.empty() && postfix.back() != ' ') {
+          postfix.push_back(' ');
+        }
         postfix.push_back(c);
       }
       prevWasDigit = true;
@@ -48,22 +55,32 @@ std::string infx2pstfx(const std::string& inf) {
         stack.push(c);
       } else if (c == ')') {
         while (!stack.empty() && stack.Top() != '(') {
-          if (!postfix.empty() && postfix.back() != ' ') postfix.push_back(' ');
+          if (!postfix.empty() && postfix.back() != ' ') {
+            postfix.push_back(' ');
+          }
           postfix.push_back(stack.pop());
         }
-        if (!stack.empty()) stack.pop();
+        if (!stack.empty()) {
+          stack.pop();
+        }
       } else {
         while (!stack.empty() && priority[stack.Top()] >= priority[c]) {
-          if (!postfix.empty() && postfix.back() != ' ') postfix.push_back(' ');
+          if (!postfix.empty() && postfix.back() != ' ') {
+            postfix.push_back(' ');
+          }
           postfix.push_back(stack.pop());
         }
-        if (!postfix.empty() && postfix.back() != ' ') postfix.push_back(' ');
+        if (!postfix.empty() && postfix.back() != ' ') {
+          postfix.push_back(' ');
+        }
         stack.push(c);
       }
     }
   }
   while (!stack.empty()) {
-    if (!postfix.empty() && postfix.back() != ' ') postfix.push_back(' ');
+    if (!postfix.empty() && postfix.back() != ' ') {
+      postfix.push_back(' ');
+    }
     postfix.push_back(stack.pop());
   }
   return postfix;
@@ -92,11 +109,17 @@ int eval(const std::string& pref) {
       }
       int b = stack.pop();
       int a = stack.pop();
-      if (c == '+') stack.push(a + b);
-      else if (c == '-') stack.push(a - b);
-      else if (c == '*') stack.push(a * b);
-      else if (c == '/') stack.push(a / b);
-      else if (c == '^') stack.push(power(a, b));
+      if (c == '+') {
+        stack.push(a + b);
+      } else if (c == '-') {
+        stack.push(a - b);
+      } else if (c == '*') {
+        stack.push(a * b);
+      } else if (c == '/') {
+        stack.push(a / b);
+      } else if (c == '^') {
+        stack.push(power(a, b));
+      }
     }
   }
   return stack.pop();
