@@ -21,14 +21,14 @@ class TStack {
       }
     }
     void pop(T& value) {
-      if (!isFull()) {
-        --top;
+      if (!isEmpty()) {
+        value = arr[top--];
       } else {
         throw std::string("Empty");
       }
     }
     T get() const {
-      if (!isFull()) {
+      if (!isEmpty()) {
         return arr[top];
       } else {
         throw std::string("Empty");
