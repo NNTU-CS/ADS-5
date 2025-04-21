@@ -102,7 +102,7 @@ int TStack<T, kSize>::eval(const std::string& pref) {
       if (top < 1) {
         exit(1);
       }
-  
+
       int b = stack[top--];
       int a = stack[top--];
 
