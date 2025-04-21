@@ -42,7 +42,7 @@ std::string TStack<T, size>::infx2pstfx(const std::string& inf) {
     } else if (c == '-' || c == '+') {
       bool fl = false;
       if (!stack.empty()) {
-        while (stack.back() == '-' || stack.back() == '+' || 
+        while (stack.back() == '-' || stack.back() == '+' ||
           stack.back() == '*' || stack.back() == '/') {
           res += stack.back();
           res += ' ';
@@ -87,9 +87,9 @@ std::string TStack<T, size>::infx2pstfx(const std::string& inf) {
   return res;
 }
 
-template<typename T, int size>
-int TStack<T, size>::eval(const std::string& pref) {
-  int stack[size];
+template<typename T, int kSize>
+int TStack<T, kSize>::eval(const std::string& pref) {
+  int stack[kSize];
   int top = -1;
 
   int i = 0;
@@ -102,7 +102,7 @@ int TStack<T, size>::eval(const std::string& pref) {
       if (top < 1) {
         exit(1);
       }
-      
+  
       int b = stack[top--];
       int a = stack[top--];
 
