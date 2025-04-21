@@ -4,8 +4,9 @@
 #include <map>
 #include "tstack.h"
 
-template<typename T, int size>
-std::string TStack<T, size>::infx2pstfx(const std::string& inf) {
+
+std::string infx2pstfx(const std::string& inf) {
+  TStack<char, 100> stack;
   std::string currentNumber = "";
   for (char c : inf) {
     if (isdigit(c)) {
@@ -87,9 +88,10 @@ std::string TStack<T, size>::infx2pstfx(const std::string& inf) {
   return res;
 }
 
-template<typename T, int kSize>
-int TStack<T, kSize>::eval(const std::string& pref) {
-  int stack[kSize];
+
+int eval(const std::string& pref) {
+  TStack<int, 100> stack;
+  int stack[100];
   int top = -1;
 
   int i = 0;
@@ -135,5 +137,3 @@ int TStack<T, kSize>::eval(const std::string& pref) {
     exit(1);
   }
 }
-
-template class TStack<int, 100>;
