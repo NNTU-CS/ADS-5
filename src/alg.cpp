@@ -51,7 +51,7 @@ std::string infx2pstfx(const std::string& inf) {
     } else if (isOperator(token)) {
     char topOp;
     while (!stack.isEmpty() && stack.get() != '(' &&
-      priority[stack.get()] >= priority[token] && token != '^') {
+      priority[stack.get()] >= priority[token]) {
       stack.pop(topOp);
       postfix += topOp;
       postfix += ' ';
