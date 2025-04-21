@@ -11,8 +11,7 @@ std::string TStack<T, size>::infx2pstfx(const std::string& inf) {
     if (isdigit(c)) {
       currentNumber += c;
       continue;
-    }
-    else {
+    } else {
       if (!currentNumber.empty()) {
         res += currentNumber;
         res += ' ';
@@ -22,8 +21,7 @@ std::string TStack<T, size>::infx2pstfx(const std::string& inf) {
 
     if (c == '(') {
       stack += c;
-    }
-    else if (c == '*' || c == '/') {
+    } else if (c == '*' || c == '/') {
       bool fl = false;
       if (!stack.empty()) {
         while (stack.back() == '*' || stack.back() == '/') {
@@ -41,11 +39,11 @@ std::string TStack<T, size>::infx2pstfx(const std::string& inf) {
       }
 
       stack += c;
-    }
-    else if (c == '-' || c == '+') {
+    } else if (c == '-' || c == '+') {
       bool fl = false;
       if (!stack.empty()) {
-        while (stack.back() == '-' || stack.back() == '+' || stack.back() == '*' || stack.back() == '/') {
+        while (stack.back() == '-' || stack.back() == '+' || 
+          stack.back() == '*' || stack.back() == '/') {
           res += stack.back();
           res += ' ';
           stack.pop_back();
@@ -60,8 +58,7 @@ std::string TStack<T, size>::infx2pstfx(const std::string& inf) {
       }
 
       stack += c;
-    }
-    else if (c == ')') {
+    } else if (c == ')') {
       while (stack.back() != '(' && !stack.empty()) {
         res += stack.back();
         res += ' ';
@@ -111,21 +108,17 @@ int TStack<T, size>::eval(const std::string& pref) {
 
       char symbol = pref[i];
       if (symbol == '+') {
-        stack[++top] = a + b; 
-      }
-      else if (symbol == '-') {
-        stack[++top] = a - b; 
-      }
-      else if (symbol == '*') {
-        stack[++top] = a * b; 
-      }
-      else {
-        stack[++top] = a / b; 
+        stack[++top] = a + b;
+      } else if (symbol == '-') {
+        stack[++top] = a - b;
+      } else if (symbol == '*') {
+        stack[++top] = a * b;
+      } else {
+        stack[++top] = a / b;
       }
 
       i++;
-    }
-    else if (isdigit(pref[i])) {
+    } else if (isdigit(pref[i])) {
       int num = 0;
       while (i < pref.size() && isdigit(pref[i])) {
         num = num * 10 + (pref[i] - '0');
@@ -138,8 +131,7 @@ int TStack<T, size>::eval(const std::string& pref) {
 
   if (top != -1) {
     return stack[top];
-  }
-  else {
+  } else {
     exit(1);
   }
 }
