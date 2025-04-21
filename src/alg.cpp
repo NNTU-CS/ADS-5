@@ -26,47 +26,32 @@ std::string infx2pstfx(const std::string& inf) {
   priority['-'] = 1;
   priority['*'] = 2;
   priority['/'] = 2;
-  int i = 0;
-  while (i < inf.length()) {
-    char token = inf[i];
-    if (isDigit(token)) {
-      while (i < inf.length() && isDigit(inf[i])) {
-        postfix += inf[i];
-        i++;
-      }
-      postfix += ' ';
-      continue;
-    } else if (token == '(') {
-      stack.push(token);
-    } else if (token == ')') {
-      char topOp;
+  for (size_t i = 0; i < inf.size(); i++) {
+    char ch = inf[i];
+    if (isDigit(ch)) {
+      postfix += ch;
+    } else if (ch == '(') {
+      stack.push(ch);
+    } else if (ch == ')') {
       while (!stack.isEmpty() && stack.get() != '(') {
-        stack.pop(topOp);
-        postfix += topOp;
+        postfix += ' ';
+        postfix += stack.pop();
+      }
+      if (!stack.isEmpty()) stack.pop();
+    } else if (priority(ch) > 0) {
+      postfix += ' ';
+      while (!stack.isEmpty() && priority(stack.get()) >= priority(ch)) {
+        postfix += stack.pop();
         postfix += ' ';
       }
-      if (!stack.isEmpty()) {
-        stack.pop(topOp);
-      }
-    } else if (isOperator(token)) {
-    char topOp;
-    while (!stack.isEmpty() && stack.get() != '(' &&
-      priority[stack.get()] >= priority[token]) {
-      stack.pop(topOp);
-      postfix += topOp;
-      postfix += ' ';
+      stack.push(ch);
     }
-    stack.push(token);
-    }
-    i++;
   }
-  char topOp;
   while (!stack.isEmpty()) {
-    stack.pop(topOp);
-    postfix += topOp;
-    postfix += ' ';
+  postfix += ' ';
+  postfix += stack.pop();
   }
-  return postfix;
+  return out;
 }
 int eval(const std::string& pref) {
   TStack<int, 100> stack;
