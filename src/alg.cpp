@@ -9,14 +9,11 @@ int precedence(char op) {
   if (op == '*' || op == '/') return 2;
   return 0;
 }
-
 std::string infx2pstfx(const std::string& inf) {
   TStack<char, 100> stack;
   std::stringstream output;
-  
   for (size_t i = 0; i < inf.size(); ++i) {
     char c = inf[i];
-    
     if (isdigit(c)) {
       while (i < inf.size() && isdigit(inf[i])) {
         output << inf[i++];
@@ -37,31 +34,25 @@ std::string infx2pstfx(const std::string& inf) {
       stack.push(c);
     }
   }
-  
   while (!stack.isEmpty()) {
     output << stack.pop() << ' ';
   }
-  
   std::string result = output.str();
   if (!result.empty() && result.back() == ' ') {
     result.pop_back();
   }
-  
   return result;
 }
-
 int eval(const std::string& post) {
   TStack<int, 100> stack;
   std::istringstream iss(post);
   std::string token;
-  
   while (iss >> token) {
     if (isdigit(token[0])) {
       stack.push(std::stoi(token));
     } else {
       int b = stack.pop();
       int a = stack.pop();
-      
       switch (token[0]) {
         case '+': stack.push(a + b); break;
         case '-': stack.push(a - b); break;
@@ -70,6 +61,5 @@ int eval(const std::string& post) {
       }
     }
   }
-  
   return stack.pop();
 }
