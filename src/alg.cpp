@@ -1,90 +1,102 @@
 // Copyright 2025 NNTU-CS
-#include <string>
+#include <cctype>
 #include <map>
+#include <string>
 #include "tstack.h"
-std::map<char, int> op_priority = {
-    {'^', 4},
-    {'*', 3}, {'/', 3},
-    {'+', 2}, {'-', 2},
-    {'(', 1}
+std::map<char,int> op_priority = {
+  {'^', 4},
+  {'*', 3}, {'/', 3},
+  {'+', 2}, {'-', 2},
+  {'(', 1}
 };
 bool isDigit(char c) {
-  return (c >= '0') && (c <= '9');
+  return c >= '0' && c <= '9';
 }
 bool isOperator(char c) {
-  return (c == '+' || c == '-' || c == '*' || c == '/' || c == '^');
+  return op_priority.find(c) != op_priority.end() && c != '(';
+}
+int power(int base, int exp) {
+  return (exp > 0) ? base * power(base, exp - 1) : 1;
 }
 std::string infx2pstfx(const std::string& inf) {
+  std::map<char, int> priority = {
+    {'(', 0},
+    {'+', 1}, {'-', 1},
+    {'*', 2}, {'/', 2},
+    {'^', 3}
+  };
   TStack<char, 100> stack;
   std::string postfix;
-  bool needSpace = false;
-  for (size_t i = 0; i < inf.size(); ++i) {
+  bool prevWasDigit = false;
+  for (std::size_t i = 0; i < inf.size(); ++i) {
     char c = inf[i];
     if (c == ' ') continue;
     if (isDigit(c)) {
-      if (needSpace) postfix += ' ';
-      postfix += c;
-      while (i + 1 < inf.size() && isDigit(inf[i+1])) {
-        postfix += inf[++i];
+      if (prevWasDigit) postfix.push_back(c);
+      else {
+        if (!postfix.empty() && postfix.back() != ' ') postfix.push_back(' ');
+        postfix.push_back(c);
       }
-      needSpace = true;
-    } else if (c == '(') {
-      stack.push(c);
-    } else if (c == ')') {
-      while (!stack.isEmpty() && stack.top() != '(') {
-        if (needSpace) postfix += ' ';
-        postfix += stack.pop();
-        needSpace = true;
+      prevWasDigit = true;
+
+    } else {
+      if (prevWasDigit) {
+        postfix.push_back(' ');
+        prevWasDigit = false;
       }
-      stack.pop();
-    } else if (isOperator(c)) {
-      while (!stack.isEmpty() && op_priority[stack.top()] >= op_priority[c]) {
-        if (needSpace) postfix += ' ';
-        postfix += stack.pop();
-        needSpace = true;
+      if (c == '(') {
+        stack.push(c);
+      } else if (c == ')') {
+        while (!stack.empty() && stack.Top() != '(') {
+          if (!postfix.empty() && postfix.back() != ' ') postfix.push_back(' ');
+          postfix.push_back(stack.pop());
+        }
+        if (!stack.empty()) stack.pop();
+      } else {
+        while (!stack.empty() && priority[stack.Top()] >= priority[c]) {
+          if (!postfix.empty() && postfix.back() != ' ') postfix.push_back(' ');
+          postfix.push_back(stack.pop());
+        }
+        if (!postfix.empty() && postfix.back() != ' ') postfix.push_back(' ');
+        stack.push(c);
       }
-      stack.push(c);
     }
   }
-  while (!stack.isEmpty()) {
-    if (needSpace) postfix += ' ';
-    postfix += stack.pop();
-    needSpace = true;
+  while (!stack.empty()) {
+    if (!postfix.empty() && postfix.back() != ' ') postfix.push_back(' ');
+    postfix.push_back(stack.pop());
   }
   return postfix;
 }
 int eval(const std::string& pref) {
   TStack<int, 100> stack;
-  std::string currentNum;
+  int num = 0;
+  bool readingNum = false;
   for (char c : pref) {
     if (c == ' ') {
-      if (!currentNum.empty()) {
-        stack.push(std::stoi(currentNum));
-        currentNum.clear();
+      if (readingNum) {
+        stack.push(num);
+        num = 0;
+        readingNum = false;
       }
       continue;
     }
     if (isDigit(c)) {
-      currentNum += c;
+      num = num * 10 + (c - '0');
+      readingNum = true;
     } else {
-      if (!currentNum.empty()) {
-        stack.push(std::stoi(currentNum));
-        currentNum.clear();
+      if (readingNum) {
+        stack.push(num);
+        num = 0;
+        readingNum = false;
       }
-      int right = stack.pop();
-      int left = stack.pop();
-      switch (c) {
-        case '+': stack.push(left + right); break;
-        case '-': stack.push(left - right); break;
-        case '*': stack.push(left * right); break;
-        case '/': stack.push(left / right); break;
-        case '^': {
-          int res = 1;
-          for (int i = 0; i < right; ++i) res *= left;
-          stack.push(res);
-          break;
-        }
-      }
+      int b = stack.pop();
+      int a = stack.pop();
+      if (c == '+') stack.push(a + b);
+      else if (c == '-') stack.push(a - b);
+      else if (c == '*') stack.push(a * b);
+      else if (c == '/') stack.push(a / b);
+      else if (c == '^') stack.push(power(a, b));
     }
   }
   return stack.pop();
