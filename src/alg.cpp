@@ -102,6 +102,10 @@ int TStack<T, size>::eval(const std::string& pref) {
     }
 
     if (pref[i] == '+' || pref[i] == '-' || pref[i] == '*' || pref[i] == '/') {
+      if (top < 1) {
+        exit(1);
+      }
+      
       int b = stack[top--];
       int a = stack[top--];
 
@@ -132,7 +136,12 @@ int TStack<T, size>::eval(const std::string& pref) {
     }
   }
 
-  return stack[top];
+  if (top != -1) {
+    return stack[top];
+  }
+  else {
+    exit(1);
+  }
 }
 
 template class TStack<int, 100>;
