@@ -4,7 +4,14 @@
 
 template<typename T, int size>
 class TStack {
-  // добавьте код стека
+  std::string stack;
+  std::string res;
+public:
+  TStack() : stack(""), res("") {}
+
+  std::string infx2pstfx(const std::string& inf);
+
+  int eval(const std::string& pref);
 };
 
 #endif  // INCLUDE_TSTACK_H_
