@@ -9,6 +9,14 @@ bool isDigit(char c) {
 bool isOperator(char c) {
   return c == '+' || c == '-' || c == '*' || c == '/';
 }
+int useOp(int a, int b, char op) {
+  switch (op) {
+  case '+': return a + b;
+  case '-': return a - b;
+  case '*': return a * b;
+  case '/': return a / b;
+  }
+}
 std::string infx2pstfx(const std::string& inf) {
   TStack<char, 100> stack;
   std::string postfix = "";
@@ -61,33 +69,16 @@ std::string infx2pstfx(const std::string& inf) {
 }
 int eval(const std::string& pref) {
   TStack<int, 100> stack;
-  int i = 0;
-  while (i < pref.length()) {
-    if (pref[i] == ' ') {
-      i++;
-      continue;
-    }
-    if (pref[i] >= '0' && pref[i] <= '9') {
-      int num = 0;
-      while (i < pref.length() && pref[i] >= '0' && pref[i] <= '9') {
-        num = num * 10 + (pref[i] - '0');
-        i++;
-      }
-      stack.push(num);
+  for (size_t i = 0; i < pref.length(); i++) {
+    if (isspace(pref[i])) continue;
+    if (isdigit(pref[i])) {
+      stack.push(pref[i] - '0');
     } else if (isOperator(pref[i])) {
-      int b, a, result = 0;
+      int b, a;
       stack.pop(b);
       stack.pop(a);
-      switch (pref[i]) {
-        case '+': result = a + b; break;
-        case '-': result = a - b; break;
-        case '*': result = a * b; break;
-        case '/': result = a / b; break;
-      }
+      int result = useOp(a, b, pref[i]);
       stack.push(result);
-      i++;
-    } else {
-      i++;
     }
   }
   int finalResult;
