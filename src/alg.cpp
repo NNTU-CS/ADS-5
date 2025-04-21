@@ -3,7 +3,7 @@
 #include <map>
 #include <string>
 #include "tstack.h"
-std::map<char,int> op_priority = {
+std::map<char, int> op_priority = {
   {'^', 4},
   {'*', 3}, {'/', 3},
   {'+', 2}, {'-', 2},
@@ -38,33 +38,32 @@ std::string infx2pstfx(const std::string& inf) {
         postfix.push_back(c);
       }
       prevWasDigit = true;
-
     } else {
       if (prevWasDigit) {
         postfix.push_back(' ');
         prevWasDigit = false;
       }
       if (c == '(') {
-        stack.push(c);
+        stack.Push(c);
       } else if (c == ')') {
-        while (!stack.empty() && stack.Top() != '(') {
+        while (!stack.IsEmpty() && stack.Peek() != '(') {
           if (!postfix.empty() && postfix.back() != ' ') postfix.push_back(' ');
-          postfix.push_back(stack.pop());
+          postfix.push_back(stack.Pop());
         }
-        if (!stack.empty()) stack.pop();
+        if (!stack.IsEmpty()) stack.Pop();
       } else {
-        while (!stack.empty() && priority[stack.Top()] >= priority[c]) {
+        while (!stack.IsEmpty() && priority[stack.Peek()] >= priority[c]) {
           if (!postfix.empty() && postfix.back() != ' ') postfix.push_back(' ');
-          postfix.push_back(stack.pop());
+          postfix.push_back(stack.Pop());
         }
         if (!postfix.empty() && postfix.back() != ' ') postfix.push_back(' ');
-        stack.push(c);
+        stack.Push(c);
       }
     }
   }
-  while (!stack.empty()) {
+  while (!stack.IsEmpty()) {
     if (!postfix.empty() && postfix.back() != ' ') postfix.push_back(' ');
-    postfix.push_back(stack.pop());
+    postfix.push_back(stack.Pop());
   }
   return postfix;
 }
@@ -75,7 +74,7 @@ int eval(const std::string& pref) {
   for (char c : pref) {
     if (c == ' ') {
       if (readingNum) {
-        stack.push(num);
+        stack.Push(num);
         num = 0;
         readingNum = false;
       }
@@ -86,18 +85,18 @@ int eval(const std::string& pref) {
       readingNum = true;
     } else {
       if (readingNum) {
-        stack.push(num);
+        stack.Push(num);
         num = 0;
         readingNum = false;
       }
-      int b = stack.pop();
-      int a = stack.pop();
-      if (c == '+') stack.push(a + b);
-      else if (c == '-') stack.push(a - b);
-      else if (c == '*') stack.push(a * b);
-      else if (c == '/') stack.push(a / b);
-      else if (c == '^') stack.push(power(a, b));
+      int b = stack.Pop();
+      int a = stack.Pop();
+      if (c == '+') stack.Push(a + b);
+      else if (c == '-') stack.Push(a - b);
+      else if (c == '*') stack.Push(a * b);
+      else if (c == '/') stack.Push(a / b);
+      else if (c == '^') stack.Push(power(a, b));
     }
   }
-  return stack.pop();
+  return stack.Pop();
 }
