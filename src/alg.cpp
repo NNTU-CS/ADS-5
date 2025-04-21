@@ -8,8 +8,8 @@ std::string infx2pstfx(const std::string& inf) {
   TStack<char, 100> stack;
   std::string output;
   std::map<char, int> priority = {
-  {'+', 1}, {'-', 1}, {'*', 2}, {'/', 2}, {'(', 0}
-};
+    {'+', 1}, {'-', 1}, {'*', 2}, {'/', 2}, {'(', 0}
+  };
   for (size_t i = 0; i < inf.size(); ++i) {
     char c = inf[i];
     if (isdigit(c)) {
