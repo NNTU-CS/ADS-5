@@ -3,11 +3,11 @@
 #define INCLUDE_TSTACK_H_
 template<typename T, int size>
 class TStack {
-  private:
+   private:
     static const int kCapacity = size;
     T data[kCapacity];
     int topIndex;
-  public:
+   public:
     TStack() : topIndex(0) {}
     void push(const T& value) {
       if (topIndex < kCapacity) {
