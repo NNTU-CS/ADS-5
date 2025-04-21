@@ -3,16 +3,16 @@
 #include <array>
 #include <stdexcept>
 
-#ifndef INCLUDE_TSTACK_H_ 
-#define TSTACK_H
+#ifndef INCLUDE_TSTACK_H_
+#define INCLUDE_TSTACK_H_
 
 template <typename T, int SIZE>
 class TStack {
-private:
+ private:
   T data[SIZE];
   int top;
 
-public:
+ public:
   TStack() : top(-1) {}
 
   bool isEmpty() const {
@@ -44,4 +44,4 @@ public:
   }
 };
 
-#endif //INCLUDE_TSTACK_H_ 
+#endif  // INCLUDE_TSTACK_H_
