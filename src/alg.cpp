@@ -9,18 +9,14 @@ static std::map<char, int> precedence = {
     {'*', 2},
     {'/', 2}
 };
-
 bool isOperator(char c) {
     return c == '+' || c == '-' || c == '*' || c == '/';
 }
-
 std::string infx2pstfx(const std::string& inf) {
     TStack<char, 100> stack;
     std::string result;
-    
     for (size_t i = 0; i < inf.length(); ++i) {
         char c = inf[i];
-        
         if (isdigit(c)) {
             while (i < inf.length() && isdigit(inf[i])) {
                 result += inf[i];
@@ -49,31 +45,24 @@ std::string infx2pstfx(const std::string& inf) {
             stack.push(c);
         }
     }
-    
     while (!stack.isEmpty()) {
         result += stack.top();
         result += ' ';
         stack.pop();
     }
-    
     if (!result.empty() && result.back() == ' ') {
         result.pop_back();
     }
-    
     return result;
 }
-
 int eval(const std::string& post) {
     TStack<int, 100> stack;
     std::string num;
-    
     for (size_t i = 0; i < post.length(); ++i) {
         char c = post[i];
-        
         if (c == ' ') {
             continue;
         }
-        
         if (isdigit(c)) {
             num.clear();
             while (i < post.length() && (isdigit(post[i]) || post[i] == ' ')) {
@@ -91,7 +80,7 @@ int eval(const std::string& post) {
             stack.pop();
             int a = stack.top();
             stack.pop();
-            
+
             switch (c) {
                 case '+':
                     stack.push(a + b);
@@ -108,6 +97,5 @@ int eval(const std::string& post) {
             }
         }
     }
-    
     return stack.top();
 }
