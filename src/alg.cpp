@@ -62,23 +62,23 @@ std::string infx2pstfx(const std::string& inf) {
 int eval(const std::string& pref) {
   TStack<int, 100> stack;
   int i = 0;
-  while (i < post.length()) {
-    if (post[i] == ' ') {
+  while (i < pref.length()) {
+    if (pref[i] == ' ') {
       i++;
       continue;
     }
-    if (post[i] >= '0' && post[i] <= '9') {
+    if (pref[i] >= '0' && pref[i] <= '9') {
       int num = 0;
-      while (i < post.length() && post[i] >= '0' && post[i] <= '9') {
-        num = num * 10 + (post[i] - '0');
+      while (i < pref.length() && pref[i] >= '0' && pref[i] <= '9') {
+        num = num * 10 + (pref[i] - '0');
         i++;
       }
       stack.push(num);
-    } else if (isOperator(post[i])) {
+    } else if (isOperator(pref[i])) {
       int b, a, result = 0;
       stack.pop(b);
       stack.pop(a);
-      switch (post[i]) {
+      switch (pref[i]) {
         case '+': result = a + b; break;
         case '-': result = a - b; break;
         case '*': result = a * b; break;
