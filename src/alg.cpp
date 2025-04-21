@@ -31,14 +31,14 @@ std::string infx2pstfx(const std::string& inf) {
     } else if (c == '(') {
       stack.push(c);
     } else if (c == ')') {
-      while (!stack.empty() && stack.Top() != '(') {
+      while (!stack.isEmpty() && stack.top() != '(') {
         if (needSpace) postfix += ' ';
         postfix += stack.pop();
         needSpace = true;
       }
       stack.pop();
     } else if (isOperator(c)) {
-      while (!stack.empty() && op_priority[stack.Top()] >= op_priority[c]) {
+      while (!stack.isEmpty() && op_priority[stack.top()] >= op_priority[c]) {
         if (needSpace) postfix += ' ';
         postfix += stack.pop();
         needSpace = true;
@@ -46,7 +46,7 @@ std::string infx2pstfx(const std::string& inf) {
       stack.push(c);
     }
   }
-  while (!stack.empty()) {
+  while (!stack.isEmpty()) {
     if (needSpace) postfix += ' ';
     postfix += stack.pop();
     needSpace = true;
@@ -64,7 +64,6 @@ int eval(const std::string& pref) {
       }
       continue;
     }
-
     if (isDigit(c)) {
       currentNum += c;
     } else {
