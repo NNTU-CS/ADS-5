@@ -3,7 +3,7 @@
 #include <array>
 #include <stdexcept>
 
-#ifndef TSTACK_H
+#ifndef INCLUDE_TSTACK_H_ 
 #define TSTACK_H
 
 template <typename T, int SIZE>
@@ -44,4 +44,4 @@ public:
   }
 };
 
-#endif
+#endif //INCLUDE_TSTACK_H_ 
