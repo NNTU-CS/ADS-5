@@ -16,6 +16,7 @@ int useOp(int a, int b, char op) {
   case '*': return a * b;
   case '/': return a / b;
   }
+  return 0;
 }
 std::string infx2pstfx(const std::string& inf) {
   TStack<char, 100> stack;
