@@ -13,10 +13,12 @@ bool isDigit(char c) {
   return c >= '0' && c <= '9';
 }
 bool isOperator(char c) {
-  return op_priority.find(c) != op_priority.end() && c != '(';
+  return op_priority.count(c) && c != '(';
 }
 int power(int base, int exp) {
-  return (exp > 0) ? base * power(base, exp - 1) : 1;
+  int res = 1;
+  for (int i = 0; i < exp; ++i) res *= base;
+  return res;
 }
 std::string infx2pstfx(const std::string& inf) {
   std::map<char, int> priority = {
@@ -28,8 +30,7 @@ std::string infx2pstfx(const std::string& inf) {
   TStack<char, 100> stack;
   std::string postfix;
   bool prevWasDigit = false;
-  for (std::size_t i = 0; i < inf.size(); ++i) {
-    char c = inf[i];
+  for (char c : inf) {
     if (c == ' ') continue;
     if (isDigit(c)) {
       if (prevWasDigit) postfix.push_back(c);
@@ -44,26 +45,26 @@ std::string infx2pstfx(const std::string& inf) {
         prevWasDigit = false;
       }
       if (c == '(') {
-        stack.Push(c);
+        stack.push(c);
       } else if (c == ')') {
-        while (!stack.IsEmpty() && stack.Peek() != '(') {
+        while (!stack.empty() && stack.Top() != '(') {
           if (!postfix.empty() && postfix.back() != ' ') postfix.push_back(' ');
-          postfix.push_back(stack.Pop());
+          postfix.push_back(stack.pop());
         }
-        if (!stack.IsEmpty()) stack.Pop();
+        if (!stack.empty()) stack.pop();
       } else {
-        while (!stack.IsEmpty() && priority[stack.Peek()] >= priority[c]) {
+        while (!stack.empty() && priority[stack.Top()] >= priority[c]) {
           if (!postfix.empty() && postfix.back() != ' ') postfix.push_back(' ');
-          postfix.push_back(stack.Pop());
+          postfix.push_back(stack.pop());
         }
         if (!postfix.empty() && postfix.back() != ' ') postfix.push_back(' ');
-        stack.Push(c);
+        stack.push(c);
       }
     }
   }
-  while (!stack.IsEmpty()) {
+  while (!stack.empty()) {
     if (!postfix.empty() && postfix.back() != ' ') postfix.push_back(' ');
-    postfix.push_back(stack.Pop());
+    postfix.push_back(stack.pop());
   }
   return postfix;
 }
@@ -74,7 +75,7 @@ int eval(const std::string& pref) {
   for (char c : pref) {
     if (c == ' ') {
       if (readingNum) {
-        stack.Push(num);
+        stack.push(num);
         num = 0;
         readingNum = false;
       }
@@ -85,18 +86,18 @@ int eval(const std::string& pref) {
       readingNum = true;
     } else {
       if (readingNum) {
-        stack.Push(num);
+        stack.push(num);
         num = 0;
         readingNum = false;
       }
-      int b = stack.Pop();
-      int a = stack.Pop();
-      if (c == '+') stack.Push(a + b);
-      else if (c == '-') stack.Push(a - b);
-      else if (c == '*') stack.Push(a * b);
-      else if (c == '/') stack.Push(a / b);
-      else if (c == '^') stack.Push(power(a, b));
+      int b = stack.pop();
+      int a = stack.pop();
+      if (c == '+') stack.push(a + b);
+      else if (c == '-') stack.push(a - b);
+      else if (c == '*') stack.push(a * b);
+      else if (c == '/') stack.push(a / b);
+      else if (c == '^') stack.push(power(a, b));
     }
   }
-  return stack.Pop();
+  return stack.pop();
 }
