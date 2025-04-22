@@ -2,10 +2,6 @@
 #include <string>
 #include <cctype>
 #include "tstack.h"
-// Copyright 2025 NNTU-CS
-#include <string>
-#include <cctype>
-#include "tstack.h"
 
 int precedence(char op) {
   if (op == '+' || op == '-') return 1;
