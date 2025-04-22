@@ -1,7 +1,7 @@
 // Copyright 2025 NNTU-CS
+#include <ctype.h>
 #include <iostream>
 #include <string>
-#include <ctype.h>
 #include <map>
 #include "tstack.h"
 
@@ -94,7 +94,8 @@ int eval(const std::string& pref) {
       i++;
     }
 
-    if (i < pref.size() && (pref[i] == '+' || pref[i] == '-' || pref[i] == '*' || pref[i] == '/')) {
+    if (i < pref.size() && (pref[i] == '+' || pref[i] == '-'
+      || pref[i] == '*' || pref[i] == '/')) {
       if (stack.get_top() < 1) {
         exit(1);
       }
