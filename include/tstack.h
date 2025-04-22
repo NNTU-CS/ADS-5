@@ -1,18 +1,33 @@
 // Copyright 2021 NNTU-CS
-#include <string>
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 
 template<typename T, int size>
 class TStack {
-  std::string stack;
-  std::string res;
+  T stack[size];
+  int top = -1;
  public:
-  TStack() : stack(""), res("") {}
+  TStack() : top(-1), stack{ 0 } {}
 
-  std::string infx2pstfx(const std::string& inf);
+  void push(T item) {
+    stack[++top] = item;
+  }
 
-  int eval(const std::string& pref);
+  T pop() {
+    if (top == -1) {
+      throw("Стек пуст");
+    }
+
+    return stack[top--];
+  }
+
+  T get_item() {
+    return stack[top];
+  }
+
+  int get_top() {
+    return top;
+  }
 };
 
 #endif  // INCLUDE_TSTACK_H_
