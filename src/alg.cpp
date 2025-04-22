@@ -1,9 +1,10 @@
 // Copyright 2025 NNTU-CS
-#include "../include/tstack.h"
+
 #include <cctype>
 #include <cmath>
 #include <string>
 
+#include "tstack.h"
 int getPriority(char op) {
   switch (op) {
   case '+':

@@ -1,23 +1,23 @@
-// Copyright 2021 NNTU-CS
-#include <iostream>
+// Copyright 2025 NNTU-CS
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
+#include <iostream>
 
-template<typename T, int size>
+template<typename T, int kMaxSize>
 class TStack {
  private:
-    T data[size];
-    int topIndex;  // индекс вершины стека
-    
+    T data[kMaxSize];
+    int topIndex;
+
  public:
-    TStack() : topIndex(-1) {}  // инициализация пустого стека
+    TStack() : topIndex(-1) {}
 
     bool isEmpty() const {
         return topIndex == -1;
     }
 
     bool isFull() const {
-        return topIndex == size - 1;
+        return topIndex == kMaxSize - 1;
     }
 
     void push(const T& value) {
@@ -39,6 +39,10 @@ class TStack {
             throw std::underflow_error("Stack is empty");
         }
         return data[topIndex];
+    }
+
+    int size() const {
+        return topIndex + 1;
     }
 };
 
