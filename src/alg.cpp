@@ -1,86 +1,84 @@
 // Copyright 2025 NNTU-CS
-#include <cctype>
+#include <iostream>
 #include <string>
+#include <ctype.h>
 #include <map>
 #include "tstack.h"
 
-
 std::string infx2pstfx(const std::string& inf) {
+  std::string res = "";
   TStack<char, 100> stack;
-  std::string currentNumber = "";
+  std::string current_number = "";
   for (char c : inf) {
     if (isdigit(c)) {
-      currentNumber += c;
+      current_number += c;
       continue;
     } else {
-      if (!currentNumber.empty()) {
-        res += currentNumber;
+      if (!current_number.empty()) {
+        res += current_number;
         res += ' ';
-        currentNumber = "";
+        current_number = "";
       }
     }
 
     if (c == '(') {
-      stack += c;
+      stack.push(c);
     } else if (c == '*' || c == '/') {
-      bool fl = false;
-      if (!stack.empty()) {
-        while (stack.back() == '*' || stack.back() == '/') {
-          res += stack.back();
+      if (stack.get_top() == -1) {
+        stack.push(c);
+        continue;
+      }
+
+      if (stack.get_item() == '*' || stack.get_item() == '/') {
+        while (stack.get_item() == '*' || stack.get_item() == '/') {
+          res += stack.pop();
           res += ' ';
-          stack.pop_back();
-          fl = true;
+        }
+
+        if (stack.get_top() != -1 && stack.get_item() == '(') {
+          stack.pop();
         }
       }
 
-      if (fl) {
-        if (stack.back() == '(') {
-          stack.pop_back();
-        }
-      }
-
-      stack += c;
+      stack.push(c);
     } else if (c == '-' || c == '+') {
-      bool fl = false;
-      if (!stack.empty()) {
-        while (stack.back() == '-' || stack.back() == '+' ||
-          stack.back() == '*' || stack.back() == '/') {
-          res += stack.back();
+      if (stack.get_top() == -1) {
+        stack.push(c);
+        continue;
+      }
+
+      if (stack.get_item() == '-' || stack.get_item() == '+' ||
+        stack.get_item() == '*' || stack.get_item() == '/') {
+        while (stack.get_item() == '-' || stack.get_item() == '+' ||
+          stack.get_item() == '*' || stack.get_item() == '/') {
+          res += stack.pop();
           res += ' ';
-          stack.pop_back();
-          fl = true;
+        }
+
+        if (stack.get_top() != -1 && stack.get_item() == '(') {
+          stack.pop();
         }
       }
 
-      if (fl) {
-        if (stack.back() == '(') {
-          stack.pop_back();
-        }
-      }
-
-      stack += c;
+      stack.push(c);
     } else if (c == ')') {
-      while (stack.back() != '(' && !stack.empty()) {
-        res += stack.back();
+      while (stack.get_top() != -1 && stack.get_item() != '(') {
+        res += stack.pop();
         res += ' ';
-        stack.pop_back();
       }
 
-      if (stack.back() == '(') {
-        stack.pop_back();
-      }
+      stack.pop();
     }
   }
 
-  if (!currentNumber.empty()) {
-    res += currentNumber;
+  if (!current_number.empty()) {
+    res += current_number;
     res += ' ';
   }
 
-  while (!stack.empty()) {
-    res += stack.back();
+  while (stack.get_top() != -1) {
+    res += stack.pop();
     res += ' ';
-    stack.pop_back();
   }
 
   res.pop_back();
@@ -88,52 +86,44 @@ std::string infx2pstfx(const std::string& inf) {
   return res;
 }
 
-
 int eval(const std::string& pref) {
   TStack<int, 100> stack;
-  int stack[100];
-  int top = -1;
-
   int i = 0;
   while (i < pref.size()) {
-    if (pref[i] == ' ') {
+    while (pref[i] == ' ') {
       i++;
     }
 
-    if (pref[i] == '+' || pref[i] == '-' || pref[i] == '*' || pref[i] == '/') {
-      if (top < 1) {
+    if (i < pref.size() && (pref[i] == '+' || pref[i] == '-' || pref[i] == '*' || pref[i] == '/')) {
+      if (stack.get_top() < 1) {
         exit(1);
       }
 
-      int b = stack[top--];
-      int a = stack[top--];
+      int b = stack.pop();
+      int a = stack.pop();
 
       char symbol = pref[i];
       if (symbol == '+') {
-        stack[++top] = a + b;
+        stack.push(a + b);
       } else if (symbol == '-') {
-        stack[++top] = a - b;
+        stack.push(a - b);
       } else if (symbol == '*') {
-        stack[++top] = a * b;
-      } else {
-        stack[++top] = a / b;
+        stack.push(a * b);
+      } else if (symbol == '/') {
+        stack.push(a / b);
       }
 
       i++;
-    } else if (isdigit(pref[i])) {
+    } else if (i < pref.size() && isdigit(pref[i])) {
       int num = 0;
       while (i < pref.size() && isdigit(pref[i])) {
         num = num * 10 + (pref[i] - '0');
         i++;
       }
 
-      stack[++top] = num;
+      stack.push(num);
     }
   }
 
-  if (top != -1) {
-    return stack[top];
-  } else {
-    exit(1);
-  }
+  return stack.get_item();
 }
