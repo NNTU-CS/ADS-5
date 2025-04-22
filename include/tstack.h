@@ -2,10 +2,11 @@
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 
-template<typename T, int size>
+template<typename T, int kSize>
 class TStack {
-  T stack[size];
+  T stack[kSize];
   int top = -1;
+
  public:
   TStack() : top(-1), stack{ 0 } {}
 
