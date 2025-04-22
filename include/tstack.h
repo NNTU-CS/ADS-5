@@ -3,11 +3,12 @@
 #define INCLUDE_TSTACK_H_
 
 #include <stdexcept>
+#include <array>
 
 template <typename T, int size>
 class TStack {
  private:
-  T data[size];
+  std::array<T, size> data;
   int topIndex = -1;
 
  public:
