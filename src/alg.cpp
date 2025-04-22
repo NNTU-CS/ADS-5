@@ -26,25 +26,26 @@ std::string infx2pstfx(const std::string& inf) {
     } else if (c == '(') {
       stack.push(c);
     } else if (c == ')') {
-      while (!stack.isEmpty() && stack.top() != '(') {
-        post += stack.pop();
+      while (!stack.empty() && stack.top() != '(') {
+        post += stack.top();
         post += ' ';
+        stack.pop();
       }
       stack.pop();
     } else {
-      while (!stack.isEmpty() && precedence(stack.top()) >= precedence(c)) {
-        post += stack.pop();
+      while (!stack.empty() && precedence(stack.top()) >= precedence(c)) {
+        post += stack.top();
         post += ' ';
+        stack.pop();
       }
       stack.push(c);
     }
   }
-
-  while (!stack.isEmpty()) {
-    post += stack.pop();
+  while (!stack.empty()) {
+    post += stack.top();
     post += ' ';
+    stack.pop();
   }
-
   if (!post.empty() && post.back() == ' ') {
     post.pop_back();
   }
@@ -53,7 +54,6 @@ std::string infx2pstfx(const std::string& inf) {
 
 int eval(const std::string& post) {
   TStack<int, 100> stack;
-
   for (size_t i = 0; i < post.size(); ++i) {
     char c = post[i];
     if (isspace(c)) continue;
@@ -66,8 +66,10 @@ int eval(const std::string& post) {
       stack.push(num);
       i--;
     } else {
-      int val2 = stack.pop();
-      int val1 = stack.pop();
+      int val2 = stack.top();
+      stack.pop();
+      int val1 = stack.top();
+      stack.pop();
       switch (c) {
         case '+': stack.push(val1 + val2); break;
         case '-': stack.push(val1 - val2); break;
@@ -76,5 +78,5 @@ int eval(const std::string& post) {
       }
     }
   }
-  return stack.pop();
+  return stack.top();
 }
