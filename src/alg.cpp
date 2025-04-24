@@ -4,7 +4,7 @@
 #include "tstack.h"
 
 namespace {
-  int getOpPriority(char oper) {
+int getOpPriority(char oper) {
     switch (oper) {
     case '(': return 0;
     case '+':
@@ -13,7 +13,7 @@ namespace {
     case '/': return 2;
     default: return -1;
     }
-  }
+}
 }
 
 std::string infx2pstfx(const std::string& inf) {
@@ -34,7 +34,7 @@ std::string infx2pstfx(const std::string& inf) {
         output += operators.top();
         output += ' ';
         operators.pop();
-      }
+      
       if (!operators.isEmpty()) {
         operators.pop();
       }
