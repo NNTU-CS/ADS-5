@@ -5,11 +5,11 @@
 
 template<typename T, int size>
 class TStack {
-private:
-  T storage[size];
+ private:
+  T storage[size] = { 100 };
   int topIndex;
 
-public:
+ public:
   TStack() : topIndex(-1) {}
   bool isFull() const {
       return topIndex >= size - 1;
