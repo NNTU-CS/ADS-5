@@ -1,8 +1,8 @@
 // Copyright 2025 NNTU-CS
-#include <string>
-#include <map>
 #include <ctype.h>
 #include <iostream>
+#include <string>
+#include <map>
 #include "tstack.h"
 
 std::string infx2pstfx(const std::string& inf) {
@@ -88,43 +88,41 @@ std::string infx2pstfx(const std::string& inf) {
 
 int eval(const std::string& pref) {
   TStack<int, 100> stack;
-  int i = 0;
-  while (i < pref.size()) {
-    while (pref[i] == ' ') {
+  for (size_t i = 0; i < postfix.size();) {
+    if (isspace(postfix[i])) {
       i++;
+      continue;
     }
-
-    if (i < pref.size() && (pref[i] == '+' || pref[i] == '-'
-      || pref[i] == '*' || pref[i] == '/')) {
-      if (stack.get_top() < 1) {
-        exit(1);
+    if (isdigit(postfix[i])) {
+      int num = 0;
+      while (i < postfix.size() && isdigit(postfix[i])) {
+        num = num * 10 + (postfix[i] - '0');
+        i++;
       }
-
+      stack.push(num);
+    } else {
       int b = stack.pop();
       int a = stack.pop();
 
-      char symbol = pref[i];
-      if (symbol == '+') {
+      switch (postfix[i]) {
+      case '+':
         stack.push(a + b);
-      } else if (symbol == '-') {
+        break;
+      case '-':
         stack.push(a - b);
-      } else if (symbol == '*') {
+        break;
+      case '*':
         stack.push(a * b);
-      } else if (symbol == '/') {
+        break;
+      case '/':
         stack.push(a / b);
+        break;
+      case '^':
+        stack.push(pow(a, b));
+        break;
       }
-
       i++;
-    } else if (i < pref.size() && isdigit(pref[i])) {
-      int num = 0;
-      while (i < pref.size() && isdigit(pref[i])) {
-        num = num * 10 + (pref[i] - '0');
-        i++;
-      }
-
-      stack.push(num);
     }
   }
-
-  return stack.get_item();
+  return stack.pop();
 }
