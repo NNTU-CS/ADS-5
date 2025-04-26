@@ -35,7 +35,8 @@ std::string infx2pstfx(const std::string& inf) {
         operators.pop();
       }
   } else if (token == '+' || token == '*' || token == '/' || token == '-') {
-      while (!operators.isEmpty() && getOpPriority(token) <= getOpPriority(operators.top())) {
+      while (!operators.isEmpty() &&
+          getOpPriority(token) <= getOpPriority(operators.top())) {
         output += operators.top();
         output += ' ';
         operators.pop();
