@@ -2,8 +2,6 @@
 #include <string>
 #include <map>
 #include "tstack.h"
-
-namespace {
 int getOpPriority(char oper) {
     switch (oper) {
     case '(': return 0;
@@ -14,8 +12,6 @@ int getOpPriority(char oper) {
     default: return -1;
     }
 }
-}
-
 std::string infx2pstfx(const std::string& inf) {
   std::string output;
   TStack<char, 100> operators;
@@ -34,10 +30,10 @@ std::string infx2pstfx(const std::string& inf) {
         output += operators.top();
         output += ' ';
         operators.pop();
-      
+      }
       if (!operators.isEmpty()) {
         operators.pop();
-      }
+      }    
   } else if (token == '+' || token == '*' || token == '/' || token == '-') {
       while (!operators.isEmpty() && getOpPriority(token) <= getOpPriority(operators.top())) {
         output += operators.top();
