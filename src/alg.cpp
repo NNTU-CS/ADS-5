@@ -33,7 +33,7 @@ std::string infx2pstfx(const std::string& inf) {
       }
       if (!operators.isEmpty()) {
         operators.pop();
-      }    
+      }
   } else if (token == '+' || token == '*' || token == '/' || token == '-') {
       while (!operators.isEmpty() && getOpPriority(token) <= getOpPriority(operators.top())) {
         output += operators.top();
@@ -41,7 +41,7 @@ std::string infx2pstfx(const std::string& inf) {
         operators.pop();
       }
       operators.push(token);
-   }
+    }
   }
 while (!operators.isEmpty()) {
   output += operators.top();
@@ -68,9 +68,9 @@ int eval(const std::string& postfix) {
     } else if (ch == ' ') {
         continue;
     } else {
-        int right = values.top(); 
+        int right = values.top();
         values.pop();
-        int left = values.top(); 
+        int left = values.top();
         values.pop();
         switch (ch) {
           case '+': values.push(left + right); break;
