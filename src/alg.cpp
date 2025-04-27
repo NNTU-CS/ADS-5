@@ -31,31 +31,30 @@ std::string infx2pstfx(const std::string& inf) {
             continue;
         }
         if (c == '(') {
-            stack.push(c);
+            stack.arr[++stack.top] = c;
         }
         else if (c == ')') {
-            while (!stack.empty() && stack.top() != '(') {
-                out += stack.top();
+            while (stack.top != -1 && stack.arr[stack.top] != '(') {
+                out += stack.arr[stack.top--];
                 out += ' ';
-                stack.pop();
             }
-            if (!stack.empty()) stack.pop();
+            if (stack.top != -1) --stack.top; // убрать '('
         }
-        else {
-            while (!stack.empty() && priority(stack.top()) >= priority(c)) {
-                out += stack.top();
+        else { // оператор + - * /
+            while (stack.top != -1 && priority(stack.arr[stack.top]) >= priority(c)) {
+                out += stack.arr[stack.top--];
                 out += ' ';
-                stack.pop();
             }
-            stack.push(c);
+            stack.arr[++stack.top] = c;
         }
         ++i;
     }
-    while (!stack.empty()) {
-        out += stack.top();
+
+    while (stack.top != -1) {
+        out += stack.arr[stack.top--];
         out += ' ';
-        stack.pop();
     }
+
     if (!out.empty() && out.back() == ' ') {
         out.pop_back();
     }
@@ -69,16 +68,16 @@ int eval(const std::string& post) {
 
     while (ss >> token) {
         if (std::isdigit(token[0])) {
-            stack.push(std::stoi(token));
+            stack.arr[++stack.top] = std::stoi(token);
         }
         else {
-            int b = stack.top(); stack.pop();
-            int a = stack.top(); stack.pop();
-            if (token == "+") stack.push(a + b);
-            else if (token == "-") stack.push(a - b);
-            else if (token == "*") stack.push(a * b);
-            else if (token == "/") stack.push(a / b);
+            int b = stack.arr[stack.top--];
+            int a = stack.arr[stack.top--];
+            if (token == "+") stack.arr[++stack.top] = a + b;
+            else if (token == "-") stack.arr[++stack.top] = a - b;
+            else if (token == "*") stack.arr[++stack.top] = a * b;
+            else if (token == "/") stack.arr[++stack.top] = a / b;
         }
     }
-    return stack.top();
+    return stack.arr[stack.top];
 }
