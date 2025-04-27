@@ -1,9 +1,10 @@
 // Copyright 2025 NNTU-CS
-#include <string>
-#include <map>
-#include <cctype>
+#include "alg.h"
 #include "tstack.h"
+#include <string>
 #include <sstream>
+#include <cctype>
+#include <map>
 
 std::string infx2pstfx(const std::string& inf) {
     TStack<char, 100> stack;
@@ -23,41 +24,39 @@ std::string infx2pstfx(const std::string& inf) {
         if (std::isspace(c)) {
             ++i;
             continue;
-        }
-        if (std::isdigit(c)) {
+        } else if (std::isdigit(c)) {
             while (i < inf.length() && std::isdigit(inf[i])) {
                 out += inf[i++];
             }
             out += ' ';
             continue;
-        }
-        if (c == '(') {
-            stack.push(c);
-        }
-        else if (c == ')') {
-            while (!stack.empty() && stack.top() != '(') {
-                out += stack.top();
+        } else if (c == '(') {
+            stack.Put(c);
+        } else if (c == ')') {
+            while (!stack.IsEmpty() && stack.TopElem() != '(') {
+                out += stack.TopElem();
                 out += ' ';
-                stack.pop();
+                stack.Get();
             }
-            if (!stack.empty()) stack.pop(); // убираем '('
-        }
-        else { // оператор + - * /
-            while (!stack.empty() && stack.top() != '(' &&
-                   priority[stack.top()] >= priority[c]) {
-                out += stack.top();
+            if (!stack.IsEmpty()) {
+                stack.Get(); // убираем '('
+            }
+        } else { // оператор + - * /
+            while (!stack.IsEmpty() && stack.TopElem() != '(' &&
+                   priority[stack.TopElem()] >= priority[c]) {
+                out += stack.TopElem();
                 out += ' ';
-                stack.pop();
+                stack.Get();
             }
-            stack.push(c);
+            stack.Put(c);
         }
         ++i;
     }
 
-    while (!stack.empty()) {
-        out += stack.top();
+    while (!stack.IsEmpty()) {
+        out += stack.TopElem();
         out += ' ';
-        stack.pop();
+        stack.Get();
     }
 
     if (!out.empty() && out.back() == ' ') {
@@ -73,16 +72,20 @@ int eval(const std::string& post) {
 
     while (ss >> token) {
         if (std::isdigit(token[0])) {
-            stack.push(std::stoi(token));
-        }
-        else {
-            int b = stack.top(); stack.pop();
-            int a = stack.top(); stack.pop();
-            if (token == "+") stack.push(a + b);
-            else if (token == "-") stack.push(a - b);
-            else if (token == "*") stack.push(a * b);
-            else if (token == "/") stack.push(a / b);
+            stack.Put(std::stoi(token));
+        } else {
+            int b = stack.TopElem(); stack.Get();
+            int a = stack.TopElem(); stack.Get();
+            if (token == "+") {
+                stack.Put(a + b);
+            } else if (token == "-") {
+                stack.Put(a - b);
+            } else if (token == "*") {
+                stack.Put(a * b);
+            } else if (token == "/") {
+                stack.Put(a / b);
+            }
         }
     }
-    return stack.top();
+    return stack.TopElem();
 }
