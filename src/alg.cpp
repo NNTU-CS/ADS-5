@@ -39,7 +39,9 @@ std::string infx2pstfx(const std::string& inf) {
                 output += " ";
                 operators.pop_back();
             }
-            operators.pop_back();
+            if (!operators.empty()) {
+                operators.pop_back();
+            }
             i++;
         } else {
             while (!operators.empty() &&
