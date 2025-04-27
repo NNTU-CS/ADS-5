@@ -3,7 +3,7 @@
 #include <map>
 #include "tstack.h"
 
-int znak(char op){
+int znak(char op) {
     if (op == '+' || op == '-') {
         return 1;
     }
@@ -24,8 +24,7 @@ std::string infx2pstfx(const std::string& inf) {
             i++;
             continue;
         }
-
-        if (isdigit(inf[i])){
+        if (isdigit(inf[i])) {
             while (i < inf.size() && (isdigit(inf[i]))) {
                 t += inf[i++];
             }
@@ -43,7 +42,8 @@ std::string infx2pstfx(const std::string& inf) {
             operators.pop_back();
             i++;
         } else {
-            while (!operators.empty() && znak(operators.back()) >= znak(inf[i])) {
+            while (!operators.empty() &&
+            znak(operators.back()) >= znak(inf[i])) {
                 output += operators.back();
                 output += " ";
                 operators.pop_back();
@@ -52,21 +52,21 @@ std::string infx2pstfx(const std::string& inf) {
         }
     }
 
-    while (!operators.empty()){
+    while (!operators.empty()) {
         output += operators.back();
         output += " ";
         operators.pop_back();
     }
-
+    output.pop_back();
     return output;
 }
 
-int eval(const std::string& post){
+int eval(const std::string& post) {
     std::string values[100];
     int top = -1;
     size_t i = 0;
 
-    while (i < post.size()){
+    while (i < post.size()) {
         if (isspace(post[i])) {
             i++;
             continue;
