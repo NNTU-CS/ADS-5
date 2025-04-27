@@ -3,74 +3,86 @@
 #include <map>
 #include <cctype>
 #include "tstack.h"
+#include <sstream>
 
 std::string infx2pstfx(const std::string& inf) {
     TStack<char, 100> stack;
-    std::string post;
-    int n = inf.length();
+    std::string out;
+    size_t i = 0;
 
-    for (int i = 0; i < n; ++i) {
+    std::map<char, int> priority = {
+        {'+', 1},
+        {'-', 1},
+        {'*', 2},
+        {'/', 2}
+    };
+
+    while (i < inf.length()) {
         char c = inf[i];
 
-        if (isdigit(c)) {
-            while (i < n && isdigit(inf[i])) {
-                post += inf[i];
-                i++;
+        if (std::isspace(c)) {
+            ++i;
+            continue;
+        }
+        if (std::isdigit(c)) {
+            while (i < inf.length() && std::isdigit(inf[i])) {
+                out += inf[i++];
             }
-            post += ' ';
-            i--;
-        } else if (c == '(') {
+            out += ' ';
+            continue;
+        }
+        if (c == '(') {
             stack.push(c);
-        } else if (c == ')') {
-            while (!stack.isEmpty() && stack.top() != '(') {
-                post += stack.pop();
-                post += ' ';
+        }
+        else if (c == ')') {
+            while (!stack.empty() && stack.top() != '(') {
+                out += stack.top();
+                out += ' ';
+                stack.pop();
             }
-            if (!stack.isEmpty()) stack.pop(); // убрать '('
-        } else if (c == '+' || c == '-' || c == '*' || c == '/') {
-            while (!stack.isEmpty() && priority(stack.top()) >= priority(c)) {
-                post += stack.pop();
-                post += ' ';
+            if (!stack.empty()) stack.pop(); // убираем '('
+        }
+        else { // оператор + - * /
+            while (!stack.empty() && stack.top() != '(' &&
+                   priority[stack.top()] >= priority[c]) {
+                out += stack.top();
+                out += ' ';
+                stack.pop();
             }
             stack.push(c);
         }
+        ++i;
     }
 
-    while (!stack.isEmpty()) {
-        post += stack.pop();
-        post += ' ';
+    while (!stack.empty()) {
+        out += stack.top();
+        out += ' ';
+        stack.pop();
     }
 
-    return post;
+    if (!out.empty() && out.back() == ' ') {
+        out.pop_back();
+    }
+    return out;
 }
 
 int eval(const std::string& post) {
     TStack<int, 100> stack;
-    int n = post.length();
+    std::stringstream ss(post);
+    std::string token;
 
-    for (int i = 0; i < n; ++i) {
-        char c = post[i];
-
-        if (isdigit(c)) {
-            int num = 0;
-            while (i < n && isdigit(post[i])) {
-                num = num * 10 + (post[i] - '0');
-                i++;
-            }
-            stack.push(num);
-        } else if (c == '+' || c == '-' || c == '*' || c == '/') {
-            int b = stack.pop();
-            int a = stack.pop();
-            int res = 0;
-
-            if (c == '+') res = a + b;
-            else if (c == '-') res = a - b;
-            else if (c == '*') res = a * b;
-            else if (c == '/') res = a / b;
-
-            stack.push(res);
+    while (ss >> token) {
+        if (std::isdigit(token[0])) {
+            stack.push(std::stoi(token));
+        }
+        else {
+            int b = stack.top(); stack.pop();
+            int a = stack.top(); stack.pop();
+            if (token == "+") stack.push(a + b);
+            else if (token == "-") stack.push(a - b);
+            else if (token == "*") stack.push(a * b);
+            else if (token == "/") stack.push(a / b);
         }
     }
-
     return stack.top();
 }
