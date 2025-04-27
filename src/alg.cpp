@@ -6,13 +6,18 @@
 #include "tstack.h"
 
 int priority(char op) {
-    if (op == '+' || op == '-') return 1;
-    if (op == '*' || op == '/') return 2;
+    if (op == '+' || op == '-') {
+      return 1;
+    }
+    if (op == '*' || op == '/') {
+      return 2;
+    }
     return 0;
 }
 
 std::string infx2pstfx(const std::string& inf) {
-    TStack<char, 100> stack;
+    char stack[100];
+    int top = -1;
     std::string out;
     size_t i = 0;
 
@@ -31,27 +36,27 @@ std::string infx2pstfx(const std::string& inf) {
             continue;
         }
         if (c == '(') {
-            stack.arr[++stack.top] = c;
+            stack[++top] = c;
         }
         else if (c == ')') {
-            while (stack.top != -1 && stack.arr[stack.top] != '(') {
-                out += stack.arr[stack.top--];
+            while (top >= 0 && stack[top] != '(') {
+                out += stack[top--];
                 out += ' ';
             }
-            if (stack.top != -1) --stack.top; // убрать '('
+            if (top >= 0) --top; // убрать '('
         }
-        else { // оператор + - * /
-            while (stack.top != -1 && priority(stack.arr[stack.top]) >= priority(c)) {
-                out += stack.arr[stack.top--];
+        else {
+            while (top >= 0 && priority(stack[top]) >= priority(c)) {
+                out += stack[top--];
                 out += ' ';
             }
-            stack.arr[++stack.top] = c;
+            stack[++top] = c;
         }
         ++i;
     }
 
-    while (stack.top != -1) {
-        out += stack.arr[stack.top--];
+    while (top >= 0) {
+        out += stack[top--];
         out += ' ';
     }
 
@@ -62,22 +67,31 @@ std::string infx2pstfx(const std::string& inf) {
 }
 
 int eval(const std::string& post) {
-    TStack<int, 100> stack;
+    int stack[100];
+    int top = -1;
     std::stringstream ss(post);
     std::string token;
 
     while (ss >> token) {
         if (std::isdigit(token[0])) {
-            stack.arr[++stack.top] = std::stoi(token);
+            stack[++top] = std::stoi(token);
         }
         else {
-            int b = stack.arr[stack.top--];
-            int a = stack.arr[stack.top--];
-            if (token == "+") stack.arr[++stack.top] = a + b;
-            else if (token == "-") stack.arr[++stack.top] = a - b;
-            else if (token == "*") stack.arr[++stack.top] = a * b;
-            else if (token == "/") stack.arr[++stack.top] = a / b;
+            int b = stack[top--];
+            int a = stack[top--];
+            if (token == "+") {
+              stack[++top] = a + b;
+            }
+            else if (token == "-") {
+              stack[++top] = a - b;
+            }
+            else if (token == "*") {
+              stack[++top] = a * b;
+            }
+            else if (token == "/") {
+              stack[++top] = a / b;
+            }
         }
     }
-    return stack.arr[stack.top];
+    return stack[top];
 }
