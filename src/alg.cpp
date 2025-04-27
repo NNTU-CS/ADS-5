@@ -28,12 +28,10 @@ std::string infx2pstfx(const std::string& inf) {
             }
             output += t + " ";
             t.clear();
-        }
-        else if (inf[i] == '(') {
+        }    else if (inf[i] == '(') {
             operators += '(';
             i++;
-        }
-        else if (inf[i] == ')') {
+        }    else if (inf[i] == ')') {
             while (!operators.empty() && operators.back() != '(') {
                 output += operators.back();
                 output += " ";
@@ -43,8 +41,7 @@ std::string infx2pstfx(const std::string& inf) {
                 operators.pop_back();
             }
             i++;
-        }
-        else {
+        }    else {
             while (!operators.empty() &&
                 mark(operators.back()) >= mark(inf[i])) {
                 output += operators.back();
@@ -77,8 +74,7 @@ int eval(const std::string& post) {
                 t += post[i++];
             }
             values[++top] = t;
-        }
-        else {
+        }    else {
             int right = std::stoi(values[top--]);
             int left = std::stoi(values[top--]);
             switch (post[i]) {
