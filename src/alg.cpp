@@ -1,6 +1,4 @@
 // Copyright 2025 NNTU-CS
-#include "include/alg.h"
-#include "include/tstack.h"
 #include <string>
 #include <sstream>
 #include <cctype>
