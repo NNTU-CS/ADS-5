@@ -1,10 +1,39 @@
-// Copyright 2021 NNTU-CS
+// Copyright 2025 NNTU-CS
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 
-template<typename T, int size>
+#include <stdexcept>
+
+template <typename T, int kSize>
 class TStack {
-  // добавьте код стека
+ public:
+  TStack() : top_(-1) {}
+
+  void Push(const T& value) {
+    if (IsFull()) {
+      throw std::overflow_error("stack overflow");
+    }
+    data_[++top_] = value;
+  }
+  T Pop() {
+    if (IsEmpty()) {
+      throw std::underflow_error("stack underflow");
+    }
+    return data_[top_--];
+  }
+  const T& Top() const {
+    if (IsEmpty()) {
+      throw std::underflow_error("stack is empty");
+    }
+    return data_[top_];
+  }
+
+  bool IsEmpty() const { return top_ == -1; }
+  bool IsFull() const { return top_ + 1 == kSize; }
+
+ private:
+  T   data_[kSize];
+  int top_;
 };
 
 #endif  // INCLUDE_TSTACK_H_
