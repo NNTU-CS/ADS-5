@@ -31,10 +31,12 @@ std::string infx2pstfx(const std::string& inf) {
         result << operators.remove() << ' ';
       }
       if (!operators.isVoid()) {
-        operators.remove();
+        operators.remove(); // Убираем '('
       }
-    } else if (symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/') {
-      while (!operators.isVoid() && priority(operators.getTop()) >= priority(symbol)) {
+    } else if (symbol == '+' || symbol == '-' ||
+               symbol == '*' || symbol == '/') {
+      while (!operators.isVoid() &&
+             priority(operators.getTop()) >= priority(symbol)) {
         result << operators.remove() << ' ';
       }
       operators.add(symbol);
