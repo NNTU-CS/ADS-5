@@ -1,102 +1,69 @@
 // Copyright 2025 NNTU-CS
 #include <string>
-#include <map>
+#include <sstream>
+#include <cctype>
 #include "tstack.h"
-
-int mark(char op) {
-    if (op == '+' || op == '-') {
-        return 1;
-    }
-    if (op == '*' || op == '/') {
-        return 2;
-    }
-    return 0;
+int priority(char oper) {
+  if (oper == '+' || oper == '-') return 1;
+  if (oper == '*' || oper == '/') return 2;
+  return 0;
 }
 std::string infx2pstfx(const std::string& inf) {
-    std::string output;
-    std::string operators;
-    std::string t;
-    size_t i = 0;
-    while (i < inf.size()) {
-        if (isspace(inf[i])) {
-            i++;
-            continue;
-        }
-        if (isdigit(inf[i])) {
-            while (i < inf.size() && (isdigit(inf[i]))) {
-                t += inf[i++];
-            }
-            output += t + " ";
-            t.clear();
-        }
-        else if (inf[i] == '(') {
-            operators += '(';
-            i++;
-        }
-        else if (inf[i] == ')') {
-            while (!operators.empty() && operators.back() != '(') {
-                output += operators.back();
-                output += " ";
-                operators.pop_back();
-            }
-            if (!operators.empty()) {
-                operators.pop_back();
-            }
-            i++;
-        }
-        else {
-            while (!operators.empty() &&
-                mark(operators.back()) >= mark(inf[i])) {
-                output += operators.back();
-                output += " ";
-                operators.pop_back();
-            }
-            operators += inf[i++];
-        }
+  TStack<char, 100> operators;
+  std::ostringstream result;
+  size_t idx = 0;
+  while (idx < inf.size()) {
+    char symbol = inf[idx];
+    if (std::isdigit(symbol)) {
+      while (idx < inf.size() && std::isdigit(inf[idx])) {
+        result << inf[idx++];
+      }
+      result << ' ';
+      --idx;
+    } else if (symbol == '(') {
+      operators.add(symbol);
+    } else if (symbol == ')') {
+      while (!operators.isVoid() && operators.getTop() != '(') {
+        result << operators.remove() << ' ';
+      }
+      if (!operators.isVoid()) {
+        operators.remove();
+      }
+    } else if (symbol == '+' || symbol == '-' ||
+               symbol == '*' || symbol == '/') {
+      while (!operators.isVoid() &&
+             priority(operators.getTop()) >= priority(symbol)) {
+        result << operators.remove() << ' ';
+      }
+      operators.add(symbol);
     }
-    while (!operators.empty()) {
-        output += operators.back();
-        output += " ";
-        operators.pop_back();
-    }
+    ++idx;
+  }
+  while (!operators.isVoid()) {
+    result << operators.remove() << ' ';
+  }
+  std::string output = result.str();
+  if (!output.empty() && output.back() == ' ')
     output.pop_back();
-    return output;
+  return output;
 }
 int eval(const std::string& post) {
-    std::string values[100];
-    int top = -1;
-    size_t i = 0;
-    while (i < post.size()) {
-        if (isspace(post[i])) {
-            i++;
-            continue;
-        }
-        std::string t;
-        if (isdigit(post[i])) {
-            while (i < post.size() && (isdigit(post[i]))) {
-                t += post[i++];
-            }
-            values[++top] = t;
-        }
-        else {
-            int right = std::stoi(values[top--]);
-            int left = std::stoi(values[top--]);
-            switch (post[i]) {
-            case ('+'):
-                values[++top] = std::to_string(left + right);
-                break;
-            case ('-'):
-                values[++top] = std::to_string(left - right);
-                break;
-            case ('*'):
-                values[++top] = std::to_string(left * right);
-                break;
-            case ('/'):
-                values[++top] = std::to_string(left / right);
-                break;
-            }
-            i++;
-        }
+  TStack<int, 100> values;
+  std::istringstream iss(post);
+  std::string part;
+  while (iss >> part) {
+    if (std::isdigit(part[0])) {
+      values.add(std::stoi(part));
+    } else {
+      int rhs = values.remove();
+      int lhs = values.remove();
+      switch (part[0]) {
+        case '+': values.add(lhs + rhs); break;
+        case '-': values.add(lhs - rhs); break;
+        case '*': values.add(lhs * rhs); break;
+        case '/': values.add(lhs / rhs); break;
+      }
     }
-    return std::stoi(values[top]);
+  }
+  return values.remove();
 }
