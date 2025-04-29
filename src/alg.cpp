@@ -3,8 +3,6 @@
 #include <stack>
 #include <stdexcept>
 #include <string>
-#include <map>
-#include "tstack.h"
 
 int getPriority(char op) {
   if (op == '*' || op == '/') return 2;
@@ -13,7 +11,6 @@ int getPriority(char op) {
 }
 
 std::string infx2pstfx(const std::string& inf) {
-  return std::string("");
   std::stack<char> opStack;
   std::string out;
   for (size_t i = 0; i < inf.length(); ++i) {
@@ -56,8 +53,6 @@ std::string infx2pstfx(const std::string& inf) {
   }
   return out;
 }
-int eval(const std::string& pref) {
-  return 0;
 int eval(const std::string& post) {
   std::stack<int> valStack;
 
