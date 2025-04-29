@@ -1,27 +1,47 @@
 // Copyright 2021 NNTU-CS
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
-#include <stdexcept>
-#include <array>
 
-template <typename T, int size>
+template<typename T, int size>
 class TStack {
- private:
-    std::array<T, size> data;
-    int topIndex = -1;
+  private:
+  ElementType storage[Capacity];
+  int pointer;
 
  public:
-    bool empty() const {
-        return topIndex == -1;
+  TStack() : pointer(-1) {}
+
+  bool isVoid() const {
+    return pointer == -1;
+  }
+
+  bool isFull() const {
+    return pointer == Capacity - 1;
+  }
+
+  void add(const ElementType& value) {
+    if (isFull()) {
+      throw std::overflow_error("Stack overflow");
     }
-    void push(const T& value) {
-        if (topIndex < size - 1) {
-            data[++topIndex] = value;
-        }    else {
-            throw std::overflow_error("Stack overflow");
-        }
+    storage[++pointer] = value;
+  }
+
+  ElementType remove() {
+    if (isVoid()) {
+      throw std::underflow_error("Stack underflow");
     }
-    void pop() {
+    return storage[pointer--];
+  }
+
+  ElementType getTop() const {
+    if (isVoid()) {
+      throw std::underflow_error("Stack empty");
+    }
+    return storage[pointer];
+  }
+};
+
+#endif  // INCLUDE_TSTACK_H_
         if (!empty()) {
             --topIndex;
         }    else {
