@@ -59,7 +59,7 @@ int eval(const std::string& post) {
       int lhs = vals.remove();
       switch (part[0]) {
         case '+': vals.add(lhs + rhs); break;
-        case '-': valss.add(lhs - rhs); break;
+        case '-': vals.add(lhs - rhs); break;
         case '*': vals.add(lhs * rhs); break;
         case '/': vals.add(lhs / rhs); break;
       }
