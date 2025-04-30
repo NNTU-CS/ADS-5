@@ -5,7 +5,7 @@
 template<typename T, int size>
 class TStack {
   public:
-    TStack : pointer(-1) {}
+    TStack() : pointer(-1) {}
 
     bool isVoid() const {
       return pointer == -1
@@ -20,7 +20,7 @@ class TStack {
       return storage[++pointer] = value;
     }
     T remove() {
-      if(isVoid()) {
+      if (isVoid()) {
         throw std::underflow_error("Stack underflow");
       }
       return storage[pointer--];
@@ -31,6 +31,7 @@ class TStack {
       }
       return storage[pointer];
     }
+
   private:
     T storage[size];
     int pointer;
