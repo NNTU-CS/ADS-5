@@ -13,7 +13,7 @@ class TStack {
 ~TStack() {
   delete[] array;
 }
-};
+
 bool is_empty() const {
   return top == -1;
 }
@@ -34,5 +34,5 @@ T peek() const {
   else
     return T();
 }
-
+};
 #endif  // INCLUDE_TSTACK_H_
