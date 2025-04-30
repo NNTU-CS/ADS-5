@@ -20,7 +20,6 @@ int get_priority(char op) {
 }
 
 std::string infx2pstfx(const std::string& inf) {
-  return std::string("");
   TStack<char, 100> op_stack;
   std::string output_str = "";
   std::string num_str = "";
@@ -115,4 +114,4 @@ int eval(const std::string& post) {
     num_stack.push(num_val);
   }
   return num_stack.top();
-}
+};
