@@ -114,4 +114,4 @@ int eval(const std::string& post) {
     num_stack.push(num_val);
   }
   return num_stack.top();
-};
+}
