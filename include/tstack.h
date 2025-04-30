@@ -3,10 +3,13 @@
 #define INCLUDE_TSTACK_H_
 
 template<typename T, int size>
-class TStack {
+class TStack 
+{
+
 private:
   T* array;
   int top;
+
 public:
   TStack(): array(new T[size]), top(-1) {}
 ~TStack() {
@@ -31,6 +34,6 @@ T peek() const {
     return array[top];
   else
     return T();
-};
+}
 
 #endif  // INCLUDE_TSTACK_H_
