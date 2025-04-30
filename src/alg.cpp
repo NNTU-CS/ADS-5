@@ -11,7 +11,7 @@ int priority(char symb) {
 }
 
 std::string infx2pstfx(const std::string& inf) {
-  TStack<char,100> opList;
+  TStack<char, 100> opList;
   std::ostringstream result;
   size_t index = 0;
 
@@ -52,7 +52,7 @@ std::string infx2pstfx(const std::string& inf) {
 }
 
 int eval(const std::string& pref) {
-  TStack<int,100> vals
+  TStack<int, 100> vals
   std::istringstream iss(pref);
   std::string part;
 
