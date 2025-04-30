@@ -3,15 +3,15 @@
 #include <map>
 #include "tstack.h"
 
-bool is_digit(char c) {
-  return c >= '0' && c <= '9';
+bool is_number_symbol(char sym) {
+  return sym >= '0' && sym <= '9';
 }
 
-bool is_math_operator(char c) {
-  return (c == '+'  c == '-'  c == '*' || c == '/');
+bool is_math_symbol(char sym) {
+  return (sym == '+' || sym == '-' || sym == '*' || sym == '/');
 }
 
-int operation_priority(char op) {
+int get_priority(char op) {
   switch (op) {
   case '+': case '-': return 1;
   case '*': case '/': return 2;
