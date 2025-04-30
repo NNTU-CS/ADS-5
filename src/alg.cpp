@@ -1,98 +1,126 @@
 // Copyright 2025 NNTU-CS
-#include <cctype>
 #include <string>
 #include <map>
-#include <cmath>
 #include "tstack.h"
 
-int getPriority(char op) {
-  switch (op) {
-  case '+':
-  case '-':
-    return 1;
-  case '*':
-  case '/':
-    return 2;
-  case '^':
-    return 3;
-  default:
-    return 0;
+std::map<char, int> op = {
+    {'^', 4},
+    {'*', 3}, {'/', 3},
+    {'+', 2}, {'-', 2},
+    {'(', 1}
+};
+
+bool isOperator(char c) {
+  return op.count(c) && c != '(';
+}
+bool isDigit(char c) {
+  return c >= '0' && c <= '9';
+}
+int power(int base, int exp) {
+  int res = 1;
+  for (int i = 0; i < exp; ++i) {
+    res = res * base;
   }
+  return res;
 }
 
 std::string infx2pstfx(const std::string& inf) {
-TStack<char, 100> stak;
-  std::string postf;
-
-  for (char x : inf) {
-    if (isspace(x))
-      continue;
-
-    if (isdigit(x)) {
-      postf = postf + x;
-    } else if (x == '(') {
-      stak.push(x);
-    } else if (x == ')') {
-      while (!stak.isEmpty() && stak.top() != '(') {
-        postf = postf + ' ';
-        postf = postf + stak.pop();;
+  std::map<char, int> priority = {
+      {'(', 0},
+      {'+', 1}, {'-', 1},
+      {'*', 2}, {'/', 2},
+      {'^', 3}
+  };
+  TStack<char, 100> stack;
+  std::string postfix;
+  bool prevWasDigit = false;
+  for (char c : inf) {
+    if (c == ' ') continue;
+    if (isdigit(c)) {
+      if (prevWasDigit) {
+        postfix = postfix + c;
+      } else {
+        if (!postfix.empty() && postfix.back() != ' ') {
+          postfix = postfix + ' ';
+        }
+        postfix = postfix + c;
       }
-      stak.pop();
+      prevWasDigit = true;
     } else {
-      postf = postf + ' ';
-      while (!stak.isEmpty() && getPriority(stak.top()) >= getPriority(x)) {
-        postf = postf + stak.pop();
-        postf = postf + ' ';
+      if (prevWasDigit) {
+        postfix = postfix + ' ';
+        prevWasDigit = false;
       }
-      stak.push(x);
+      if (c == '(') {
+        stack.push(c);
+      } else if (c == ')') {
+        while (!stack.empty() && stack.Top() != '(') {
+          if (!postfix.empty() && postfix.back() != ' ') {
+            postfix = postfix + ' ';
+          }
+          postfix = postfix + stack.pop();
+        }
+        stack.pop();
+      } else {
+        while (!stack.empty() && priority[stack.Top()] >= priority[c]) {
+          if (!postfix.empty() && postfix.back() != ' ') {
+            postfix = postfix + ' ';
+          }
+          postfix = postfix + stack.pop();
+        }
+        if (!postfix.empty() && postfix.back() != ' ') {
+          postfix = postfix + ' ';
+        }
+        stack.push(c);
+      }
     }
   }
-  while (!stak.isEmpty()) {
-    postf = postf + ' ';
-    postf = postf + stak.pop();;
+  while (!stack.empty()) {
+    if (!postfix.empty() && postfix.back() != ' ') {
+      postfix = postfix + ' ';
+    }
+    postfix = postfix + stack.pop();
   }
-  return postf;
+  return postfix;
 }
 
 int eval(const std::string& pref) {
-TStack<int, 100> stak;
-
-  for (size_t i = 0; i < postf.size();) {
-    if (isspace(postf[i])) {
-      i++;
+  TStack<int, 100> stack;
+  int n = 0;
+  bool readingNum = false;
+  for (char c : pref) {
+    if (c == ' ') {
+      if (readingNum) {
+        stack.push(n);
+        n = 0;
+        readingNum = false;
+      }
       continue;
     }
-    
-    if (isdigit(postf[i])) {
-      int c = 0;
-      while (i < postf.size() && isdigit(postf[i])) {
-        c = c * 10 + (postf[i] - '0');
-        i++;
-      }
-      stak.push(c);
+    if (isdigit(c)) {
+      n = n * 10 + (c - '0');
+      readingNum = true;
     } else {
-      int x2 = stak.pop();
-      int x1 = stak.pop();
-
-      switch (postf[i]) {
-      case '^':
-        stak.push(pow(x1, x2));
-        break;
-      case '/':
-        stak.push(x1 / x2);
-        break;
-      case '+':
-        stak.push(x1 + x2);
-        break;
-      case '-':
-        stak.push(x1 - x2);
-        break;
-      case '*':
-        stak.push(x1 * x2);
+      if (readingNum) {
+        stack.push(n;
+        n = 0;
+        readingNum = false;
+      }
+      int x2 = stack.pop();
+      int x1 = stack.pop();
+      switch (c) {
+      case '+': stack.push(x1 + x2); break;
+      case '-': stack.push(x1 - x2); break;
+      case '*': stack.push(x1 * x2); break;
+      case '/': stack.push(x1 / x2); break;
+      case '^': {
+        int result = 1;
+        for (int i = 0; i < x2; ++i) result = result * x1;
+        stack.push(result);
         break;
       }
-      i++;
+      }
     }
   }
-  return stak.pop();
+  return stack.pop();
 }
