@@ -29,16 +29,16 @@ std::string infx2pstfx(const std::string& inf) {
     } else if (ch == ')') {
       while (!opList.empty() && opList.top() != '(') {
         result << opList.top() << ' ';
-        opList.pop()
+        opList.pop();
       }
       if (!opList.empty()) {
         result << opList.top();
-        opList.pop()
+        opList.pop();
       }
     } else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
       while (!opList.empty() && priority(opList.top()) >= priority(ch)) {
         result << opList.top() << ' ';
-        opList.pop()
+        opList.pop();
       }
       opList.push(ch);
     }
@@ -47,7 +47,7 @@ std::string infx2pstfx(const std::string& inf) {
 
   while (!opList.empty()) {
     result << opList.top() << ' ';
-    opList.pop()
+    opList.pop();
   }
   std::string output = result.str();
   if (!output.empty() && output.back() == ' ') {
@@ -66,9 +66,9 @@ int eval(const std::string& pref) {
       vals.push(std::stoi(part));
     } else {
       int right = vals.top();
-      vals.pop()
+      vals.pop();
       int left = vals.top();
-      vals.pop()
+      vals.pop();
       switch (part[0]) {
         case '+': vals.push(left + right); break;
         case '-': vals.push(left - right); break;
