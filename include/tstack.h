@@ -3,9 +3,7 @@
 #define INCLUDE_TSTACK_H_
 
 template<typename T, int size>
-class TStack 
-{
-
+class TStack {
 private:
   T* array;
   int top;
@@ -14,6 +12,7 @@ public:
   TStack(): array(new T[size]), top(-1) {}
 ~TStack() {
   delete[] array;
+}
 }
 bool is_empty() const {
   return top == -1;
