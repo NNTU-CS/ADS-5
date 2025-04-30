@@ -36,8 +36,8 @@ std::string infx2pstfx(const std::string& inf) {
     if (curr_char == '(') {
       op_stack.push(curr_char);
     } else if (curr_char == ')') {
-      while (!op_stack.is_empty() && op_stack.top() != '(') {
-        output_str += op_stack.top();
+      while (!op_stack.is_empty() && op_stack.peek() != '(') {
+        output_str += op_stack.peek();
         output_str += " ";
         op_stack.pop();
       }
@@ -45,9 +45,9 @@ std::string infx2pstfx(const std::string& inf) {
         op_stack.pop();
       }
     } else if (is_math_symbol(curr_char)) {
-      while (!op_stack.is_empty() && op_stack.top() != '(' &&
-        get_priority(op_stack.top()) >= get_priority(curr_char)) {
-        output_str += op_stack.top();
+      while (!op_stack.is_empty() && op_stack.peek() != '(' &&
+        get_priority(op_stack.peek()) >= get_priority(curr_char)) {
+        output_str += op_stack.peek();
         output_str += " ";
         op_stack.pop();
       }
@@ -58,8 +58,8 @@ std::string infx2pstfx(const std::string& inf) {
     output_str += num_str + " ";
   }
   while (!op_stack.is_empty()) {
-    if (op_stack.top() != '(') {
-      output_str += op_stack.top();
+    if (op_stack.peek() != '(') {
+      output_str += op_stack.peek();
       output_str += " ";
     }
     op_stack.pop();
@@ -88,10 +88,10 @@ int eval(const std::string& post) {
       }
     } else if (is_math_symbol(curr_char)) {
       if (num_stack.is_empty()) continue;
-      int right_operand = num_stack.top();
+      int right_operand = num_stack.peek();
       num_stack.pop();
       if (num_stack.is_empty()) continue;
-      int left_operand = num_stack.top();
+      int left_operand = num_stack.peek();
       num_stack.pop();
       int res = 0;
       switch (curr_char) {
@@ -113,5 +113,5 @@ int eval(const std::string& post) {
       num_val = num_val * 10 + (curr_num[j] - '0');
     num_stack.push(num_val);
   }
-  return num_stack.top();
+  return num_stack.peek();
 }
