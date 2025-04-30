@@ -13,7 +13,7 @@ class TStack {
 ~TStack() {
   delete[] array;
 }
-}
+};
 bool is_empty() const {
   return top == -1;
 }
