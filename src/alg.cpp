@@ -62,7 +62,7 @@ TStack<int, 100> stak;
       i++;
       continue;
     }
-
+    
     if (isdigit(postf[i])) {
       int c = 0;
       while (i < postf.size() && isdigit(postf[i])) {
@@ -90,7 +90,6 @@ TStack<int, 100> stak;
       case '*':
         stak.push(x1 * x2);
         break;
-
       }
       i++;
     }
