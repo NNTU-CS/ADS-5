@@ -5,14 +5,14 @@
 #include <cmath>
 #include "tstack.h"
 
-int getPriority(char n) {
-  switch (n) {
-  case '*':
-  case '/':
-    return 2;
+int getPriority(char op) {
+  switch (op) {
   case '+':
   case '-':
     return 1;
+  case '*':
+  case '/':
+    return 2;
   case '^':
     return 3;
   default:
