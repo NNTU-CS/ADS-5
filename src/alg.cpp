@@ -71,11 +71,11 @@ std::string infx2pstfx(const std::string& inf) {
   return output_str;
 }
 
-int eval(const std::string& pref) {
+int eval(const std::string& post) {
   TStack<int, 100> num_stack;
   std::string curr_num = "";
-  for (int idx = 0; idx < pstfx.length(); idx++) {
-    char curr_char = pstfx[idx];
+  for (int idx = 0; idx < post.length(); idx++) {
+    char curr_char = post[idx];
     if (is_number_symbol(curr_char)) {
       curr_num += curr_char;
     } else if (curr_char == ' ') {
