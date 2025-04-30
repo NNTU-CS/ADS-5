@@ -72,6 +72,47 @@ std::string infx2pstfx(const std::string& inf) {
 }
 
 int eval(const std::string& pref) {
-  // добавьте код
-  return 0;
+  TStack<int, 100> num_stack;
+  std::string curr_num = "";
+  for (int idx = 0; idx < pstfx.length(); idx++) {
+    char curr_char = pstfx[idx];
+    if (is_number_symbol(curr_char)) {
+      curr_num += curr_char;
+    } else if (curr_char == ' ') {
+      if (!curr_num.empty()) {
+        int num_val = 0;
+        for (int j = 0; j < curr_num.length(); j++) {
+          num_val = num_val * 10 + (curr_num[j] - '0');
+        }
+        num_stack.push(num_val);
+        curr_num = "";
+      }
+    } else if (is_math_symbol(curr_char)) {
+      if (num_stack.is_empty()) continue;
+      int right_operand = num_stack.top();
+      num_stack.pop();
+      if (num_stack.is_empty()) continue;
+      int left_operand = num_stack.top();
+      num_stack.pop();
+      int res = 0;
+      switch (curr_char) {
+      case '+': res = left_operand + right_operand; break;
+      case '-': res = left_operand - right_operand; break;
+      case '*': res = left_operand * right_operand; break;
+      case '/':
+        if (right_operand != 0) {
+          res = left_operand / right_operand;
+        }
+        break;
+      }
+      num_stack.push(res);
+    }
+  }
+  if (!curr_num.empty()) {
+    int num_val = 0;
+    for (int j = 0; j < curr_num.length(); j++)
+      num_val = num_val * 10 + (curr_num[j] - '0');
+    num_stack.push(num_val);
+  }
+  return num_stack.top();
 }
