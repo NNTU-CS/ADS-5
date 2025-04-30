@@ -9,7 +9,7 @@ int priority(char oper) {
   return 0;
 }
 std::string infx2pstfx(const std::string& inf) {
-  TStack<char, 100> opList;
+  TStack<char, 100> opsList;
   std::ostringstream result;
   size_t index = 0;
   while (index < inf.size()) {
@@ -21,26 +21,26 @@ std::string infx2pstfx(const std::string& inf) {
       result << ' ';
       --index;
     } else if (symbol == '(') {
-      opList.add(symbol);
+      opsList.add(symbol);
     } else if (symbol == ')') {
-      while (!opList.isVoid() && opList.getTop() != '(') {
-        result << opList.remove() << ' ';
+      while (!opsList.isVoid() && opsList.getTop() != '(') {
+        result << opsList.remove() << ' ';
       }
-      if (!opList.isVoid()) {
-        opList.remove();
+      if (!opsList.isVoid()) {
+        opsList.remove();
       }
     } else if (symbol == '+' || symbol == '-' ||
                symbol == '*' || symbol == '/') {
-      while (!opList.isVoid() &&
-             priority(opList.getTop()) >= priority(symbol)) {
-        result << opList.remove() << ' ';
+      while (!opsList.isVoid() &&
+             priority(opsList.getTop()) >= priority(symbol)) {
+        result << opsList.remove() << ' ';
       }
-      opList.add(symbol);
+      opsList.add(symbol);
     }
     ++index;
   }
-  while (!opList.isVoid()) {
-    result << opList.remove() << ' ';
+  while (!opsList.isVoid()) {
+    result << opsList.remove() << ' ';
   }
   std::string output = result.str();
   if (!output.empty() && output.back() == ' ')
