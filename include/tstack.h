@@ -4,7 +4,6 @@
 
 template<typename ElementType, int Capacity>
 class TStack {
-
  public:
   TStack() : pointer(-1) {}
 
