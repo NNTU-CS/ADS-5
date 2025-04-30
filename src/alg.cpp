@@ -28,14 +28,17 @@ std::string infx2pstfx(const std::string& inf) {
       opList.push(ch);
     } else if (ch == ')') {
       while (!opList.empty() && opList.top() != '(') {
-        result << opList.pop() << ' ';
+        result << opList.top() << ' ';
+        opList.pop()
       }
       if (!opList.empty()) {
-        result << opList.pop();
+        result << opList.top();
+        opList.pop()
       }
     } else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
       while (!opList.empty() && priority(opList.top()) >= priority(ch)) {
-        result << opList.pop() << ' ';
+        result << opList.top() << ' ';
+        opList.pop()
       }
       opList.push(ch);
     }
@@ -43,10 +46,11 @@ std::string infx2pstfx(const std::string& inf) {
   }
 
   while (!opList.empty()) {
-    result << opList.pop() << ' ';
+    result << opList.top() << ' ';
+    opList.pop()
   }
   std::string output = result.str();
-  if (!output.empty() && output.back == ' ') {
+  if (!output.empty() && output.back() == ' ') {
     output.pop_back();
   }
   return output;
@@ -61,8 +65,10 @@ int eval(const std::string& pref) {
     if (std::isdigit(part[0])) {
       vals.push(std::stoi(part));
     } else {
-      int right = vals.pop();
-      int left = vals.pop();
+      int right = vals.top();
+      vals.pop()
+      int left = vals.top();
+      vals.pop()
       switch (part[0]) {
         case '+': vals.push(left + right); break;
         case '-': vals.push(left - right); break;
@@ -71,5 +77,5 @@ int eval(const std::string& pref) {
       }
     }
   }
-  return vals.pop();
+  return vals.top();
 }
