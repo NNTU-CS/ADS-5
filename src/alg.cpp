@@ -2,8 +2,8 @@
 #include <string>
 #include <map>
 #include <sstream>
-#include <stack>
-//#include "tstack.h"
+//#include <stack>
+#include "tstack.h"
 
 int priority(char symb) {
   if (symb == '+' || symb == '-') return 1;
@@ -12,7 +12,7 @@ int priority(char symb) {
 }
 
 std::string infx2pstfx(const std::string& inf) {
-  std::stack<char> opList;
+  TStack<char, 100> opList;
   std::ostringstream result;
   size_t index = 0;
 
@@ -25,29 +25,25 @@ std::string infx2pstfx(const std::string& inf) {
       result << ' ';
       index--;
     } else if (ch == '(') {
-      opList.push(ch);
+      opList.add(ch);
     } else if (ch == ')') {
-      while (!opList.empty() && opList.top() != '(') {
-        result << opList.top() << ' ';
-        opList.pop();
+      while (!opList.isVoid() && opList.getTop() != '(') {
+        result << opList.remove() << ' ';
       }
-      if (!opList.empty()) {
-        result << opList.top();
-        opList.pop();
+      if (!opList.isVoid()) {
+        result << opList.remove();
       }
     } else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
-      while (!opList.empty() && priority(opList.top()) >= priority(ch)) {
-        result << opList.top() << ' ';
-        opList.pop();
+      while (!opList.isVoid() && priority(opList.getTop()) >= priority(ch)) {
+        result << opList.remove() << ' ';
       }
-      opList.push(ch);
+      opList.add(ch);
     }
     index++;
   }
 
-  while (!opList.empty()) {
-    result << opList.top() << ' ';
-    opList.pop();
+  while (!opList.isVoid()) {
+    result << opList.remove() << ' ';
   }
   std::string output = result.str();
   if (!output.empty() && output.back() == ' ') {
@@ -57,25 +53,23 @@ std::string infx2pstfx(const std::string& inf) {
 }
 
 int eval(const std::string& pref) {
-  std::stack<int> vals;
+  TStack<int, 100> vals;
   std::istringstream iss(pref);
   std::string part;
 
   while (iss >> part) {
     if (std::isdigit(part[0])) {
-      vals.push(std::stoi(part));
+      vals.add(std::stoi(part));
     } else {
-      int right = vals.top();
-      vals.pop();
-      int left = vals.top();
-      vals.pop();
+      int right = vals.remove();
+      int left = vals.remove();
       switch (part[0]) {
-        case '+': vals.push(left + right); break;
-        case '-': vals.push(left - right); break;
-        case '*': vals.push(left * right); break;
-        case '/': vals.push(left / right); break;
+        case '+': vals.add(left + right); break;
+        case '-': vals.add(left - right); break;
+        case '*': vals.add(left * right); break;
+        case '/': vals.add(left / right); break;
       }
     }
   }
-  return vals.top();
+  return vals.remove();
 }
