@@ -73,7 +73,6 @@ int eval(const std::string& post) {
         if (b == 0) throw std::runtime_error("Деление на ноль");
         stack2.push(a / b);
         break;
-        continue;
       }
     }
   }
