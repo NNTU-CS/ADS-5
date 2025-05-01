@@ -20,6 +20,9 @@ std::string infx2pstfx(const std::string& inf) {
     if (c == ' ') continue;
     if (isDigit(c)) {
       result += c;
+      while (i + 1 < inf.size() && isDigit(inf[i+1])) {
+        result += inf[++i];
+      }
       result += ' ';
     }
     if (c == '(') stack1.push(c);
@@ -42,7 +45,7 @@ std::string infx2pstfx(const std::string& inf) {
     result += stack1.pop();
   }
   for (int i = result.size(); i; i--) {
-    if(result[i] == ' ' && result[i-1] == ' ') {
+    if (result[i] == ' ' && result[i-1] == ' ') {
       result[i] = result[i+1];
       result[i+1] = 0;
     }
