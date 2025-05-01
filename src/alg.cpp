@@ -14,41 +14,50 @@ bool isOperator(char c) {
   return c == '+' || c == '-' || c == '*' || c == '/';
 }
 std::string infx2pstfx(const std::string& inf) {
-  std::ostringstream output;
+  std::vector<std::string> tokens; // хранилище токенов
   TStack<char, 100> opStack;
   int i = 0;
+
   while (i < inf.size()) {
     if (isspace(inf[i])) {
       i++;
     } else if (isdigit(inf[i])) {
+      std::string number;
       while (i < inf.size() && isdigit(inf[i])) {
-        output << inf[i++];
+        number += inf[i++];
       }
-      output << ' ';
-    } else if (inf[i] == '(') {
-      opStack.push(inf[i++]);
-    } else if (inf[i] == ')') {
-      while (!opStack.isEmpty() && opStack.peek() != '(') {
-        output << opStack.pop() << ' ';
-      }
-      opStack.pop(); // удаляем '('
-      i++;
-    } else if (isOperator(inf[i])) {
-      while (!opStack.isEmpty() && \
-        precedence(opStack.peek()) >= precedence(inf[i])) {
-        output << opStack.pop() << ' ';
-      }
-      opStack.push(inf[i++]);
-    } else {
+      tokens.push_back(number);
+      } else if (inf[i] == '(') {
+        opStack.push(inf[i++]);
+      } else if (inf[i] == ')') {
+        while (!opStack.isEmpty() && opStack.peek() != '(') {
+          tokens.push_back(std::string(1, opStack.pop()));
+        }
+        opStack.pop(); // удаляем '('
+        i++;
+      } else if (isOperator(inf[i])) {
+        while (!opStack.isEmpty() &&
+          precedence(opStack.peek()) >= precedence(inf[i])) {
+            tokens.push_back(std::string(1, opStack.pop()));
+          }
+          opStack.push(inf[i++]);
+      } else {
         i++;  // пропустить неизвестный символ
+      }
     }
-  }
 
-  while (!opStack.isEmpty()) {
-    output << opStack.pop() << ' ';
-  }
+    while (!opStack.isEmpty()) {
+      tokens.push_back(std::string(1, opStack.pop()));
+    }
 
-  return output.str();
+    // Собираем результат без лишних пробелов
+    std::ostringstream output;
+    for (size_t j = 0; j < tokens.size(); ++j) {
+      if (j > 0) output << ' ';
+      output << tokens[j];
+    }
+
+    return output.str();
 }
 
 int eval(const std::string& pref) {
