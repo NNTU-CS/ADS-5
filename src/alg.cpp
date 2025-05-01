@@ -51,7 +51,7 @@ std::string infx2pstfx(const std::string& inf) {
 }
 
 int eval(const std::string& pref) {
-  std::istringstream input(post);
+  std::istringstream input(pref);
   TStack<int, 100> valStack;
   std::string token;
 
