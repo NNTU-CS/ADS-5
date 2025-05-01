@@ -5,10 +5,11 @@
 
 template<typename T, int size>
 class TStack {
-private:
+ private:
   T mas[size];
   int top;
-public:
+
+ public:
   TStack() : top(-1) {}
   bool isEmpty() const { return top == -1; }
   bool isFull() const { return top == size - 1; }
