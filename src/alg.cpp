@@ -2,6 +2,7 @@
 #include <string>
 #include <map>
 #include "tstack.h"
+#define isDigit(c) (c >= '0' && c <= '9')
 
 static int priority(char sign) {
   if (sign == '+' || sign == '-') return 1;
