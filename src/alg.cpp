@@ -3,6 +3,7 @@
 #include <cctype>
 #include <sstream>
 #include <map>
+#include <vector>
 #include "tstack.h"
 int precedence(char op) {
   if (op == '+' || op == '-') return 1;
