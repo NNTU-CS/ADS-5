@@ -34,7 +34,8 @@ std::string infx2pstfx(const std::string& inf) {
       opStack.pop(); // удаляем '('
       i++;
     } else if (isOperator(inf[i])) {
-      while (!opStack.isEmpty() && precedence(opStack.peek()) >= precedence(inf[i])) {
+      while (!opStack.isEmpty() && \
+        precedence(opStack.peek()) >= precedence(inf[i])) {
         output << opStack.pop() << ' ';
       }
       opStack.push(inf[i++]);
