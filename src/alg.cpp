@@ -7,7 +7,7 @@
 static int priority(char sign) {
   if (sign == '+' || sign == '-') return 1;
   if (sign == '*' || sign == '/') return 2;
-  if (sign == '(') return 0;
+  return 0;
 }
 char isOp(char sign) {
   return sign == '+' || sign == '-' || sign == '*' || sign == '/';
