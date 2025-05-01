@@ -15,40 +15,40 @@ char isOp(char sign) {
 std::string infx2pstfx(const std::string& inf) {
   TStack <char, 100> stack1;
   std::string result;
+  bool space = false;
   for (int i = 0; i < inf.size(); i++) {
     char c = inf[i];
     if (c == ' ') continue;
     if (isDigit(c)) {
+      if (space) result += ' ';
       result += c;
       while (i + 1 < inf.size() && isDigit(inf[i+1])) {
         result += inf[++i];
       }
-      result += ' ';
+      space = true;
     }
     if (c == '(') stack1.push(c);
     if (c == ')') {
       while (!stack1.isEmpty() && stack1.getTop() != '(') {
+        if (space) result += ' ';
         result += stack1.pop();
+        space = true;
       }
       stack1.pop();
     }
     if (isOp(c)) {
       while (!stack1.isEmpty() && priority(stack1.getTop()) >= priority(c)) {
+        if (space) result += ' ';
         result += stack1.pop();
+        space = true;
       }
       stack1.push(c);
-      result += ' ';
     }
   }
   while (!stack1.isEmpty()) {
-    result += ' ';
+    if (space) result += ' ';
     result += stack1.pop();
-  }
-  for (int i = result.size(); i; i--) {
-    if (result[i] == ' ' && result[i-1] == ' ') {
-      result[i] = result[i+1];
-      result[i+1] = 0;
-    }
+    space = true;
   }
   return result;
 }
