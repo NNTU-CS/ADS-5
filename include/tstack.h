@@ -6,7 +6,8 @@
 template<typename T, int size>
 class TStack {
  private:
-  T mas[size];
+  static constexpr int kStaticSize = size;
+  T mas[kStaticSize];
   int top;
 
  public:
