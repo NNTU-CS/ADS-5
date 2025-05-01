@@ -4,6 +4,7 @@
 
 template<typename T, int size>
 class TStack {
+
 private:
     static constexpr int kStackSize = size;
     T arr[kStackSize];
