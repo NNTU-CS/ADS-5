@@ -21,26 +21,22 @@ std::string infx2pstfx(const std::string& inf) {
     if (isdigit(c)) {
       if (prevWasDigit) {
         output += c;
-      }
-      else {
+      } else {
         if (!output.empty()) output += ' ';
         output += c;
       }
       prevWasDigit = true;
-    }
-    else {
+    } else {
       prevWasDigit = false;
       if (c == '(') {
         stack.push(c);
-      }
-      else if (c == ')') {
+      } else if (c == ')') {
         while (!stack.isEmpty() && stack.peek() != '(') {
           output += ' ';
           output += stack.pop();
         }
         stack.pop();
-      }
-      else {
+      } else {
         while (!stack.isEmpty() && precedence(c) <= precedence(stack.peek())) {
           output += ' ';
           output += stack.pop();
@@ -68,8 +64,7 @@ int eval(const std::string& post) {
     if (isdigit(c)) {
       num = num * 10 + (c - '0');
       readingNum = true;
-    }
-    else {
+    } else {
       if (readingNum) {
         stack.push(num);
         num = 0;
