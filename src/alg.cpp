@@ -14,6 +14,7 @@ int eval(const std::string& pref) {
 }
 #include <string>
 #include <cctype>
+#include "tstack.h"
 
 int precedence(char oper) {
     if (oper == '+' || oper == '-') return 1;
