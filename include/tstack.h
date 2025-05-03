@@ -8,8 +8,8 @@ class TStack {
 };
 
 #endif  // INCLUDE_TSTACK_H_
-#ifndef INCLUDE_TSTACK_H_
-#define INCLUDE_TSTACK_H_
+#ifndef TSTACK_H_
+#define TSTACK_H_
 template <typename T, int SIZE>
 class TStack
 {
