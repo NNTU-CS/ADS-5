@@ -8,6 +8,8 @@ class TStack {
 };
 
 #endif  // INCLUDE_TSTACK_H_
+#ifndef INCLUDE_TSTACK_H_
+#define INCLUDE_TSTACK_H_
 template <typename T, int SIZE>
 class TStack
 {
@@ -32,3 +34,4 @@ public:
         return isEmpty() ? T() : data[topIndex];
     }
 };
+#endif  // INCLUDE_TSTACK_H_
