@@ -2,8 +2,7 @@
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 template <typename T, int SIZE>
-class TStack
-{
+class TStack {
 private:
   T data[SIZE];
   int topIndex;
