@@ -13,6 +13,7 @@ int eval(const std::string& pref) {
   return 0;
 }
 #include <string>
+#include <cctype>
 
 int precedence(char oper) {
     if (oper == '+' || oper == '-') return 1;
@@ -40,7 +41,7 @@ std::string infx2pstfx(const std::string& inf) {
         } else {
             prevWasDigit = false;
             if (c == '(') {
-                stack.push('c');
+                stack.push(c);
             } else if (c == ')') {
                 while (!stack.isEmpty() && stack.peek() != '(') {
                     output += ' ';
@@ -84,7 +85,9 @@ int eval(const std::string& post) {
             
             if (c == ' ') continue;
 
+            if (stack.isEmpty()) return 0;
             int b = stack.pop();
+            if (stack.isEmpty()) return b;
             int a = stack.pop();
             switch (c) {
                 case '+': stack.push(a + b); break;
