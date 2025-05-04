@@ -42,4 +42,4 @@ class TStack {
   bool full() const { return top_index_ == kStackSize - 1; }
 };
 
-#endif 
+#endif  // INCLUDE_TSTACK_H_
