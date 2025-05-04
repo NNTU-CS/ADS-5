@@ -33,12 +33,6 @@ std::string infx2pstfx(const std::string& inf) {
         out += stack.pop();
         out += ' ';
       }
-      if (!stack.isEmpty()) stack.pop();
-    } else if (c == '+' || c == '-' || c == '*' || c == '/') {
-      while (!stack.isEmpty() && priority(stack.get()) >= priority(c)) {
-        out += stack.pop();
-        out += ' ';
-      }
       stack.push(c);
     }
   }
@@ -46,7 +40,14 @@ std::string infx2pstfx(const std::string& inf) {
   out += stack.pop();
   out += ' ';
   }
-  return out;
+  std::string res;
+  for (size_t i = 0; i < out.size(); ++i) {
+    if (i == out.size() - 1 && out[i] == ' ') {
+      continue;
+    }
+    res += out[i];
+  }
+  return res;
 }
 int eval(const std::string& pref) {
   TStack<int, 100> stack;
