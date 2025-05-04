@@ -51,7 +51,8 @@ int eval(const std::string& pref) {
         num = num * 10 + (pref[i++] - '0');
       }
       stack.push(num);
-    } else if (pref[i] == '+' || pref[i] == '-' || pref[i] == '*' || pref[i] == '/') {
+    } else if (pref[i] == '+' || pref[i] == '-' ||
+      pref[i] == '*' || pref[i] == '/') {
       int b = stack.pop();
       int a = stack.pop();
       int result = 0;
