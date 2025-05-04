@@ -25,7 +25,10 @@ int toInt(char arg) {
       return 8;
     case '9':
       return 9;
+    default:
+      return 0;
   }
+  return 0;
 }
 
 int pri(char target) {
