@@ -11,7 +11,7 @@ class TStack {
   TStack(): top(-1) {}
   bool isEmpty() const { return top < 0;
   }
-  bool isFull() const { return top >= (size - 1);
+  bool isFull() const { return top >= (k - 1);
   }
   void push(const T& value) {
     if (isFull()) throw std::string("Stack is full!");
