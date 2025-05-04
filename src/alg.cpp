@@ -101,8 +101,8 @@ int eval(const std::string& pref) {
       i++;
     }
     if (pref[i] == '+' || pref[i] == '-' || pref[i] == '*' || pref[i] == '/') {
-      switch (pref[i]) { 
-      case '+':
+      switch (pref[i]) {
+        case '+':{
           int operand2 = 0, operand1 = 0;
           operand2 = stack.getTop();
           stack.pop();
@@ -111,16 +111,18 @@ int eval(const std::string& pref) {
           int result = operand1 + operand2;
           stack.push(result);
           break;
-      case '-':
-        int operand2 = 0, operand1 = 0;
-        operand2 = stack.getTop();
-        stack.pop();
-        operand1 = stack.getTop();
-        stack.pop();
-        int result = operand1 - operand2;
-        stack.push(result);
-        break;
-      case '*':
+      }
+        case '-':{
+          int operand2 = 0, operand1 = 0;
+          operand2 = stack.getTop();
+          stack.pop();
+          operand1 = stack.getTop();
+          stack.pop();
+          int result = operand1 - operand2;
+          stack.push(result);
+          break;
+      }
+      case '*': {
         int operand2 = 0, operand1 = 0;
         operand2 = stack.getTop();
         stack.pop();
@@ -129,7 +131,8 @@ int eval(const std::string& pref) {
         int result = operand1 * operand2;
         stack.push(result);
         break;
-      case '/':
+      }
+      case '/': {
         int operand2 = 0, operand1 = 0;
         operand2 = stack.getTop();
         stack.pop();
@@ -138,6 +141,7 @@ int eval(const std::string& pref) {
         int result = operand1 / operand2;
         stack.push(result);
         break;
+      }
       }
       continue;
     }
