@@ -2,16 +2,16 @@
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 #include <string>
-template <typename T, int k>
+template <typename T, int K>
 class TStack {
  private:
-  T data[k];
+  T data[K];
   int top;
  public:
   TStack(): top(-1) {}
   bool isEmpty() const { return top < 0;
   }
-  bool isFull() const { return top >= (k - 1);
+  bool isFull() const { return top >= (K - 1);
   }
   void push(const T& value) {
     if (isFull()) throw std::string("Stack is full!");
