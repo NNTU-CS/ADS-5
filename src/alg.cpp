@@ -34,7 +34,7 @@ std::string infx2pstfx(const std::string& inf) {
         out += ' ';
       }
       if (!stack.isEmpty()) stack.pop();
-    } else if (c == '+'  c == '-'  c == '*' || c == '/') {
+    } else if (c == '+' || c == '-' || c == '*' || c == '/') {
       while (!stack.isEmpty() && priority(stack.get()) >= priority(c)) {
         out += stack.pop();
         out += ' ';
