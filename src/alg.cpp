@@ -1,73 +1,67 @@
 // Copyright 2025 NNTU-CS
 #include <string>
-#include <map>
+#include <cctype>
 #include "tstack.h"
 
-bool isDigit(char c) {
-  return c >= '0' && c <= '9';
-}
-bool isOperator(char c) {
-  return c == '+' || c == '-' || c == '*' || c == '/';
-}
-int useOp(int a, int b, char op) {
-  switch (op) {
-  case '+': return a + b;
-  case '-': return a - b;
-  case '*': return a * b;
-  case '/': return a / b;
-  }
+int priority(char op) {
+  if (op == '+' || op == '-') return 1;
+  if (op == '*' || op == '/') return 2;
   return 0;
 }
 std::string infx2pstfx(const std::string& inf) {
+  std::string out;
   TStack<char, 100> stack;
-  std::string postfix = "";
-  std::map<char, int> priority;
-  priority['+'] = 1;
-  priority['-'] = 1;
-  priority['*'] = 2;
-  priority['/'] = 2;
-  for (size_t i = 0; i < inf.size(); i++) {
-    char ch = inf[i];
-    if (isDigit(ch)) {
-      postfix += ch;
-    } else if (ch == '(') {
-      stack.push(ch);
-    } else if (ch == ')') {
+  for (size_t i = 0; i < inf.size(); ++i) {
+    char c = inf[i];
+    if (isdigit(c)) {
+      while (i < inf.size() && isdigit(inf[i])) {
+        out += inf[i++];
+      }
+      out += ' ';
+      --i;
+    } else if (c == '(') {
+      stack.push(c);
+    } else if (c == ')') {
       while (!stack.isEmpty() && stack.get() != '(') {
-        postfix += ' ';
-        postfix += stack.pop();
+        out += stack.pop();
+        out += ' ';
       }
       if (!stack.isEmpty()) stack.pop();
-    } else if (priority(ch) > 0) {
-      postfix += ' ';
-      while (!stack.isEmpty() && priority(stack.get()) >= priority(ch)) {
-        postfix += stack.pop();
-        postfix += ' ';
+    } else if (c == '+' || c == '-' || c == '*' || c == '/') {
+      while (!stack.isEmpty() && priority(stack.get()) >= priority(c)) {
+        out += stack.pop();
+        out += ' ';
       }
-      stack.push(ch);
+      stack.push(c);
     }
   }
   while (!stack.isEmpty()) {
-  postfix += ' ';
-  postfix += stack.pop();
+    out += stack.pop();
+    out += ' ';
   }
   return out;
 }
 int eval(const std::string& pref) {
   TStack<int, 100> stack;
-  for (size_t i = 0; i < pref.length(); i++) {
-    if (isspace(pref[i])) continue;
+  int i = 0;
+  while (i < pref.size()) {
     if (isdigit(pref[i])) {
-      stack.push(pref[i] - '0');
-    } else if (isOperator(pref[i])) {
-      int b, a;
-      stack.pop(b);
-      stack.pop(a);
-      int result = useOp(a, b, pref[i]);
+      int num = 0;
+      while (i < pref.size() && isdigit(pref[i])) {
+        num = num * 10 + (pref[i++] - '0');
+      }
+      stack.push(num);
+    } else if (pref[i] == '+' || pref[i] == '-' || pref[i] == '*' || pref[i] == '/') {
+      int b = stack.pop();
+      int a = stack.pop();
+      int result = 0;
+      if (pref[i] == '+') result = a + b;
+      else if (pref[i] == '-') result = a - b;
+      else if (pref[i] == '*') result = a * b;
+      else if (pref[i] == '/') result = a / b;
       stack.push(result);
     }
+    ++i;
   }
-  int finalResult;
-  stack.pop(finalResult);
-  return finalResult;
+  return stack.pop();
 }
