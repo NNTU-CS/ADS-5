@@ -41,7 +41,7 @@ int pri(char target) {
       return 2;
     case '/':
       return 2;
-    default: 
+    default:
       return 0;
   }
 }
@@ -82,8 +82,9 @@ std::string infx2pstfx(const std::string& inf) {
       }
       stack.push(inf[i]);
       continue;
-    } else
+    } else {
       throw std::string("Error!");
+    }
   }
   while (!stack.isEmpty()) {
     if (stack.getTop() == '(' || stack.getTop() == ')')
@@ -105,7 +106,7 @@ int eval(const std::string& pref) {
     }
     if (pref[i] == '+' || pref[i] == '-' || pref[i] == '*' || pref[i] == '/') {
       switch (pref[i]) {
-        case '+':{
+        case '+': {
           int operand2 = 0, operand1 = 0;
           operand2 = stack.getTop();
           stack.pop();
@@ -115,7 +116,7 @@ int eval(const std::string& pref) {
           stack.push(result);
           break;
       }
-        case '-':{
+        case '-': {
           int operand2 = 0, operand1 = 0;
           operand2 = stack.getTop();
           stack.pop();
