@@ -24,13 +24,13 @@ class TStack {
       if (!isEmpty()) {
         return arr[top--];
       }
-      return T;
+      return T();
     }
     T get() const {
       if (!isEmpty()) {
         return arr[top];
       }
-      return T;
+      return T();
     }
 };
 
