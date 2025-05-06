@@ -3,87 +3,85 @@
 #include <map>
 #include "tstack.h"
 
+int getOpPriority(char oper) {
+    switch (oper) {
+    case '(': return 0;
+    case '+':
+    case '-': return 1;
+    case '*':
+    case '/': return 2;
+    default: return -1;
+    }
+}
+
 std::string infx2pstfx(const std::string& inf) {
-  std::map<char, int> precedence;
-  precedence['+'] = precedence['-'] = 1;
-  precedence['*'] = precedence['/'] = 2;
-  TStack<char, 100> stack;
   std::string output;
-  for (size_t i = 0; i < inf.length(); ++i) {
-    char ch = inf[i];
-    if (ch == ' ') continue;
-    if (isDigit(ch)) {
-      std::string num;
-      while (i < inf.length() && isDigit(inf[i])) {
-        num += inf[i++];
-      }
-      output += num + ' ';
-      --i;
-    } else if (ch == '(') {
-      stack.push(ch);
-    } else if (ch == ')') {
-      while (!stack.isEmpty() && stack.peek() != '(') {
-        output += stack.pop();
+  TStack<char, 100> operators;
+  for (size_t pos = 0; pos < inf.length(); ++pos) {
+  char token = inf[pos];
+  if (std::isdigit(token)) {
+    while (pos < inf.length() && std::isdigit(inf[pos])) {
+      output += inf[pos++];
+    }
+    output += ' ';
+    --pos;
+  } else if (token == '(') {
+      operators.push(token);
+  } else if (token == ')') {
+      while (!operators.isEmpty() && operators.top() != '(') {
+        output += operators.top();
         output += ' ';
+        operators.pop();
       }
-      if (!stack.isEmpty()) stack.pop();
-      } else if (isOperator(ch)) {
-      while (!stack.isEmpty() && stack.peek() != '(' &&
-        precedence[ch] <= precedence[stack.peek()]) {
-        output += stack.pop();
+      if (!operators.isEmpty()) {
+        operators.pop();
+      }
+  } else if (token == '+' || token == '*' || token == '/' || token == '-') {
+      while (!operators.isEmpty() &&
+          getOpPriority(token) <= getOpPriority(operators.top())) {
+        output += operators.top();
         output += ' ';
+        operators.pop();
       }
-      stack.push(ch);
+      operators.push(token);
     }
   }
-  while (!stack.isEmpty()) {
-    output += stack.pop();
-    output += ' ';
-  }
-  if (!output.empty() && output.back() == ' ') {
-    output.erase(output.size() - 1);
-  }
-  return output;
+while (!operators.isEmpty()) {
+  output += operators.top();
+  output += ' ';
+  operators.pop();
+}
+if (!output.empty() && output.back() == ' ') {
+  output.pop_back();
+}
+return output;
 }
 
 int eval(const std::string& pref) {
-  TStack<int, 100> stack;
-  std::string num;
-  for (size_t i = 0; i < pref.length(); ++i) {
-    char ch = pref[i];
-    if (ch == ' ') {
-      if (!num.empty()) {
-        stack.push(toInt(num));
-        num.clear();
+  TStack<int, 100> values;
+  for (size_t i = 0; i < postfix.length(); ++i) {
+    char ch = postfix[i];
+    if (std::isdigit(ch)) {
+      int number = 0;
+      while (i < postfix.length() && std::isdigit(postfix[i])) {
+        number = number * 10 + (postfix[i++] - '0');
       }
-    } else if (isDigit(ch)) {
-      num += ch;
-    } else if (isOperator(ch)) {
-      if (stack.isEmpty()) throw "Invalid postfix expression";
-      int b = stack.pop();
-      if (stack.isEmpty()) throw "Invalid postfix expression";
-      int a = stack.pop();
-      switch (ch) {
-        case '+':
-          stack.push(a + b);
-          break;
-        case '-':
-          stack.push(a - b);
-          break;
-        case '*':
-          stack.push(a * b);
-          break;
-        case '/':
-          if (b == 0) throw "Division by zero";
-          stack.push(a / b);
-          break;
+      values.push(number);
+      --i;
+    } else if (ch == ' ') {
+        continue;
+    } else {
+        int right = values.top();
+        values.pop();
+        int left = values.top();
+        values.pop();
+        switch (ch) {
+          case '+': values.push(left + right); break;
+          case '-': values.push(left - right); break;
+          case '*': values.push(left * right); break;
+          case '/': values.push(left / right); break;
+        }
       }
-    }
   }
-  if (stack.isEmpty()) throw "Invalid postfix expression";
-  int result = stack.pop();
-  if (!stack.isEmpty()) {
-    throw "Invalid postfix expression";
-  }
-  return result;
+return values.top();
 }
