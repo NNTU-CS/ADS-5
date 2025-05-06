@@ -57,7 +57,7 @@ if (!output.empty() && output.back() == ' ') {
 return output;
 }
 
-int eval(const std::string& pref) {
+int eval(const std::string& postfix) {
   TStack<int, 100> values;
   for (size_t i = 0; i < postfix.length(); ++i) {
     char ch = postfix[i];
