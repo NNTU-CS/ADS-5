@@ -15,7 +15,6 @@ int getPlace(char oper) {
 }
 
 std::string infx2pstfx(const std::string& inf) {
-  
   std::string output;
   TStack<char, 100> operators;
   for (size_t pos = 0; pos < inf.length(); ++pos) {
@@ -47,7 +46,6 @@ std::string infx2pstfx(const std::string& inf) {
         operators.push(token);
     }
   }
-  
   while (!operators.isEmpty()) {
     output += operators.top();
     output += ' ';
@@ -57,7 +55,6 @@ std::string infx2pstfx(const std::string& inf) {
   if (!output.empty() && output.back() == ' ') {
     output.pop_back();
   }
-  
   return output;
 }
 
@@ -87,6 +84,5 @@ int eval(const std::string& postfix) {
         }
       }
   }
-  
   return values.top();
 }
