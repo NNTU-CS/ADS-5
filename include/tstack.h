@@ -6,8 +6,7 @@
 template<typename T, int size>
 class TStack {
  private:
-  static const int kMaxSize = Size;
-  T storage[kMaxSize];
+  T storage[size] = { 100 };
   int topIndex;
  public:
   TStack() : topIndex(-1) {}
