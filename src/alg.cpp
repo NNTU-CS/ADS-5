@@ -67,7 +67,7 @@ std::string infx2pstfx(std::string inf) {
 			}
 		}
 
-		if (inf[i] >= '0' && inf[i] <= '9'){
+                if (inf[i] >= '0' && inf[i] <= '9'){
 			newstring += inf[i];
 			newstring += ' ';
 		}
