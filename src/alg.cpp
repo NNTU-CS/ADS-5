@@ -1,7 +1,7 @@
 // Copyright 2025 NNTU-CS
-#include "tstack.h"
 #include <string>
 #include <iostream>
+#include "tstack.h"
 
 std::string infx2pstfx(std::string inf);
 int eval(const std::string& pref);
