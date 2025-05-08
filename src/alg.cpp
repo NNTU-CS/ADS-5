@@ -5,7 +5,7 @@
 
 
 std::string infx2pstfx(std::string inf);
-int eval(std::string pref);
+int eval(const std::string& pref)
 
 int main() {
 	std::string inf = "8*(3+7)/2";
@@ -108,9 +108,9 @@ std::string infx2pstfx(std::string inf) {
 						stack1.pop();
 					}
 					if (!stack1.isEmpty()) {
-						char operat1 = stack1.get();
+						char topOper = stack1.get();
 						prior1 = 0;
-						switch (operat1) {
+						switch (topOper) {
 						case '(':
 							prior1 = 0;
 							break;
@@ -130,7 +130,7 @@ std::string infx2pstfx(std::string inf) {
 							prior1 = 3;
 							break;
 						}
-						if (operat1 == '(') {
+						if (topOper == '(') {
 							break;
 						}
 					}
