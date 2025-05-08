@@ -1,6 +1,6 @@
 // Copyright 2025 NNTU-CS
-#include <iostream>
 #include "tstack.h"
+#include <iostream>
 #include <string>
 
 std::string infx2pstfx(std::string inf);
@@ -131,5 +131,5 @@ int eval(const std::string& pref) {
             return stack2.get();
         }
     }
-    return 0; 
+    return 0;
 }
