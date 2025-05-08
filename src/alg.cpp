@@ -8,48 +8,48 @@ std::string infx2pstfx(std::string inf);
 int eval(const std::string& pref)
 
 int main() {
-	std::string inf = "8*(3+7)/2";
-	std::string pref = infx2pstfx(inf);
-	std::cout << infx2pstfx(inf) << std::endl;
-	std::cout << eval(pref) << std::endl;
-	return 0;
+        std::string inf = "8*(3+7)/2";
+        std::string pref = infx2pstfx(inf);
+        std::cout << infx2pstfx(inf) << std::endl;
+        std::cout << eval(pref) << std::endl;
+        return 0;
 }
 
 
 std::string infx2pstfx(std::string inf) {
 	SStack<char, 100> stack1;
-	std::string newstring = "";
-	for (int i = 0; i < inf.length() + 1; i++) {
-		char operat1 = inf[i];
-		int prior1 = 0;
-		switch (operat1) {
-		case '(':
-			prior1 = 0;
+        std::string newstring = "";
+        for (int i = 0; i < inf.length() + 1; i++) {
+        char operat1 = inf[i];
+                int prior1 = 0;
+                switch (operat1) {
+                case '(':
+                        prior1 = 0;
+                        break;
+                case ')':
+                        prior1 = 1;
 			break;
-		case ')':
-			prior1 = 1;
-			break;
-		case '+':
-			prior1 = 2;
-			break;
-		case '-':
-			prior1 = 2;
-			break;
-		case '*':
-			prior1 = 3;
-			break;
-		case '/':
-			prior1 = 3;
-			break;
+                case '+':
+                        prior1 = 2;
+                        break;
+                case '-':
+                        prior1 = 2;
+                        break;
+                case '*':
+                        prior1 = 3;
+                        break;
+                case '/':
+                        prior1 = 3;
+                        break;
 		}
-		int prior2 = 0;
-		if (!stack1.isEmpty()) {
-			char operat2 = stack1.get();
-			switch (operat2) {
-			case '(':
-				prior2 = 0;
-				break;
-			case ')':
+                int prior2 = 0;
+                if (!stack1.isEmpty()) {
+                        char operat2 = stack1.get();
+                        switch (operat2) {
+                        case '(':
+                                prior2 = 0;
+                                break;
+		        case ')':
 				prior2 = 1;
 				break;
 			case '+':
