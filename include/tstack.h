@@ -1,3 +1,4 @@
+// Copyright 2021 NNTU-CS
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 #include <stdexcept>
@@ -5,12 +6,11 @@
 template<typename T, int size>
 class TStack {
  private:
-  T storage[size];
+  static const int kMaxSize = Size;
+  T storage[kMaxSize];
   int topIndex;
-
  public:
   TStack() : topIndex(-1) {}
-  
   bool isFull() const {
       return topIndex >= size - 1;
   }
