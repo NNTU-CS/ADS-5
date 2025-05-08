@@ -29,7 +29,7 @@ std::string infx2pstfx(std::string inf) {
 
         int prior2 = 0;
         if (!stack1.isEmpty()) {
-            char operat2 = stack1.get();
+            char operat2 = stack1.top();
             switch (operat2) {
                 case '(': prior2 = 0; break;
                 case ')': prior2 = 1; break;
@@ -48,7 +48,7 @@ std::string infx2pstfx(std::string inf) {
                 stack1.push(inf[i]);
             } else {
                 while (prior1 <= prior2) {
-                    char operat2 = stack1.get();
+                    char operat2 = stack1.top();
                     prior2 = 0;
                     switch (operat2) {
                         case '(': prior2 = 0; break;
@@ -57,14 +57,14 @@ std::string infx2pstfx(std::string inf) {
                         case '*': case '/': prior2 = 3; break;
                     }
 
-                    if (stack1.get() != '(') {
-                        newstring += stack1.get();
+                    if (stack1.top() != '(') {
+                        newstring += stack1.top();
                         newstring += ' ';
                         stack1.pop();
                     }
 
                     if (!stack1.isEmpty()) {
-                        char topOper = stack1.get();
+                        char topOper = stack1.top();
                         prior1 = 0;
                         switch (topOper) {
                             case '(': prior1 = 0; break;
@@ -80,9 +80,9 @@ std::string infx2pstfx(std::string inf) {
                 stack1.push(inf[i]);
             }
         } else if (inf[i] == ')') {
-            while (stack1.get() != '(') {
+            while (stack1.top() != '(') {
                 if (stack1.isEmpty()) break;
-                newstring += stack1.get();
+                newstring += stack1.top();
                 newstring += ' ';
                 stack1.pop();
             }
@@ -91,7 +91,7 @@ std::string infx2pstfx(std::string inf) {
 
         if (inf[i] == '\0') {
             while (!stack1.isEmpty()) {
-                newstring += stack1.get();
+                newstring += stack1.top();
                 newstring += ' ';
                 stack1.pop();
             }
@@ -113,9 +113,9 @@ int eval(const std::string& pref) {
             timeline = "";
         } else if (pref[i] >= '(' && pref[i] <= '/') {
             char s = pref[i];
-            int num1 = stack2.get();
+            int num1 = stack2.top();
             stack2.pop();
-            int num2 = stack2.get();
+            int num2 = stack2.top();
             stack2.pop();
             int res = 0;
             switch (s) {
@@ -128,7 +128,7 @@ int eval(const std::string& pref) {
         }
 
         if (pref[i] == '\0') {
-            return stack2.get();
+            return stack2.top();
         }
     }
     return 0;
