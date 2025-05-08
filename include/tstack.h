@@ -31,7 +31,6 @@ class TStack {
     if (!isEmpty()) {
       --topIndex;
     } else {
-
       throw std::out_of_range("Stack is empty");
     }
   }
@@ -40,13 +39,11 @@ class TStack {
     if (!isEmpty()) {
       return stack[topIndex];
     } else {
- 
       throw std::out_of_range("Stack is empty");
     }
   }
 
-
-  int size() const {
+  int currentSize() const {
     return topIndex + 1;
   }
 };
