@@ -8,6 +8,7 @@ class TStack {
  private:
   T storage[size] = { 100 };
   int topIndex;
+
  public:
   TStack() : topIndex(-1) {}
   bool isFull() const {
