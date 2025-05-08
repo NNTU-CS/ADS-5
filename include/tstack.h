@@ -4,29 +4,51 @@
 
 template<typename T, int size>
 class TStack {
-  class SStack {
-private:
-	const int Ksize = size;
-	T arr[100];
-	int top;
-public:
-	TStack() : top(-1) { }
-	T get() const {
-		return arr[top];
-	}
-	bool isEmpty() const {
-		return top == -1;
-	}
-	bool isFull() const {
-		return top == size-1;
-	}
-	void pop() {
-		if (top >= 0)
-			top--;
-	}
-	void push(T item) {
-		if (top < size-1)
-			arr[++top] = item;
-	}
+ private:
+  T stack[size];
+  int topIndex;
+
+ public:
+  TStack() : topIndex(-1) {}
+
+  bool isEmpty() const {
+    return topIndex == -1;
+  }
+
+  bool isFull() const {
+    return topIndex == size - 1;
+  }
+
+  void push(const T& value) {
+    if (!isFull()) {
+      stack[++topIndex] = value;
+    } else {
+      throw std::out_of_range("Stack is full");
+    }
+  }
+
+  void pop() {
+    if (!isEmpty()) {
+      --topIndex;
+    } else {
+
+      throw std::out_of_range("Stack is empty");
+    }
+  }
+
+  T top() const {
+    if (!isEmpty()) {
+      return stack[topIndex];
+    } else {
+ 
+      throw std::out_of_range("Stack is empty");
+    }
+  }
+
+
+  int size() const {
+    return topIndex + 1;
+  }
 };
+
 #endif  // INCLUDE_TSTACK_H_
