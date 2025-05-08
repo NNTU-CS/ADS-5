@@ -15,7 +15,7 @@ int main() {
 }
 
 std::string infx2pstfx(std::string inf) {
-    SStack<char, 100> stack1;
+    TStack<char, 100> stack1;
     std::string newstring = "";
     for (int i = 0; i < inf.length() + 1; i++) {
         char operat1 = inf[i];
@@ -102,7 +102,7 @@ std::string infx2pstfx(std::string inf) {
 }
 
 int eval(const std::string& pref) {
-    SStack<int, 100> stack2;
+    TStack<int, 100> stack2;
     std::string timeline = "";
     for (int i = 0; i < pref.length() + 1; i++) {
         if (pref[i] >= '0' && pref[i] <= '9') {
