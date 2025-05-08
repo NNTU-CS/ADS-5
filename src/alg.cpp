@@ -163,7 +163,7 @@ std::string infx2pstfx(std::string inf) {
 	return newstring;
 }
 
-int eval(std::string pref) {
+int eval(const std::string& pref){
 	SStack<int, 100> stack2;
 	std::string timeline = "";
 	for (int i = 0; i < pref.length() + 1; i++) {
