@@ -1,9 +1,11 @@
 // Copyright 2025 NNTU-CS
-#include "tstack.h"
 #include <string>
 #include <sstream>
+#include "tstack.h"
 
-using namespace std;
+using std::string;
+using std::stringstream;
+using std::isdigit;
 
 static int precedence(char op) {
   if (op == '+' || op == '-') return 1;
@@ -24,26 +26,26 @@ string infx2pstfx(const string& inf) {
       }
       postfix += num + " ";
     } else if (c == '(') {
-      stack.push(c);
+      stack.Push(c);
       i++;
     } else if (c == ')') {
-      while (!stack.isEmpty() && stack.top() != '(') {
-        postfix += stack.pop();
+      while (!stack.IsEmpty() && stack.Top() != '(') {
+        postfix += stack.Pop();
         postfix += ' ';
       }
-      stack.pop();
+      stack.Pop();
       i++;
     } else {
-      while (!stack.isEmpty() && precedence(c) <= precedence(stack.top())) {
-        postfix += stack.pop();
+      while (!stack.IsEmpty() && precedence(c) <= precedence(stack.Top())) {
+        postfix += stack.Pop();
         postfix += ' ';
       }
-      stack.push(c);
+      stack.Push(c);
       i++;
     }
   }
-  while (!stack.isEmpty()) {
-    postfix += stack.pop();
+  while (!stack.IsEmpty()) {
+    postfix += stack.Pop();
     postfix += ' ';
   }
   if (!postfix.empty() && postfix.back() == ' ') {
@@ -58,17 +60,17 @@ int eval(const string& post) {
   string token;
   while (ss >> token) {
     if (isdigit(token[0])) {
-      stack.push(stoi(token));
+      stack.Push(stoi(token));
     } else {
-      int b = stack.pop();
-      int a = stack.pop();
+      int b = stack.Pop();
+      int a = stack.Pop();
       switch (token[0]) {
-        case '+': stack.push(a + b); break;
-        case '-': stack.push(a - b); break;
-        case '*': stack.push(a * b); break;
-        case '/': stack.push(a / b); break;
+        case '+': stack.Push(a + b); break;
+        case '-': stack.Push(a - b); break;
+        case '*': stack.Push(a * b); break;
+        case '/': stack.Push(a / b); break;
       }
     }
   }
-  return stack.pop();
+  return stack.Pop();
 }
