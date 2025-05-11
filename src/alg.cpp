@@ -24,13 +24,12 @@ std::string infx2pstfx(const std::string& inf) {
         }
         stack.pop();
       } else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
-        while (!stack.isEmpty() && stack.peek() != '(' {
+        while !stack.isEmpty() && stack.peek() != '(' {
     char top = stack.peek();
     bool shouldPop = false;
     if (ch == '+' || ch == '-') {
         shouldPop = true;
-    }
-    else if (top == '*' || top == '/') {
+    } else if (top == '*' || top == '/') {
         shouldPop = true;
     }
     if (!shouldPop) break;
