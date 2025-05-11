@@ -1,7 +1,7 @@
 // Copyright 2021 NNTU-CS
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
-
+#include <iostream>
 template<typename T, int size>
 class TStack {
  private:
@@ -9,7 +9,7 @@ class TStack {
   int top;
   int capacity;
 
-public:
+ public:
   TStack() : top(-1), capacity(size) {
     arr = new T[capacity];
   }
