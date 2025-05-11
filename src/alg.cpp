@@ -2,7 +2,7 @@
 #include <string>
 #include <sstream>
 #include <cctype>
-#include "Tstack.h"
+#include "tstack.h"
 
 using std::string;
 using std::stringstream;
