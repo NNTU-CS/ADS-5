@@ -25,7 +25,7 @@ std::string infx2pstfx(const std::string& inf) {
         stack.pop();
       } else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
         while (!stack.isEmpty() && stack.peek() != '(' &&
-          ((ch =='+'||ch=='-')?true:(stack.peek()=='*'||stack.peek()=='/'))){
+          ((ch =='+' || ch=='-')?true:(stack.peek()=='*' || stack.peek()=='/'))) {
           postfix += std::string(1, stack.pop()) + " ";
         }
         stack.push(ch);
