@@ -27,26 +27,26 @@ string infx2pstfx(const string& inf) {
       }
       postfix += num + " ";
     } else if (c == '(') {
-      stack.Push(c);
+      stack.push(c);
       i++;
     } else if (c == ')') {
-      while (!stack.IsEmpty() && stack.Top() != '(') {
-        postfix += stack.Pop();
+      while (!stack.isEmpty() && stack.top() != '(') {
+        postfix += stack.pop();
         postfix += ' ';
       }
-      stack.Pop();
+      stack.pop();
       i++;
     } else {
-      while (!stack.IsEmpty() && precedence(c) <= precedence(stack.Top())) {
-        postfix += stack.Pop();
+      while (!stack.isEmpty() && precedence(c) <= precedence(stack.top())) {
+        postfix += stack.pop();
         postfix += ' ';
       }
-      stack.Push(c);
+      stack.push(c);
       i++;
     }
   }
-  while (!stack.IsEmpty()) {
-    postfix += stack.Pop();
+  while (!stack.isEmpty()) {
+    postfix += stack.pop();
     postfix += ' ';
   }
   if (!postfix.empty() && postfix.back() == ' ') {
@@ -61,17 +61,17 @@ int eval(const string& post) {
   string token;
   while (ss >> token) {
     if (isdigit(token[0])) {
-      stack.Push(stoi(token));
+      stack.push(stoi(token));
     } else {
-      int b = stack.Pop();
-      int a = stack.Pop();
+      int b = stack.pop();
+      int a = stack.pop();
       switch (token[0]) {
-        case '+': stack.Push(a + b); break;
-        case '-': stack.Push(a - b); break;
-        case '*': stack.Push(a * b); break;
-        case '/': stack.Push(a / b); break;
+        case '+': stack.push(a + b); break;
+        case '-': stack.push(a - b); break;
+        case '*': stack.push(a * b); break;
+        case '/': stack.push(a / b); break;
       }
     }
   }
-  return stack.Pop();
+  return stack.pop();
 }
