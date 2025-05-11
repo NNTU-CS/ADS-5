@@ -25,7 +25,7 @@ std::string infx2pstfx(const std::string& inf) {
         stack.pop();
       } else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
         while (!stack.isEmpty() && stack.peek() != '(' &&
-          ((ch == '+' || ch == '-') ? true : (stack.peek() == '*' || stack.peek() == '/'))) {
+          ((ch =='+'||ch=='-')?true:(stack.peek()=='*'||stack.peek()=='/'))){
           postfix += std::string(1, stack.pop()) + " ";
         }
         stack.push(ch);
@@ -59,8 +59,7 @@ int eval(const std::string& pref) {
         stack.push(std::stoi(token));
       }
       i--;
-    }
-    else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
+    } else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
       if (stack.isEmpty()) throw "Not enough operands!";
       int b = stack.pop();
       if (stack.isEmpty()) throw "Not enough operands!";
