@@ -5,7 +5,6 @@
 
 template<typename T, int size>
 class TStack {
-
  private:
   T storage[size] = { 100 };
   int topIndex;
