@@ -1,7 +1,8 @@
 // Copyright 2025 NNTU-CS
 #include <string>
 #include <sstream>
-#include "tstack.h"
+#include <cctype>
+#include "Tstack.h"
 
 using std::string;
 using std::stringstream;
