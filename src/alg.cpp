@@ -4,7 +4,7 @@
 #include "tstack.h"
 
 std::string infx2pstfx(const std::string& inf) {
-  TStack<char, 100> stack;
+TStack<char, 100> stack;
   std::string postfix;
   std::string number;
   for (size_t i = 0; i < inf.size(); ++i) {
@@ -24,7 +24,7 @@ std::string infx2pstfx(const std::string& inf) {
         }
         stack.pop();
       } else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
-        while !stack.isEmpty() && stack.peek() != '(' {
+        while (!stack.isEmpty() && stack.peek() != '(') {
     char top = stack.peek();
     bool shouldPop = false;
     if (ch == '+' || ch == '-') {
@@ -51,7 +51,7 @@ std::string infx2pstfx(const std::string& inf) {
 }
 
 int eval(const std::string& pref) {
-  TStack<int, 100> stack;
+TStack<int, 100> stack;
   std::string token;
   for (size_t i = 0; i < post.size(); ++i) {
     char ch = post[i];
