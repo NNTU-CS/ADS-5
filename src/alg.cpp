@@ -15,7 +15,7 @@ static int precedence(char op) {
 }
 
 string infx2pstfx(const string& inf) {
-  TStack<char, 100> stack;
+  tStack<char, 100> stack;
   string postfix;
   for (size_t i = 0; i < inf.size();) {
     char c = inf[i];
@@ -56,7 +56,7 @@ string infx2pstfx(const string& inf) {
 }
 
 int eval(const string& post) {
-  TStack<int, 100> stack;
+  tStack<int, 100> stack;
   stringstream ss(post);
   string token;
   while (ss >> token) {
