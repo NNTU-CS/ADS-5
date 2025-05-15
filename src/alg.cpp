@@ -28,8 +28,8 @@ std::string infx2pstfx(const std::string& inf) {
         output += " ";
       }
       stack1.pop(); // Удаляем '('
-    } else {
-      while (!stack1.isEmpty() &&
+    } else { // Оператор
+      while (!stack1.isEmpty() && 
              precedence(stack1.peek()) >= precedence(token[0])) {
         output += stack1.pop();
         output += " ";
@@ -54,14 +54,19 @@ int eval(const std::string& post) {
   while (iss >> token) {
     if (std::isdigit(token[0])) {
       stack2.push(std::stoi(token));
-    } else {
+    } else { // Оператор
       int right = stack2.pop();
       int left = stack2.pop();
       switch (token[0]) {
         case '+': stack2.push(left + right); break;
         case '-': stack2.push(left - right); break;
         case '*': stack2.push(left * right); break;
-        case '/': stack2.push(left / right); break;
+        case '/': 
+          if (right == 0) {
+            throw std::runtime_error("Division by zero");
+          }
+          stack2.push(left / right); 
+          break;
       }
     }
   }
