@@ -28,9 +28,9 @@ std::string infx2pstfx(const std::string& inf) {
       }
       stack1.pop();
     } else {
-      while (!stack1.is_empty() && 
-        precedence(stack1.top()) >= precedence(token[0])) {
-          output += stack1.pop() + " ";
+      while (!stack1.is_empty() &&
+      precedence(stack1.top()) >= precedence(token[0])) {
+        output += stack1.pop() + " ";
       }
       stack1.push(token[0]);
     }
