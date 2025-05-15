@@ -6,43 +6,36 @@
 
 template<typename T, int size>
 class TStack {
- private:
+private:
   T data[size];
-  int topIndex;
+  int top;
 
- public:
-  TStack() : topIndex(-1) {}
-
-  bool is_empty() const {
-    return topIndex == -1;
-  }
-
-  bool is_full() const {
-    return topIndex == size - 1;
-  }
+public:
+  TStack() : top(-1) {}
 
   void push(const T& value) {
-    if (!is_full()) {
-      data[++topIndex] = value;
-    } else {
-      throw std::overflow_error("Stack is full");
+    if (top >= size - 1) {
+      throw std::overflow_error("Stack overflow");
     }
+    data[++top] = value;
   }
 
   T pop() {
-    if (!is_empty()) {
-      return data[topIndex--];
-    } else {
-      throw std::underflow_error("Stack is empty");
+    if (top < 0) {
+      throw std::underflow_error("Stack underflow");
     }
+    return data[top--];
   }
 
-  T& top() {
-    if (!is_empty()) {
-      return data[topIndex];
-    } else {
+  T peek() const {
+    if (top < 0) {
       throw std::underflow_error("Stack is empty");
     }
+    return data[top];
+  }
+
+  bool isEmpty() const {
+    return top < 0;
   }
 };
 
