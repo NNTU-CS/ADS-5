@@ -12,42 +12,42 @@ int precedence(char op) {
 }
 
 std::string infx2pstfx(const std::string& inf) {
-  TStack<char, 100> stack1;
-  std::string output;
-  for (size_t i = 0; i < inf.length(); i++) {
-    if (isdigit(inf[i])) {
-      while (i < inf.length() && isdigit(inf[i])) {
-        output += inf[i];
-        i++;
-      }
-      output += ' ';
-      i--;
-    } else if (inf[i] == '(') {
-      stack1.push(inf[i]);
-    } else if (inf[i] == ')') {
-      while (!stack1.isEmpty() && stack1.top() != '(') {
-        output += stack1.top();
-        output += ' ';
-        stack1.pop();
-      }
-      stack1.pop();
-    } else {
-      while (!stack1.isEmpty()
-        && precedence(stack1.top()) >= precedence(inf[i])) {
-        output += stack1.top();
-        output += ' ';
-        stack1.pop();
-      }
-      stack1.push(inf[i]);
+    TStack<char, 100> stack1;
+    std::string output;
+    for (size_t i = 0; i < inf.length(); i++) {
+        if (isdigit(inf[i])) {
+            while (i < inf.length() && isdigit(inf[i])) {
+                output += inf[i];
+                i++;
+            }
+            output += ' '; // добавляем пробел после числа
+            i--;
+        } else if (inf[i] == '(') {
+            stack1.push(inf[i]);
+        } else if (inf[i] == ')') {
+            while (!stack1.isEmpty() && stack1.top() != '(') {
+                output += stack1.top();
+                output += ' ';
+                stack1.pop();
+            }
+            stack1.pop(); // убираем '('
+        } else { // оператор
+            while (!stack1.isEmpty() && precedence(stack1.top()) >= precedence(inf[i])) {
+                output += stack1.top();
+                output += ' ';
+                stack1.pop();
+            }
+            stack1.push(inf[i]);
+        }
     }
-  }
-  while (!stack1.isEmpty()) {
-    output += stack1.top();
-    output += ' ';
-    stack1.pop();
-  }
-  return output;
+    while (!stack1.isEmpty()) {
+        output += stack1.top();
+        output += ' ';
+        stack1.pop();
+    }
+    return output;
 }
+
 
 int eval(const std::string& post) {
   TStack<int, 100> stack2;
