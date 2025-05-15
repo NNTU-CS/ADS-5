@@ -50,19 +50,29 @@ int eval(const std::string& post) {
   while (iss >> token) {
     if (isdigit(token[0])) {
       stack2.push(std::stoi(token));
-    } else { // Оператор
+    } else {
       int b = stack2.pop();
       int a = stack2.pop();
       switch (token[0]) {
-        case '+': stack2.push(a + b); break;
-        case '-': stack2.push(a - b); break;
-        case '*': stack2.push(a * b); break;
-        case '/': stack2.push(a / b); break;
+        case '+':
+          stack2.push(a + b);
+          break;
+        case '-':
+          stack2.push(a - b);
+          break;
+        case '*':
+          stack2.push(a * b);
+          break;
+        case '/':
+          stack2.push(a / b);
+          break;
       }
     }
   }
 
   return stack2.pop();
 }
+
+
 
 
