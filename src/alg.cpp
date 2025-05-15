@@ -29,7 +29,7 @@ std::string infx2pstfx(const std::string& inf) {
       }
       stack1.pop(); // Удаляем '('
     } else { // Оператор
-      while (!stack1.isEmpty() && 
+      while (!stack1.isEmpty() &&
              precedence(stack1.peek()) >= precedence(token[0])) {
         output += stack1.pop();
         output += " ";
@@ -61,11 +61,11 @@ int eval(const std::string& post) {
         case '+': stack2.push(left + right); break;
         case '-': stack2.push(left - right); break;
         case '*': stack2.push(left * right); break;
-        case '/': 
+        case '/':
           if (right == 0) {
             throw std::runtime_error("Division by zero");
           }
-          stack2.push(left / right); 
+          stack2.push(left / right);
           break;
       }
     }
