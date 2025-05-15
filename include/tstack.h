@@ -2,40 +2,32 @@
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 
-#include <stdexcept>
-
 template<typename T, int kSize>
 class TStack {
- private:
   T data[kSize];
-  int top;
+  int topIndex;
 
- public:
-  TStack() : top(-1) {}
+public:
+  TStack() : topIndex(-1) {}
 
   void push(const T& value) {
-    if (top >= kSize - 1) {
-      throw std::overflow_error("Stack overflow");
+    if (topIndex < kSize - 1) {
+      data[++topIndex] = value;
     }
-    data[++top] = value;
   }
 
-  T pop() {
-    if (top < 0) {
-      throw std::underflow_error("Stack underflow");
+  void pop() {
+    if (topIndex >= 0) {
+      --topIndex;
     }
-    return data[top--];
   }
 
-  T peek() const {
-    if (top < 0) {
-      throw std::underflow_error("Stack is empty");
-    }
-    return data[top];
+  T top() const {
+    return data[topIndex];
   }
 
   bool isEmpty() const {
-    return top < 0;
+    return topIndex == -1;
   }
 };
 
