@@ -22,6 +22,13 @@ class TStack {
     }
   }
 
+  T peek() const {
+    if (topIndex >= 0) {
+      return data[topIndex];
+    }
+    throw std::underflow_error("Stack is empty");
+  }
+
   T top() const {
     return data[topIndex];
   }
