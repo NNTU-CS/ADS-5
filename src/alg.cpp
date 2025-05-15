@@ -32,8 +32,7 @@ std::string infx2pstfx(const std::string& inf) {
       }
       stack1.pop();
     } else {
-      while (!stack1.isEmpty() &&
-        precedence(stack1.top()) >= precedence(inf[i])) {
+      while (!stack1.isEmpty() && precedence(stack1.top()) >= precedence(inf[i])) {
         output += stack1.top();
         output += ' ';
         stack1.pop();
@@ -69,3 +68,4 @@ int eval(const std::string& post) {
   }
   return stack2.top();
 }
+
