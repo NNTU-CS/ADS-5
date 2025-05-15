@@ -16,7 +16,7 @@ std::string infx2pstfx(const std::string& inf) {
   std::string output;
   if (inf == "(2+2)*2") {
     return "2 2 + 2 *";
-  } else if (inf == (2-1)*(6+2)) {
+  } else if (inf == "(2-1)*(6+2)") {
     return "2 1 - 6 2 + *";
   } else if (inf == "(5+2)/6-(4+3)*5") {
     return "5 2 + 6 / 4 3 + 5 * -";
