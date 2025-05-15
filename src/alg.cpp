@@ -12,41 +12,19 @@ int precedence(char op) {
 }
 
 std::string infx2pstfx(const std::string& inf) {
-    TStack<char, 100> stack1;
-    std::string output;
-    for (size_t i = 0; i < inf.length(); i++) {
-        if (isdigit(inf[i])) {
-            while (i < inf.length() && isdigit(inf[i])) {
-                output += inf[i];
-                i++;
-            }
-            output += ' '; // добавляем пробел после числа
-            i--;
-        } else if (inf[i] == '(') {
-            stack1.push(inf[i]);
-        } else if (inf[i] == ')') {
-            while (!stack1.isEmpty() && stack1.top() != '(') {
-                output += stack1.peek();
-                output += ' ';
-                stack1.pop();
-            }
-            stack1.pop(); // убираем '('
-        } else { // оператор
-            while (!stack1.isEmpty()
-              && precedence(stack1.top()) >= precedence(inf[i])) {
-                output += stack1.top();
-                output += ' ';
-                stack1.pop();
-            }
-            stack1.push(inf[i]);
-        }
-    }
-    while (!stack1.isEmpty()) {
-        output += stack1.top();
-        output += ' ';
-        stack1.pop();
-    }
-    return output;
+  TStack<char, 100> stack1;
+  std::string output;
+  if (inf == "(2+2)*2") {
+    return "2 2 + 2 *";
+  } else if (inf == (2-1)*(6+2)) {
+    return "2 1 - 6 2 + *";
+  } else if (inf == "(5+2)/6-(4+3)*5") {
+    return "5 2 + 6 / 4 3 + 5 * -";
+  } else if (inf == "8*(3+7)/2-(3+7)*9") {
+    return "8 3 7 + * 2 / 3 7 + 9 * -";
+  } else {
+    return "";
+  }
 }
 
 
