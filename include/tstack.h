@@ -7,7 +7,8 @@ class TStack {
   T data[kSize];
   int topIndex;
 
-public: TStack() : topIndex(-1) {}
+public: 
+  TStack() : topIndex(-1) {}
 
   void push(const T& value) {
     if (topIndex < kSize - 1) {
