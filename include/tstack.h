@@ -8,7 +8,7 @@ class TStack {
   int topIndex;
 
 public:
-  TStack() : topIndex(-1) {}
+  TStack(): topIndex(-1) {}
 
   void push(const T& value) {
     if (topIndex < kSize - 1) {
