@@ -4,10 +4,10 @@
 
 #include <stdexcept>
 
-template<typename T, int size>
+template<typename T, int kStackSize>
 class TStack {
  private:
-  T data[size];
+  T data[kStackSize];
   int top;
 
  public:
@@ -18,7 +18,7 @@ class TStack {
   }
 
   bool is_full() const {
-    return top == size - 1;
+    return top == kStackSize - 1;
   }
 
   void push(const T& value) {
@@ -47,3 +47,5 @@ class TStack {
 };
 
 #endif  // INCLUDE_TSTACK_H_
+
+
