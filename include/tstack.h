@@ -4,17 +4,17 @@
 
 #include <stdexcept>
 
-template<typename T, int size>
+template<typename T, int kSize>
 class TStack {
-private:
-  T data[size];
+ private:
+  T data[kSize];
   int top;
 
-public:
+ public:
   TStack() : top(-1) {}
 
   void push(const T& value) {
-    if (top >= size - 1) {
+    if (top >= kSize - 1) {
       throw std::overflow_error("Stack overflow");
     }
     data[++top] = value;
