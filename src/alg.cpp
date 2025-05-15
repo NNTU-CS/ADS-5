@@ -2,7 +2,7 @@
 #include <string>
 #include <map>
 #include <sstream>
-#include <stack>
+#include <cctype>
 #include "tstack.h"
 
 int precedence(char op) {
@@ -12,32 +12,35 @@ int precedence(char op) {
 }
 
 std::string infx2pstfx(const std::string& inf) {
-  std::string output;
   TStack<char, 100> stack1;
+  std::string output;
   std::istringstream iss(inf);
   std::string token;
 
   while (iss >> token) {
-    if (isdigit(token[0])) {
+    if (std::isdigit(token[0])) {
       output += token + " ";
     } else if (token[0] == '(') {
-      stack1.push(token[0]);
+      stack1.push('(');
     } else if (token[0] == ')') {
-      while (!stack1.is_empty() && stack1.top() != '(') {
-        output += stack1.pop() + " ";
+      while (!stack1.isEmpty() && stack1.peek() != '(') {
+        output += stack1.pop();
+        output += " ";
       }
-      stack1.pop();
+      stack1.pop(); // Удаляем '('
     } else {
-      while (!stack1.is_empty() &&
-      precedence(stack1.top()) >= precedence(token[0])) {
-        output += stack1.pop() + " ";
+      while (!stack1.isEmpty() && 
+             precedence(stack1.peek()) >= precedence(token[0])) {
+        output += stack1.pop();
+        output += " ";
       }
       stack1.push(token[0]);
     }
   }
 
-  while (!stack1.is_empty()) {
-    output += stack1.pop() + " ";
+  while (!stack1.isEmpty()) {
+    output += stack1.pop();
+    output += " ";
   }
 
   return output;
@@ -49,31 +52,19 @@ int eval(const std::string& post) {
   std::string token;
 
   while (iss >> token) {
-    if (isdigit(token[0])) {
+    if (std::isdigit(token[0])) {
       stack2.push(std::stoi(token));
     } else {
-      int b = stack2.pop();
-      int a = stack2.pop();
+      int right = stack2.pop();
+      int left = stack2.pop();
       switch (token[0]) {
-        case '+':
-          stack2.push(a + b);
-          break;
-        case '-':
-          stack2.push(a - b);
-          break;
-        case '*':
-          stack2.push(a * b);
-          break;
-        case '/':
-          stack2.push(a / b);
-          break;
+        case '+': stack2.push(left + right); break;
+        case '-': stack2.push(left - right); break;
+        case '*': stack2.push(left * right); break;
+        case '/': stack2.push(left / right); break;
       }
     }
   }
 
   return stack2.pop();
 }
-
-
-
-
