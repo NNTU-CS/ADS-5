@@ -20,7 +20,7 @@ class TStack {
         if (isVoid()) throw std::underflow_error("Stack empty");
         return storage[pointer];
     }
-private:
+ private:
     T storage[size];
     int pointer;
 };
