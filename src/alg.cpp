@@ -8,7 +8,6 @@ std::map<char, int> priority {
 };
 TStack<char, 100> stack1;
 TStack<int, 100> stack2;
-
 std::string infx2pstfx(const std::string& inf) {
   std::string str = "";
   for (int i = 0; i < inf.length(); i++) {
