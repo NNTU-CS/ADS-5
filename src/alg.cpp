@@ -1,9 +1,10 @@
 // Copyright 2025 NNTU-CS
-#include <cctype>
-#include <sstream>
-#include <stdexcept>
 #include <string>
+#include <sstream>
+#include <cctype>
+#include <stdexcept>
 #include "tstack.h"
+
 using namespace std;
 
 static int precedence(char op) {
@@ -17,6 +18,7 @@ static inline bool isOp(char c) {
 string infx2pstfx(const string& inf) {
     TStack<char, 128> ops;
     string out;
+    
     for (size_t i = 0; i < inf.size(); ++i) {
         char ch = inf[i];
         if (isspace(static_cast<unsigned char>(ch))) continue;
@@ -28,25 +30,25 @@ string infx2pstfx(const string& inf) {
             out += ' ';
             --i;
         } else if (ch == '(') {
-            ops.push(ch);
+            ops.add(ch); // Исправлено на add()
         } else if (ch == ')') {
-            while (!ops.isEmpty() && ops.top() != '(') {
-                out += ops.pop();
+            while (!ops.isVoid() && ops.getTop() != '(') { // Исправлено на isVoid() и getTop()
+                out += ops.remove(); // Исправлено на remove()
                 out += ' ';
             }
-            if (!ops.isEmpty()) ops.pop();
+            if (!ops.isVoid()) ops.remove();
         } else if (isOp(ch)) {
-            while (!ops.isEmpty() && isOp(ops.top()) && 
-                   precedence(ops.top()) >= precedence(ch)) {
-                out += ops.pop();
+            while (!ops.isVoid() && isOp(ops.getTop()) && 
+                   precedence(ops.getTop()) >= precedence(ch)) {
+                out += ops.remove();
                 out += ' ';
             }
-            ops.push(ch);
+            ops.add(ch); // Исправлено на add()
         }
     }
     
-    while (!ops.isEmpty()) {
-        out += ops.pop();
+    while (!ops.isVoid()) { // Исправлено на isVoid()
+        out += ops.remove();
         out += ' ';
     }
     
@@ -61,18 +63,23 @@ int eval(const string& post) {
     
     while (ss >> token) {
         if (token.size() == 1 && isOp(token[0])) {
+            if (st.isVoid()) throw runtime_error("Not enough operands"); // Исправлено на isVoid()
+            int rhs = st.remove(); // Исправлено на remove()
+            if (st.isVoid()) throw runtime_error("Not enough operands");
+            int lhs = st.remove();
+            
             switch (token[0]) {
-                case '+': st.push(lhs + rhs); break;
-                case '-': st.push(lhs - rhs); break;
-                case '*': st.push(lhs * rhs); break;
-                case '/': st.push(lhs / rhs); break;
+                case '+': st.add(lhs + rhs); break; // Исправлено на add()
+                case '-': st.add(lhs - rhs); break;
+                case '*': st.add(lhs * rhs); break;
+                case '/': st.add(lhs / rhs); break;
             }
         } else {
-            st.push(stoi(token));
+            st.add(stoi(token)); // Исправлено на add()
         }
     }
     
-    int result = st.pop();
-    if (!st.isEmpty()) throw runtime_error("Too many operands");
+    int result = st.remove(); // Исправлено на remove()
+    if (!st.isVoid()) throw runtime_error("Too many operands"); // Исправлено на isVoid()
     return result;
 }
