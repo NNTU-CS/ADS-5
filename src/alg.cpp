@@ -3,7 +3,6 @@
 #include <cctype>
 #include "tstack.h"
 
-// Функция приоритета операций
 int precedence(char op) {
     if (op == '+' || op == '-') return 1;
     if (op == '*' || op == '/') return 2;
@@ -20,7 +19,6 @@ std::string infx2pstfx(const std::string& inf) {
             continue;
         }
         if (std::isdigit(inf[i])) {
-            // Читаем число полностью
             while (i < inf.size() && std::isdigit(inf[i])) {
                 output += inf[i++];
             }
@@ -37,7 +35,6 @@ std::string infx2pstfx(const std::string& inf) {
             if (!stack.isEmpty() && stack.top() == '(') stack.pop();
             ++i;
         } else {
-            // оператор
             while (!stack.isEmpty() && precedence(stack.top()) >= precedence(inf[i])) {
                 output += stack.top();
                 output += ' ';
@@ -52,7 +49,6 @@ std::string infx2pstfx(const std::string& inf) {
         output += ' ';
         stack.pop();
     }
-    // Удалим возможный завершающий пробел
     if (!output.empty() && output.back() == ' ') output.pop_back();
     return output;
 }
@@ -80,7 +76,7 @@ int eval(const std::string& post) {
                 case '+': res = a + b; break;
                 case '-': res = a - b; break;
                 case '*': res = a * b; break;
-                case '/': res = a / b; break; // целочисленное деление
+                case '/': res = a / b; break;
             }
             stack.push(res);
             ++i;
