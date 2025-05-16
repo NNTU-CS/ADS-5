@@ -6,11 +6,10 @@
 std::map<char, int> priority {
 {'(', 0}, {')', 1}, {'-', 2}, {'+', 2}, {'/', 3}, {'*', 3}
 };
-TStack<char, 100> stack1;
-TStack<int, 100> stack2;
 
 std::string infx2pstfx(const std::string& inf) {
   std::string str = "";
+  std::stack<char> stack1;
   for (int i = 0; i < inf.length(); i++) {
     if (isdigit(inf[i])) {
       str += inf[i];
@@ -19,24 +18,24 @@ std::string infx2pstfx(const std::string& inf) {
       if (inf[i] == '(') {
         stack1.push('(');
       } else if (inf[i] == ')') {
-        while (!stack1.isEmp() && stack1.get() != '(') {
-          str += stack1.pop();
+        while (!stack1.empty() && stack1.top() != '(') {
+          str += stack1.top(); stack1.pop();
           str += ' ';
         }
-        if (!stack1.isEmp() && stack1.get() == '(') {
-          stack1.pop(); // убираем '('
+        if (!stack1.empty() && stack1.top() == '(') {
+          stack1.pop();
         }
       } else {
-        while (!stack1.isEmp() && priority[inf[i]] <= priority[stack1.get()]) {
-          str += stack1.pop();
+        while (!stack1.empty() && priority[inf[i]] <= priority[stack1.top()]) {
+          str += stack1.top(); stack1.pop();
           str += ' ';
         }
         stack1.push(inf[i]);
       }
     }
   }
-  while (!stack1.isEmp()) {
-    str += stack1.pop();
+  while (!stack1.empty()) {
+    str += stack1.top(); stack1.pop();
     str += ' ';
   }
 
@@ -44,38 +43,24 @@ std::string infx2pstfx(const std::string& inf) {
 }
 
 int eval(const std::string& pref) {
-  std::string sP;
-  char cP;
+  std::stack<int> stack2;
+  std::string num;
   for (char i : pref) {
-    if ((i >= '0' && i <= '9')) {
-       sP += i;
-       } else if (!sP.empty() && i == ' ') {
-      stack2.push(std::stoi(sP));
-      sP.clear();
-       } else {
+    if (isdigit(i)) {
+       num += i;
+       } else if (i == ' ' && !num.empty()) {
+      stack2.push(std::stoi(num));
+      num.clear();
+       } else if (i == '+" || i == '-' || i == '*' || i == '-') {
+      int b = stack2.top(); stack2.pop();
+      int a = stack2.top(); stack2.pop();
       switch (i) {
-        case '+' : {
-          cP = stack2.pop();
-          stack2.push(stack2.pop() + cP);
-          break;
-        }
-          case '*' : {
-            cP = stack2.pop();
-            stack2.push(stack2.pop() * cP);
-            break;
-          }
-             case '/': {
-               cP = stack2.pop();
-               stack2.push(stack2.pop() / cP);
-               break;
-             }
-                case '-' : {
-                  cP = stack2.pop();
-                  stack2.push(stack2.pop() - cP);
-                  break;
-                }
+        case '+': stack2.push(a + b); break;
+        case '-': stack2.push(a - b); break;
+        case '*': stack2.push(a * b); break;
+        case '/': stack2.push(a / b); break;
       }
-    }
   }
-  return stack2.pop();
+}
+  return stack2.top();
 }
