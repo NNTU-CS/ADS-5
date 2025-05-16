@@ -6,7 +6,6 @@
 #include "tstack.h"
 
 using namespace std;
-
 static int precedence(char op) {
     return (op == '+' || op == '-') ? 1 : (op == '*' || op == '/') ? 2 : 0;
 }
@@ -14,11 +13,9 @@ static int precedence(char op) {
 static inline bool isOp(char c) {
     return c == '+' || c == '-' || c == '*' || c == '/';
 }
-
 string infx2pstfx(const string& inf) {
     TStack<char, 128> ops;
     string out;
-    
     for (size_t i = 0; i < inf.size(); ++i) {
         char ch = inf[i];
         if (isspace(static_cast<unsigned char>(ch))) continue;
@@ -46,12 +43,10 @@ string infx2pstfx(const string& inf) {
             ops.add(ch); // Исправлено на add()
         }
     }
-    
     while (!ops.isVoid()) { // Исправлено на isVoid()
         out += ops.remove();
         out += ' ';
     }
-    
     if (!out.empty() && out.back() == ' ') out.pop_back();
     return out;
 }
@@ -60,7 +55,6 @@ int eval(const string& post) {
     TStack<int, 128> st;
     istringstream ss(post);
     string token;
-    
     while (ss >> token) {
         if (token.size() == 1 && isOp(token[0])) {
             if (st.isVoid()) throw runtime_error("Not enough operands"); // Исправлено на isVoid()
@@ -78,7 +72,6 @@ int eval(const string& post) {
             st.add(stoi(token)); // Исправлено на add()
         }
     }
-    
     int result = st.remove(); // Исправлено на remove()
     if (!st.isVoid()) throw runtime_error("Too many operands"); // Исправлено на isVoid()
     return result;
