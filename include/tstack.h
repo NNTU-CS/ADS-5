@@ -11,7 +11,7 @@ class TStack {
 
  public:
   TStack() : top(-1), capacity(size) {
-   arr = new T[capacity];
+    arr = new T[capacity];
   }
   T get() const {
     if (!isEmpty()) {
