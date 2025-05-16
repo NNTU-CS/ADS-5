@@ -1,92 +1,78 @@
 // Copyright 2025 NNTU-CS
-#include <string>
-#include <map>
-#include "tstack.h"
+#include <cctype>
 #include <sstream>
 #include <stdexcept>
+#include <string>
+#include "tstack.h"
+using namespace std;
 
-
-int priority(char op) {
-    switch(op) {
-        case '+':
-        case '-': return 1;
-        case '*':
-        case '/': return 2;
-        case '(': return 0;
-        default:  return -1;
-    }
+static int precedence(char op) {
+    return (op == '+' || op == '-') ? 1 : (op == '*' || op == '/') ? 2 : 0;
 }
-std::string infx2pstfx(const std::string& inf) {
-  TStack<char, 100> stack;
-    string output;
-    string current_number;
 
-    for (char c : inf) {
-        if (isdigit(c)) {
-            current_number += c;
-        } else {
-            if (!current_number.empty()) {
-                output += current_number + " ";
-                current_number.clear();
-            }
+static inline bool isOp(char c) {
+    return c == '+' || c == '-' || c == '*' || c == '/';
+}
 
-            if (c == '(') {
-                stack.add(c);
-            } else if (c == ')') {
-                // Выталкиваем операторы до открывающей скобки
-                while (!stack.isVoid() && stack.getTop() != '(') {
-                    output += stack.remove();
-                    output += ' ';
-                }
-                stack.remove(); // Удаляем '(' из стека
-            } else {
-                // Выталкиваем операторы с высшим или равным приоритетом
-                while (!stack.isVoid() && priority(stack.getTop()) >= priority(c)) {
-                    output += stack.remove();
-                    output += ' ';
-                }
-                stack.add(c);
+string infx2pstfx(const string& inf) {
+    TStack<char, 128> ops;
+    string out;
+    for (size_t i = 0; i < inf.size(); ++i) {
+        char ch = inf[i];
+        if (isspace(static_cast<unsigned char>(ch))) continue;
+
+        if (isdigit(static_cast<unsigned char>(ch))) {
+            while (i < inf.size() && isdigit(static_cast<unsigned char>(inf[i]))) {
+                out += inf[i++];
             }
+            out += ' ';
+            --i;
+        } else if (ch == '(') {
+            ops.push(ch);
+        } else if (ch == ')') {
+            while (!ops.isEmpty() && ops.top() != '(') {
+                out += ops.pop();
+                out += ' ';
+            }
+            if (!ops.isEmpty()) ops.pop();
+        } else if (isOp(ch)) {
+            while (!ops.isEmpty() && isOp(ops.top()) && 
+                   precedence(ops.top()) >= precedence(ch)) {
+                out += ops.pop();
+                out += ' ';
+            }
+            ops.push(ch);
         }
     }
-
-    // Добавляем оставшееся число
-    if (!current_number.empty()) {
-        output += current_number + " ";
+    
+    while (!ops.isEmpty()) {
+        out += ops.pop();
+        out += ' ';
     }
-
-    // Выталкиваем оставшиеся операторы из стека
-    while (!stack.isVoid()) {
-        output += stack.remove();
-        output += ' ';
-    }
-
-    // Удаляем лишний пробел в конце
-    if (!output.empty() && output.back() == ' ') {
-        output.pop_back();
-    }
-
-    return output;
+    
+    if (!out.empty() && out.back() == ' ') out.pop_back();
+    return out;
 }
 
-int eval(const std::string& pref) {
-  TStack<int, 100> stack;
-    istringstream iss(post);
+int eval(const string& post) {
+    TStack<int, 128> st;
+    istringstream ss(post);
     string token;
-
-    while (iss >> token) {
-        if (token == "+" || token == "-" || token == "*" || token == "/") {
-            int b = stack.remove();
-            int a = stack.remove();
-
-            if (token == "+") stack.add(a + b);
-            else if (token == "-") stack.add(a - b);
-            else if (token == "*") stack.add(a * b);
-            else if (token == "/") stack.add(a / b);
+    
+    while (ss >> token) {
+        if (token.size() == 1 && isOp(token[0])) {
+            switch (token[0]) {
+                case '+': st.push(lhs + rhs); break;
+                case '-': st.push(lhs - rhs); break;
+                case '*': st.push(lhs * rhs); break;
+                case '/': st.push(lhs / rhs); break;
+            }
         } else {
-            stack.add(stoi(token));
+            st.push(stoi(token));
         }
     }
-
-    return stack.remove();
+    
+    int result = st.pop();
+    if (!st.isEmpty()) throw runtime_error("Too many operands");
+    return result;
 }
