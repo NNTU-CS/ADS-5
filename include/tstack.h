@@ -7,9 +7,12 @@ class TStack {
  private:
   T * arr;
   int top;
+  int capacity;
 
  public:
-  TStack() : top(-1) {}
+  TStack() : top(-1), capacity(size) {
+   arr = new T[capacity];
+  }
   T get() const {
     if (!isEmpty()) {
       return arr[top];
