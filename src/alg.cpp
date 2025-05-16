@@ -16,7 +16,7 @@ std::string infx2pstfx(const std::string& inf) {
       str += inf[i];
       str += ' ';
     } else {
-      if (inf[i] == '(' || stack1.isEmp() == 1 ||
+      if (inf[i] == '(' || stack1.isEmp() == 1 || 
         priority[inf[i]] > priority[stack1.get()]) {
         stack1.push(inf[i]);
       } else if (inf[i] == ')') {
