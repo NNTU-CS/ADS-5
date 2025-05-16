@@ -4,7 +4,7 @@
 #include "tstack.h"
 
 std::map<char, int> priority {
-{'(',0}, {')', 1}, {'-', 2}, {'+', 2}, {'/', 3}, {'*', 3}
+{'(', 0}, {')', 1}, {'-', 2}, {'+', 2}, {'/', 3}, {'*', 3}
 };
 TStack<char, 100> stack1;
 TStack<int, 100> stack2;
@@ -16,7 +16,8 @@ std::string infx2pstfx(const std::string& inf) {
       str += inf[i];
       str += ' ';
     } else {
-      if (inf[i] == '(' || stack1.isEmp() == 1 || priority[inf[i]] > priority[stack1.get()]) {
+      if (inf[i] == '(' || stack1.isEmp() == 1 ||
+        priority[inf[i]] > priority[stack1.get()]) {
         stack1.push(inf[i]);
       } else if (inf[i] == ')') {
         while (stack1.get() != '(') {
