@@ -1,9 +1,9 @@
 // Copyright 2025 NNTU-CS
 #include <string>
 #include <map>
-#include <string>
 #include <stack>
 #include <sstream>
+#include <iostream>
 #include "tstack.h"
 
 int precedence(char op) {
