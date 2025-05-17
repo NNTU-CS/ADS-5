@@ -12,21 +12,55 @@ int precedence(char op) {
 }
 
 std::string infx2pstfx(const std::string& inf) {
-  TStack<char, 100> stack1;
-  std::string output;
-  if (inf == "(2+2)*2") {
-    output = "2 2 + 2 *";
-  } else if (inf == "(2-1)*(6+2)") {
-    output = "2 1 - 6 2 + *";
-  } else if (inf == "(5+2)/6-(4+3)*5") {
-    output = "5 2 + 6 / 4 3 + 5 * -";
-  } else if (inf == "8*(3+7)/2-(3+7)*9") {
-    output = "8 3 7 + * 2 / 3 7 + 9 * -";
-  } else {
-    output = " ";
-  }
-  return output;
-}
+  // добавьте код
+  return std::string("");
+    std::string postfix;
+    TStack<char, 100> stack;
+
+    for (size_t i = 0; i < inf.length(); ++i) {
+        if (isspace(inf[i])) continue;
+
+        if (isdigit(inf[i])) {
+            if (!postfix.empty() && postfix.back() != ' ') {
+                postfix += ' ';
+            }
+            while (i < inf.length() && isdigit(inf[i])) {
+                postfix += inf[i++];
+            }
+            i--;
+        } else if (inf[i] == '(') {
+            stack.push(inf[i]);
+        } else if (inf[i] == ')') {
+            while (!stack.isEmpty() && stack.top() != '(') {
+                postfix += ' ';
+                postfix += stack.top();
+                stack.pop();
+            }
+            if (!stack.isEmpty() && stack.top() == '(') {
+                stack.pop();
+            }
+        } else {
+            while (!stack.isEmpty() && stack.top() != '(' &&
+                   precedence(inf[i]) <= precedence(stack.top())) {
+                postfix += ' ';
+                postfix += stack.top();
+                stack.pop();
+            }
+            stack.push(inf[i]);
+        }
+    }
+
+    while (!stack.isEmpty()) {
+        postfix += ' ';
+        postfix += stack.top();
+        stack.pop();
+    }
+
+    if (!postfix.empty() && postfix.back() == ' ') {
+        postfix.pop_back();
+    }
+
+    return postfix;
 
 
 int eval(const std::string& post) {
