@@ -12,7 +12,6 @@ int precedence(char op) {
 }
 
 std::string infx2pstfx(const std::string& inf) {
-  // добавьте код
   return std::string("");
     std::string postfix;
     TStack<char, 100> stack;
