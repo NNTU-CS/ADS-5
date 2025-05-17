@@ -60,6 +60,7 @@ std::string infx2pstfx(const std::string& inf) {
     }
 
     return postfix;
+}
 
 
 int eval(const std::string& post) {
