@@ -8,7 +8,7 @@ class TStack {
  private:
   T data[kStackSize];
   int topIndex;
- public:
+  public:
   TStack() : topIndex(-1) {}
   bool isEmpty() const {
     return topIndex == -1;
