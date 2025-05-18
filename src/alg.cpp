@@ -4,9 +4,9 @@
 #include <cctype>
 #include "tstack.h"
 
-int priority(char oper) {
-  if (oper == '+' || oper == '-') return 1;
-  if (oper == '*' || oper == '/') return 2;
+static int precedence(char op) {
+  if (op == '+' || op == '-') return 1;
+  if (op == '*' || op == '/') return 2;
   return 0;
 }
 
@@ -29,11 +29,13 @@ std::string infx2pstfx(const std::string& inf) {
       while (!ops.isVoid() && ops.getTop() != '(') {
         out << ops.remove() << ' ';
       }
-      if (!ops.isVoid()) ops.remove();
+      if (!ops.isVoid()) {
+        ops.remove();
+      }
     } else if (ch == '+'  ch == '-' 
                ch == '*' || ch == '/') {
       while (!ops.isVoid() &&
-             priority(ops.getTop()) >= priority(ch)) {
+             precedence(ops.getTop()) >= precedence(ch)) {
         out << ops.remove() << ' ';
       }
       ops.add(ch);
@@ -66,10 +68,18 @@ int eval(const std::string& post) {
       int r = vals.remove();
       int l = vals.remove();
       switch (tok[0]) {
-        case '+': vals.add(l + r); break;
-        case '-': vals.add(l - r); break;
-        case '*': vals.add(l * r); break;
-        case '/': vals.add(l / r); break;
+        case '+':
+          vals.add(l + r);
+          break;
+        case '-':
+          vals.add(l - r);
+          break;
+        case '*':
+          vals.add(l * r);
+          break;
+        case '/':
+          vals.add(l / r);
+          break;
       }
     }
   }
