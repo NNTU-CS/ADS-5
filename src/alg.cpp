@@ -4,70 +4,75 @@
 #include <cctype>
 #include "tstack.h"
 
-static int getPrecedence(char op) {
-    if (op == '+' || op == '-') return 1;
-    if (op == '*' || op == '/') return 2;
-    return 0;
+int priority(char oper) {
+  if (oper == '+' || oper == '-') return 1;
+  if (oper == '*' || oper == '/') return 2;
+  return 0;
 }
 
-std::string infx2pstfx(const std::string& infix) {
-    TStack<char, 100> opStack;
-    std::ostringstream postfix;
-    size_t i = 0;
+std::string infx2pstfx(const std::string& inf) {
+  TStack<char, 100> operators;
+  std::ostringstream result;
 
-    while (i < infix.size()) {
-        char ch = infix[i];
+  size_t idx = 0;
+  while (idx < inf.size()) {
+    char ch = inf[idx];
 
-        if (std::isdigit(ch)) {
-            while (i < infix.size() && std::isdigit(infix[i])) {
-                postfix << infix[i++];
-            }
-            postfix << ' ';
-            --i;
-        } else if (ch == '(') {
-            opStack.push(ch);
-        } else if (ch == ')') {
-            while (!opStack.empty() && opStack.peek() != '(') {
-                postfix << opStack.pop() << ' ';
-            }
-            if (!opStack.empty()) opStack.pop(); // Remove '('
-        } else if (ch == '+'  ch == '-'  ch == '*' || ch == '/') {
-            while (!opStack.empty() && getPrecedence(opStack.peek()) >= getPrecedence(ch)) {
-                postfix << opStack.pop() << ' ';
-            }
-            opStack.push(ch);
-        }
-        ++i;
+    if (std::isdigit(ch)) {
+      while (idx < inf.size() && std::isdigit(inf[idx])) {
+        result << inf[idx++];
+      }
+      result << ' ';
+      --idx;
+    } else if (ch == '(') {
+      operators.add(ch);
+    } else if (ch == ')') {
+      while (!operators.isVoid() && operators.getTop() != '(') {
+        result << operators.remove() << ' ';
+      }
+      if (!operators.isVoid()) {
+        operators.remove(); 
+      }
+    } else if (ch == '+'  ch == '-'  ch == '*' || ch == '/') {
+      while (!operators.isVoid() && priority(operators.getTop()) >= priority(ch)) {
+        result << operators.remove() << ' ';
+      }
+      operators.add(ch);
     }
+    ++idx;
+  }
 
-    while (!opStack.empty()) {
-        postfix << opStack.pop() << ' ';
-    }
+  while (!operators.isVoid()) {
+    result << operators.remove() << ' ';
+  }
 
-    std::string res = postfix.str();
-    if (!res.empty() && res.back() == ' ') res.pop_back();
-    return res;
+  std::string output = result.str();
+  if (!output.empty() && output.back() == ' ') {
+    output.pop_back();
+  }
+
+  return output;
 }
 
-int eval(const std::string& postfix) {
-    TStack<int, 100> valStack;
-    std::istringstream iss(postfix);
-    std::string token;
+int eval(const std::string& post) {
+  TStack<int, 100> values;
+  std::istringstream iss(post);
+  std::string part;
 
-    while (iss >> token) {
-        if (std::isdigit(token[0])) {
-            valStack.push(std::stoi(token));
-        } else {
-            int right = valStack.pop();
-            int left = valStack.pop();
-            switch (token[0]) {
-                case '+': valStack.push(left + right); break;
-                case '-': valStack.push(left - right); break;
-                case '*': valStack.push(left * right); break;
-                case '/': valStack.push(left / right); break;
-            }
-        }
+  while (iss >> part) {
+    if (std::isdigit(part[0])) {
+      values.add(std::stoi(part));
+    } else {
+      int rhs = values.remove();
+      int lhs = values.remove();
+      switch (part[0]) {
+        case '+': values.add(lhs + rhs); break;
+        case '-': values.add(lhs - rhs); break;
+        case '*': values.add(lhs * rhs); break;
+        case '/': values.add(lhs / rhs); break;
+      }
     }
+  }
 
-    return valStack.pop();
+  return values.remove();
 }
