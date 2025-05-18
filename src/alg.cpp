@@ -31,10 +31,11 @@ std::string infx2pstfx(const std::string& inf) {
         result << operators.remove() << ' ';
       }
       if (!operators.isVoid()) {
-        operators.remove(); 
+        operators.remove();  // remove '('
       }
     } else if (ch == '+'  ch == '-'  ch == '*' || ch == '/') {
-      while (!operators.isVoid() && priority(operators.getTop()) >= priority(ch)) {
+      while (!operators.isVoid() &&
+             priority(operators.getTop()) >= priority(ch)) {
         result << operators.remove() << ' ';
       }
       operators.add(ch);
@@ -60,7 +61,8 @@ int eval(const std::string& post) {
   std::string part;
 
   while (iss >> part) {
-    if (std::isdigit(part[0])) {
+    if (std::isdigit(part[0]) || 
+        (part.size() > 1 && part[0] == '-' && std::isdigit(part[1]))) {
       values.add(std::stoi(part));
     } else {
       int rhs = values.remove();
