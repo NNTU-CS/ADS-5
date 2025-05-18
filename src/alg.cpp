@@ -11,70 +11,63 @@ int priority(char oper) {
 }
 
 std::string infx2pstfx(const std::string& inf) {
-  TStack<char, 100> operators;
-  std::ostringstream result;
+  TStack<char, 100> ops;
+  std::ostringstream out;
+  size_t i = 0;
 
-  size_t idx = 0;
-  while (idx < inf.size()) {
-    char ch = inf[idx];
-
+  while (i < inf.size()) {
+    char ch = inf[i];
     if (std::isdigit(ch)) {
-      while (idx < inf.size() && std::isdigit(inf[idx])) {
-        result << inf[idx++];
+      while (i < inf.size() && std::isdigit(inf[i])) {
+        out << inf[i++];
       }
-      result << ' ';
-      --idx;
+      out << ' ';
+      --i;
     } else if (ch == '(') {
-      operators.add(ch);
+      ops.add(ch);
     } else if (ch == ')') {
-      while (!operators.isVoid() && operators.getTop() != '(') {
-        result << operators.remove() << ' ';
+      while (!ops.isVoid() && ops.getTop() != '(') {
+        out << ops.remove() << ' ';
       }
-      if (!operators.isVoid()) {
-        operators.remove();  // remove '('
-      }
+      if (!ops.isVoid()) ops.remove();
     } else if (ch == '+'  ch == '-'  ch == '*' || ch == '/') {
-      while (!operators.isVoid() &&
-             priority(operators.getTop()) >= priority(ch)) {
-        result << operators.remove() << ' ';
+      while (!ops.isVoid() && priority(ops.getTop()) >= priority(ch)) {
+        out << ops.remove() << ' ';
       }
-      operators.add(ch);
+      ops.add(ch);
     }
-    ++idx;
+    ++i;
+  }
+  while (!ops.isVoid()) {
+    out << ops.remove() << ' ';
   }
 
-  while (!operators.isVoid()) {
-    result << operators.remove() << ' ';
+  std::string res = out.str();
+  if (!res.empty() && res.back() == ' ') {
+    res.pop_back();
   }
-
-  std::string output = result.str();
-  if (!output.empty() && output.back() == ' ') {
-    output.pop_back();
-  }
-
-  return output;
+  return res;
 }
 
 int eval(const std::string& post) {
-  TStack<int, 100> values;
+  TStack<int, 100> vals;
   std::istringstream iss(post);
-  std::string part;
+  std::string tok;
 
-  while (iss >> part) {
-    if (std::isdigit(part[0]) || 
-        (part.size() > 1 && part[0] == '-' && std::isdigit(part[1]))) {
-      values.add(std::stoi(part));
+  while (iss >> tok) {
+    if (std::isdigit(tok[0]) ||
+        (tok.size() > 1 && tok[0] == '-' && std::isdigit(tok[1]))) {
+      vals.add(std::stoi(tok));
     } else {
-      int rhs = values.remove();
-      int lhs = values.remove();
-      switch (part[0]) {
-        case '+': values.add(lhs + rhs); break;
-        case '-': values.add(lhs - rhs); break;
-        case '*': values.add(lhs * rhs); break;
-        case '/': values.add(lhs / rhs); break;
+      int r = vals.remove();
+      int l = vals.remove();
+      switch (tok[0]) {
+        case '+': vals.add(l + r); break;
+        case '-': vals.add(l - r); break;
+        case '*': vals.add(l * r); break;
+        case '/': vals.add(l / r); break;
       }
     }
   }
-
-  return values.remove();
+  return vals.remove();
 }
