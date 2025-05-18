@@ -32,8 +32,10 @@ std::string infx2pstfx(const std::string& inf) {
       if (!ops.isVoid()) {
         ops.remove();
       }
-    } else if (ch == '+'  ch == '-' 
-               ch == '*' || ch == '/') {
+    } else if (
+        ch == '+'  ch == '-' 
+        ch == '*' || ch == '/'
+    ) {
       while (!ops.isVoid() &&
              precedence(ops.getTop()) >= precedence(ch)) {
         out << ops.remove() << ' ';
@@ -60,26 +62,19 @@ int eval(const std::string& post) {
   std::string tok;
 
   while (iss >> tok) {
-    if (std::isdigit(tok[0]) ||
-        (tok.size() > 1 && tok[0] == '-' &&
-         std::isdigit(tok[1]))) {
+    if (
+        std::isdigit(tok[0]) ||
+        (tok.size() > 1 && tok[0] == '-' && std::isdigit(tok[1]))
+    ) {
       vals.add(std::stoi(tok));
     } else {
       int r = vals.remove();
       int l = vals.remove();
       switch (tok[0]) {
-        case '+':
-          vals.add(l + r);
-          break;
-        case '-':
-          vals.add(l - r);
-          break;
-        case '*':
-          vals.add(l * r);
-          break;
-        case '/':
-          vals.add(l / r);
-          break;
+        case '+': vals.add(l + r); break;
+        case '-': vals.add(l - r); break;
+        case '*': vals.add(l * r); break;
+        case '/': vals.add(l / r); break;
       }
     }
   }
