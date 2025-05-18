@@ -2,45 +2,43 @@
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 
-#include <stdexcept>
-
-template<typename T, int MaxSize>
+template<typename ElementType, int Capacity>
 class TStack {
-public:
-    TStack() : topIndex(-1) {}
+ public:
+  TStack() : pointer(-1) {}
 
-    bool empty() const {
-        return topIndex == -1;
+  bool isVoid() const {
+    return pointer == -1;
+  }
+
+  bool isFull() const {
+    return pointer == Capacity - 1;
+  }
+
+  void add(const ElementType& value) {
+    if (isFull()) {
+      throw std::overflow_error("Stack overflow");
     }
+    storage[++pointer] = value;
+  }
 
-    bool full() const {
-        return topIndex == MaxSize - 1;
+  ElementType remove() {
+    if (isVoid()) {
+      throw std::underflow_error("Stack underflow");
     }
+    return storage[pointer--];
+  }
 
-    void push(const T& value) {
-        if (full()) {
-            throw std::overflow_error("Stack overflow");
-        }
-        storage[++topIndex] = value;
+  ElementType getTop() const {
+    if (isVoid()) {
+      throw std::underflow_error("Stack empty");
     }
+    return storage[pointer];
+  }
 
-    T pop() {
-        if (empty()) {
-            throw std::underflow_error("Stack underflow");
-        }
-        return storage[topIndex--];
-    }
-
-    T peek() const {
-        if (empty()) {
-            throw std::underflow_error("Stack is empty");
-        }
-        return storage[topIndex];
-    }
-
-private:
-    T storage[MaxSize];
-    int topIndex;
+ private:
+  ElementType storage[Capacity];
+  int pointer;
 };
 
 #endif  // INCLUDE_TSTACK_H_
