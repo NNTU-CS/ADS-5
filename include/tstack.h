@@ -47,7 +47,7 @@ class TStack {
 
  private:
   int top;
-  T data[size];
+  T data[100];
 };
 
 #endif  // INCLUDE_TSTACK_H_
