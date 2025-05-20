@@ -26,7 +26,7 @@ std::string infx2pstfx(const std::string& inf) {
   for (unsigned i = 0; i < inf.size(); ++i) {
     if (inf[i] >= '0' && inf[i] <= '9') {
       result.push_back(inf[i]);
-      for (; i + 1 < inf.size() && inf[i + 1] >= '0' 
+      for (; i + 1 < inf.size() && inf[i + 1] >= '0'
         && inf[i + 1] <= '9'; ++i) {
         result.push_back(inf[i + 1]);
       }
