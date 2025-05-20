@@ -71,15 +71,12 @@ int eval(const std::string& pref) {
             }
             int oper1 = stk2.pop();
             switch (token[0]) {
-                case '+': 
                 case '+':
                     stk2.push(oper1 + oper2);
                     break;
-                case '-': 
                 case '-':
                     stk2.push(oper1 - oper2);
                     break;
-                case '*': 
                 case '*':
                     stk2.push(oper1 * oper2);
                     break;
